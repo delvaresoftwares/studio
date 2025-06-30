@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { X, Circle, RotateCcw } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type Player = 'X' | 'O';
 type SquareValue = Player | null;
+type Difficulty = 'easy' | 'hard' | 'impossible';
 
 const Square = ({ value, onSquareClick }: { value: SquareValue; onSquareClick: () => void }) => {
   return (
@@ -25,6 +27,7 @@ const TicTacToe = () => {
   const [isPlayerNext, setIsPlayerNext] = useState(true);
   const [status, setStatus] = useState('Your turn!');
   const [gameOver, setGameOver] = useState(false);
+  const [difficulty, setDifficulty] = useState<Difficulty>('hard');
 
   const calculateWinner = (currentSquares: SquareValue[]) => {
     const lines = [
@@ -41,11 +44,23 @@ const TicTacToe = () => {
     return null;
   };
 
-  const findBestMove = (currentSquares: SquareValue[]): number => {
+  const findBestMove = (currentSquares: SquareValue[], difficulty: Difficulty): number => {
     const player: Player = 'O';
     const opponent: Player = 'X';
 
-    // 1. Check for a winning move for AI
+    const getAvailableMoves = () => {
+      return currentSquares.map((s, i) => s === null ? i : null).filter((v): v is number => v !== null);
+    };
+
+    // --- Easy: Picks a random available spot. Very beatable. ---
+    if (difficulty === 'easy') {
+      const availableMoves = getAvailableMoves();
+      return availableMoves[Math.floor(Math.random() * availableMoves.length)];
+    }
+
+    // --- Logic for Hard & Impossible ---
+
+    // Check for a winning move for AI ('O')
     for (let i = 0; i < 9; i++) {
       if (currentSquares[i] === null) {
         const nextSquares = [...currentSquares];
@@ -56,7 +71,7 @@ const TicTacToe = () => {
       }
     }
 
-    // 2. Block the opponent's winning move
+    // Block the opponent's ('X') winning move
     for (let i = 0; i < 9; i++) {
       if (currentSquares[i] === null) {
         const nextSquares = [...currentSquares];
@@ -67,13 +82,20 @@ const TicTacToe = () => {
       }
     }
 
-    // 3. Try to take the center
+    // --- Hard: After checking for immediate win/loss, picks a random spot. Beatable. ---
+    if (difficulty === 'hard') {
+      const availableMoves = getAvailableMoves();
+      return availableMoves[Math.floor(Math.random() * availableMoves.length)];
+    }
+    
+    // --- Impossible: The rest of the logic for the unbeatable AI. ---
+    // Try to take the center
     if (currentSquares[4] === null) {
       return 4;
     }
 
-    // 4. Try to take the opposite corner
-    const opposites: {[key: number]: number} = { 0: 8, 2: 6, 6: 2, 8: 0 };
+    // Try to take the opposite corner
+    const opposites: { [key: number]: number } = { 0: 8, 2: 6, 6: 2, 8: 0 };
     for (const cornerStr in opposites) {
       const corner = parseInt(cornerStr, 10);
       const opposite = opposites[corner];
@@ -81,26 +103,25 @@ const TicTacToe = () => {
         return opposite;
       }
     }
-    
-    // 5. Try to take an empty corner
+
+    // Try to take an empty corner
     const corners = [0, 2, 6, 8];
     const emptyCorners = corners.filter(i => currentSquares[i] === null);
     if (emptyCorners.length > 0) {
       return emptyCorners[Math.floor(Math.random() * emptyCorners.length)];
     }
 
-    // 6. Try to take an empty side
+    // Try to take an empty side
     const sides = [1, 3, 5, 7];
     const emptySides = sides.filter(i => currentSquares[i] === null);
     if (emptySides.length > 0) {
       return emptySides[Math.floor(Math.random() * emptySides.length)];
     }
 
-    // Fallback (should not be reached in a normal game)
-    const available = currentSquares.map((s, i) => s === null ? i : null).filter((v): v is number => v !== null);
-    return available[0];
+    // Fallback: take any available spot
+    const availableMoves = getAvailableMoves();
+    return availableMoves[0];
   };
-
 
   const handlePlayerClick = (i: number) => {
     if (gameOver || squares[i] || !isPlayerNext) {
@@ -136,7 +157,7 @@ const TicTacToe = () => {
     // PC's turn
     if (!isPlayerNext && !winner && !isDraw) {
       const timeoutId = setTimeout(() => {
-        const bestMove = findBestMove(squares);
+        const bestMove = findBestMove(squares, difficulty);
         if (bestMove !== undefined) {
             const newSquares = squares.slice();
             newSquares[bestMove] = 'O';
@@ -147,7 +168,7 @@ const TicTacToe = () => {
 
       return () => clearTimeout(timeoutId);
     }
-  }, [squares, isPlayerNext]);
+  }, [squares, isPlayerNext, difficulty]);
 
 
   return (
@@ -158,6 +179,20 @@ const TicTacToe = () => {
                 <RotateCcw className="w-5 h-5" />
             </Button>
         </div>
+         <Tabs 
+          defaultValue={difficulty} 
+          onValueChange={(value) => {
+            setDifficulty(value as Difficulty);
+            resetGame();
+          }}
+          className="mb-4 flex justify-center"
+        >
+          <TabsList>
+            <TabsTrigger value="easy">Easy</TabsTrigger>
+            <TabsTrigger value="hard">Hard</TabsTrigger>
+            <TabsTrigger value="impossible">Impossible</TabsTrigger>
+          </TabsList>
+        </Tabs>
         <div className={cn("grid grid-cols-3 gap-3", (gameOver || !isPlayerNext) && "pointer-events-none opacity-70")}>
             {squares.map((square, i) => (
                 <Square key={i} value={square} onSquareClick={() => handlePlayerClick(i)} />
