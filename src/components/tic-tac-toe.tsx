@@ -44,83 +44,97 @@ const TicTacToe = () => {
     return null;
   };
 
-  const findBestMove = (currentSquares: SquareValue[], difficulty: Difficulty): number => {
-    const player: Player = 'O';
-    const opponent: Player = 'X';
+  const minimax = (board: SquareValue[], isMaximizing: boolean): number => {
+    const winner = calculateWinner(board);
+    if (winner === 'O') return 10;
+    if (winner === 'X') return -10;
+    if (!board.includes(null)) return 0;
 
+    if (isMaximizing) {
+      let bestScore = -Infinity;
+      for (let i = 0; i < 9; i++) {
+        if (board[i] === null) {
+          board[i] = 'O';
+          let score = minimax(board, false);
+          board[i] = null;
+          bestScore = Math.max(score, bestScore);
+        }
+      }
+      return bestScore;
+    } else {
+      let bestScore = Infinity;
+      for (let i = 0; i < 9; i++) {
+        if (board[i] === null) {
+          board[i] = 'X';
+          let score = minimax(board, true);
+          board[i] = null;
+          bestScore = Math.min(score, bestScore);
+        }
+      }
+      return bestScore;
+    }
+  };
+
+  const findBestMove = (currentSquares: SquareValue[], difficulty: Difficulty): number => {
     const getAvailableMoves = () => {
       return currentSquares.map((s, i) => s === null ? i : null).filter((v): v is number => v !== null);
     };
 
-    // --- Easy: Picks a random available spot. Very beatable. ---
     if (difficulty === 'easy') {
       const availableMoves = getAvailableMoves();
       return availableMoves[Math.floor(Math.random() * availableMoves.length)];
     }
 
-    // --- Logic for Hard & Impossible ---
-
-    // Check for a winning move for AI ('O')
-    for (let i = 0; i < 9; i++) {
-      if (currentSquares[i] === null) {
-        const nextSquares = [...currentSquares];
-        nextSquares[i] = player;
-        if (calculateWinner(nextSquares) === player) {
-          return i;
+    if (difficulty === 'impossible') {
+      let bestScore = -Infinity;
+      let move = -1;
+      for (let i = 0; i < 9; i++) {
+        if (currentSquares[i] === null) {
+          const newBoard = [...currentSquares];
+          newBoard[i] = 'O';
+          let score = minimax(newBoard, false);
+          if (score > bestScore) {
+            bestScore = score;
+            move = i;
+          }
         }
       }
+      return move;
     }
 
-    // Block the opponent's ('X') winning move
-    for (let i = 0; i < 9; i++) {
-      if (currentSquares[i] === null) {
-        const nextSquares = [...currentSquares];
-        nextSquares[i] = opponent;
-        if (calculateWinner(nextSquares) === opponent) {
-          return i;
-        }
-      }
-    }
-
-    // --- Hard: After checking for immediate win/loss, picks a random spot. Beatable. ---
     if (difficulty === 'hard') {
-      const availableMoves = getAvailableMoves();
-      return availableMoves[Math.floor(Math.random() * availableMoves.length)];
+        const player: Player = 'O';
+        const opponent: Player = 'X';
+        
+        // 1. Win if possible
+        for (let i = 0; i < 9; i++) {
+            if (currentSquares[i] === null) {
+              const nextSquares = [...currentSquares];
+              nextSquares[i] = player;
+              if (calculateWinner(nextSquares) === player) return i;
+            }
+        }
+
+        // 2. Block opponent's win
+        for (let i = 0; i < 9; i++) {
+            if (currentSquares[i] === null) {
+              const nextSquares = [...currentSquares];
+              nextSquares[i] = opponent;
+              if (calculateWinner(nextSquares) === opponent) return i;
+            }
+        }
+        
+        // 3. Take center
+        if (currentSquares[4] === null) return 4;
+
+        // 4. Take random available spot
+        const availableMoves = getAvailableMoves();
+        return availableMoves[Math.floor(Math.random() * availableMoves.length)];
     }
     
-    // --- Impossible: The rest of the logic for the unbeatable AI. ---
-    // Try to take the center
-    if (currentSquares[4] === null) {
-      return 4;
-    }
-
-    // Try to take the opposite corner
-    const opposites: { [key: number]: number } = { 0: 8, 2: 6, 6: 2, 8: 0 };
-    for (const cornerStr in opposites) {
-      const corner = parseInt(cornerStr, 10);
-      const opposite = opposites[corner];
-      if (currentSquares[corner] === opponent && currentSquares[opposite] === null) {
-        return opposite;
-      }
-    }
-
-    // Try to take an empty corner
-    const corners = [0, 2, 6, 8];
-    const emptyCorners = corners.filter(i => currentSquares[i] === null);
-    if (emptyCorners.length > 0) {
-      return emptyCorners[Math.floor(Math.random() * emptyCorners.length)];
-    }
-
-    // Try to take an empty side
-    const sides = [1, 3, 5, 7];
-    const emptySides = sides.filter(i => currentSquares[i] === null);
-    if (emptySides.length > 0) {
-      return emptySides[Math.floor(Math.random() * emptySides.length)];
-    }
-
-    // Fallback: take any available spot
-    const availableMoves = getAvailableMoves();
-    return availableMoves[0];
+    // Fallback
+    const available = getAvailableMoves();
+    return available.length > 0 ? available[0] : -1;
   };
 
   const handlePlayerClick = (i: number) => {
@@ -158,7 +172,7 @@ const TicTacToe = () => {
     if (!isPlayerNext && !winner && !isDraw) {
       const timeoutId = setTimeout(() => {
         const bestMove = findBestMove(squares, difficulty);
-        if (bestMove !== undefined) {
+        if (bestMove !== -1) {
             const newSquares = squares.slice();
             newSquares[bestMove] = 'O';
             setSquares(newSquares);
