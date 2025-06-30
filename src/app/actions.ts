@@ -3,8 +3,7 @@
 import { generateTechFeatureDescription } from "@/ai/flows/tech-feature-descriptions"
 import { estimateProjectCost } from "@/ai/flows/project-cost-estimator"
 import type { ProjectCostEstimatorInput, ProjectCostEstimatorOutput } from "@/ai/flows/project-cost-estimator"
-import { db } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { Resend } from 'resend';
 
 export async function getTechFeatureDescriptionAction(featureName: string): Promise<string> {
   try {
@@ -34,38 +33,37 @@ export type ContactFormData = {
 };
 
 export async function saveContactInfoAction(formData: ContactFormData): Promise<{ success: boolean; error?: string }> {
-  if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID === "YOUR_PROJECT_ID") {
-    console.error("Firebase credentials are not set up. Please create and populate a .env.local file.");
+  // 1. Validate environment variables
+  if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === "YOUR_RESEND_API_KEY") {
+    console.error("Resend API key is not set up. Please create and populate a .env.local file.");
     return { 
       success: false, 
-      error: "The contact form is not yet configured. Please follow the instructions in the README to set up your Firebase project." 
+      error: "The contact form is not yet configured. Please follow the instructions in the README to set up Resend." 
     };
   }
 
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const toEmail = 'you@example.com'; // IMPORTANT: Replace with your email address in src/app/actions.ts
+
+  // 2. Send the email
   try {
-    await addDoc(collection(db, 'contacts'), {
-      ...formData,
-      submittedAt: serverTimestamp(),
+    await resend.emails.send({
+      from: 'Delvare Contact Form <onboarding@resend.dev>', // This is a default for testing. See README.
+      to: toEmail,
+      subject: `New Contact Form Submission from ${formData.name}`,
+      reply_to: formData.email,
+      html: `
+        <h1>New Contact Submission</h1>
+        <p><strong>Name:</strong> ${formData.name}</p>
+        <p><strong>Email:</strong> ${formData.email}</p>
+        <p><strong>Phone:</strong> ${formData.phone}</p>
+        <p><strong>Message:</strong></p>
+        <p>${formData.message.replace(/\n/g, '<br>')}</p>
+      `,
     });
     return { success: true };
   } catch (error: any) {
-    console.error("Error saving contact info to Firestore:", error);
-    let errorMessage = "An unknown error occurred while sending your message.";
-    if (error.code) {
-        switch (error.code) {
-            case 'permission-denied':
-                errorMessage = "Submission failed due to a permissions issue. Have you deployed the firestore.rules file to your project?";
-                break;
-            case 'unauthenticated':
-                errorMessage = "Submission failed because the request was unauthenticated. Please check your Firebase configuration.";
-                break;
-            case 'not-found':
-                 errorMessage = "Could not connect to the database. Have you created a Firestore database in your Firebase project?";
-                 break;
-            default:
-                errorMessage = `A Firebase error occurred: ${error.code}. Please check your configuration and security rules.`;
-        }
-    }
-    return { success: false, error: errorMessage };
+    console.error("Error sending email with Resend:", error);
+    return { success: false, error: "An error occurred while sending your message. Please check your Resend configuration and try again." };
   }
 }

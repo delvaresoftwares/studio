@@ -4,49 +4,41 @@ This is a NextJS starter in Firebase Studio.
 
 To get started, take a look at src/app/page.tsx.
 
-## Production Readiness
+## Production Readiness: Contact Form
 
-To make your application ready for production with a persistent database, follow these two crucial steps:
+To make your contact form ready for production, it needs to be connected to a service that can send you emails. This project is configured to use **Resend**.
 
-### 1. Configure Firebase Environment Variables
+Follow these steps to get it working:
 
-Your project uses Firebase for the contact form's database. You must configure it with your own Firebase project credentials.
+### 1. Create a Resend Account and API Key
 
-**How to find your Firebase credentials:**
-1. Go to the [Firebase Console](https://console.firebase.google.com/) and select your project (`delvare-software-solutions`).
-2. Click the gear icon next to "Project Overview" in the top-left corner and select **Project settings**.
-3. In the "General" tab, scroll down to the "Your apps" section.
-4. If you haven't created a web app yet, click the `</>` (Web) icon to create one.
-5. In your web app's settings, under **SDK setup and configuration**, select the **Config** option.
-6. You will see a `firebaseConfig` object. Copy all the key-value pairs from this object.
+1.  Go to [resend.com](https://resend.com/) and sign up for a free account.
+2.  In your Resend dashboard, navigate to the **API Keys** section from the side menu.
+3.  Click **Create API Key**. Give it a name (e.g., "Delvare Contact Form") and set the permission to **Sending access**.
+4.  Copy the generated API key. **You will only see this key once, so save it somewhere safe.**
 
-**How to use your credentials:**
-Create a `.env.local` file in the root of your project by copying the contents of the `.env` file. Then, replace the placeholder values with the actual values you just copied from your Firebase project.
+### 2. Configure Your Environment
+
+1.  In your project, create a new file named `.env.local` by copying the contents of the `.env` file.
+2.  In `.env.local`, replace the placeholder `YOUR_RESEND_API_KEY` with the actual key you just copied from Resend.
 
 ```bash
 # .env.local
-NEXT_PUBLIC_FIREBASE_API_KEY="YOUR_API_KEY"
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN="YOUR_AUTH_DOMAIN"
-NEXT_PUBLIC_FIREBASE_PROJECT_ID="YOUR_PROJECT_ID"
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET="YOUR_STORAGE_BUCKET"
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID="YOUR_MESSAGING_SENDER_ID"
-NEXT_PUBLIC_FIREBASE_APP_ID="YOUR_APP_ID"
+RESEND_API_KEY="YOUR_RESEND_API_KEY"
 ```
 
-**Note:** Never commit your `.env.local` file or other files containing secrets to a public repository.
+### 3. Set Your Email Address
 
-### 2. Deploy Firestore Security Rules
+1.  Open the file `src/app/actions.ts`.
+2.  Find the `saveContactInfoAction` function.
+3.  On the line `const toEmail = 'you@example.com';`, change `'you@example.com'` to the email address where you want to receive the contact form submissions.
 
-For security, your database needs rules that define who can access your data. I have created a `firestore.rules` file with secure defaults for your contact form. These rules allow anyone to submit the form (`create`) but prevent anyone from reading, updating, or deleting contact information from the client side.
+### 4. (Optional but Recommended) Verify Your Domain
 
-**Before you deploy rules, ensure you have created a Firestore database in your project:**
-1. In the Firebase Console, go to the **Build** section and click on **Firestore Database**.
-2. Click **Create database** and follow the prompts to create it in **Native mode**. Choose a location close to your users.
+For testing, Resend allows sending emails from `onboarding@resend.dev`. For production, you should send emails from your own domain.
 
-**How to deploy the rules:**
-1.  Go to your Firestore Database page in the Firebase Console.
-2.  Click on the "Rules" tab.
-3.  Copy the content from `firestore.rules` in this project and paste it into the editor.
-4.  Click "Publish".
+1.  In your Resend dashboard, go to the **Domains** section.
+2.  Click **Add Domain** and follow the instructions to verify your domain.
+3.  Once verified, you can update the `from` field in `src/app/actions.ts` to use an address like `'contact@yourdomain.com'`.
 
-With these steps completed, your contact form will be connected to a secure, persistent database and ready for production!
+With these steps completed, your contact form will send submissions directly to your email inbox!
