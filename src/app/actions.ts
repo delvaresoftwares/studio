@@ -34,6 +34,14 @@ export type ContactFormData = {
 };
 
 export async function saveContactInfoAction(formData: ContactFormData): Promise<{ success: boolean; error?: string }> {
+  if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID === "YOUR_PROJECT_ID") {
+    console.error("Firebase credentials are not set up. Please create and populate a .env.local file.");
+    return { 
+      success: false, 
+      error: "The contact form is not yet configured. Please follow the instructions in the README to set up your Firebase project." 
+    };
+  }
+
   try {
     await addDoc(collection(db, 'contacts'), {
       ...formData,
@@ -42,6 +50,6 @@ export async function saveContactInfoAction(formData: ContactFormData): Promise<
     return { success: true };
   } catch (error) {
     console.error("Error saving contact info to Firestore:", error);
-    return { success: false, error: "Failed to send message. Please try again later." };
+    return { success: false, error: "Failed to send message. This could be due to incorrect Firebase credentials or Firestore security rules." };
   }
 }
