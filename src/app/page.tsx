@@ -5,12 +5,13 @@ import TechFeaturesSection from '@/components/sections/tech-features';
 import CostEstimatorSection from '@/components/sections/cost-estimator';
 import GameSpaceSection from '@/components/sections/game-space';
 import ContactSection from '@/components/sections/contact';
+import Footer from '@/components/footer';
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <Header />
-      <main>
+      <main className="flex-grow">
         <HeroSection />
         <ServicesSection />
         <TechFeaturesSection />
@@ -18,6 +19,7 @@ export default function Home() {
         <GameSpaceSection />
         <ContactSection />
       </main>
+      <Footer />
     </div>
   );
 }
