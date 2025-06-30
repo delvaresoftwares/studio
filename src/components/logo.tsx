@@ -1,10 +1,9 @@
-import { Terminal } from 'lucide-react';
+import Image from 'next/image';
 
 const Logo = () => {
   return (
     <div className="flex items-center gap-2">
-      <Terminal className="w-8 h-8 text-primary" />
-      <h1 className="text-2xl font-bold font-headline text-foreground">Delvare</h1>
+      <Image src="https://res.cloudinary.com/dt4mweku7/image/upload/v1751266408/buissware_h6bmig.png" alt="Buissware Logo" width={180} height={40} priority />
     </div>
   );
 };

@@ -1,26 +1,38 @@
 import { Button } from '@/components/ui/button';
 import { ArrowDown } from 'lucide-react';
+import Image from 'next/image';
 
 const HeroSection = () => {
   return (
-    <section id="hero" className="h-screen w-full flex flex-col items-center justify-center snap-start relative text-center p-4">
-      <div className="animate-fade-in-up">
-        <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter mb-4">
-          Build. Launch. Succeed.
-        </h1>
-        <p className="max-w-2xl mx-auto text-lg md:text-xl text-muted-foreground mb-8">
-          Delvare provides cutting-edge software solutions tailored to your business needs. From websites to complex inventory systems, we deliver excellence.
-        </p>
-        <div className="flex gap-4 justify-center">
-          <Button size="lg" asChild>
-            <a href="#services">Our Services</a>
-          </Button>
-          <Button size="lg" variant="outline" asChild>
-            <a href="#contact">Get a Quote</a>
-          </Button>
+    <section id="hero" className="h-screen w-full flex items-center justify-center snap-start relative p-4">
+      <div className="container mx-auto grid md:grid-cols-2 gap-8 items-center">
+        <div className="animate-fade-in-up text-center md:text-left">
+          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter mb-4">
+            Build. Launch. Succeed.
+          </h1>
+          <p className="max-w-xl mx-auto md:mx-0 text-lg md:text-xl text-muted-foreground mb-8">
+            Buissware provides cutting-edge software solutions tailored to your business needs. From websites to complex inventory systems, we deliver excellence.
+          </p>
+          <div className="flex gap-4 justify-center md:justify-start">
+            <Button size="lg" asChild>
+              <a href="#services">Our Services</a>
+            </Button>
+            <Button size="lg" variant="outline" asChild>
+              <a href="#contact">Get a Quote</a>
+            </Button>
+          </div>
+        </div>
+        <div className="hidden md:flex justify-center animate-fade-in-up">
+          <Image 
+            src="https://res.cloudinary.com/dt4mweku7/image/upload/v1751266409/buissware_amykyt.gif" 
+            alt="Buissware services animation" 
+            width={500} 
+            height={500} 
+            unoptimized 
+          />
         </div>
       </div>
-      <a href="#services" aria-label="Scroll to next section" className="absolute bottom-10 animate-bounce">
+      <a href="#services" aria-label="Scroll to next section" className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
         <ArrowDown className="w-8 h-8 text-muted-foreground" />
       </a>
     </section>
