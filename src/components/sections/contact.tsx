@@ -10,7 +10,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Send, CheckCircle } from 'lucide-react';
-import Image from 'next/image';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -42,66 +41,61 @@ const ContactSection = () => {
                 Have a project in mind or just want to say hi? We'd love to hear from you.
             </p>
         </div>
-        <Card className="max-w-4xl mx-auto">
-            <div className="grid md:grid-cols-2">
-                <CardContent className="p-8 flex items-center justify-center">
-                    {isSubmitted ? (
-                        <div className="text-center animate-fade-in-up">
-                            <CheckCircle className="mx-auto h-16 w-16 text-primary mb-4" />
-                            <h3 className="text-2xl font-bold mb-2">Message Sent!</h3>
-                            <p className="text-muted-foreground mb-6">Thanks for reaching out. We'll get back to you soon.</p>
-                            <Button onClick={() => { setIsSubmitted(false); form.reset(); }}>
-                                Send another message
-                            </Button>
-                        </div>
-                    ) : (
-                      <Form {...form}>
-                          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-full">
-                          <FormField
-                              control={form.control}
-                              name="name"
-                              render={({ field }) => (
-                              <FormItem>
-                                  <FormLabel>Full Name</FormLabel>
-                                  <FormControl><Input placeholder="John Doe" {...field} /></FormControl>
-                                  <FormMessage />
-                              </FormItem>
-                              )}
-                          />
-                          <FormField
-                              control={form.control}
-                              name="email"
-                              render={({ field }) => (
-                              <FormItem>
-                                  <FormLabel>Email Address</FormLabel>
-                                  <FormControl><Input placeholder="you@example.com" {...field} /></FormControl>
-                                  <FormMessage />
-                              </FormItem>
-                              )}
-                          />
-                          <FormField
-                              control={form.control}
-                              name="message"
-                              render={({ field }) => (
-                              <FormItem>
-                                  <FormLabel>Your Message</FormLabel>
-                                  <FormControl><Textarea placeholder="Tell us about your project..." {...field} rows={5} /></FormControl>
-                                  <FormMessage />
-                              </FormItem>
-                              )}
-                          />
-                          <Button type="submit" className="w-full">
-                              <Send className="mr-2 h-4 w-4" />
-                              Send Message
-                          </Button>
-                          </form>
-                      </Form>
-                    )}
-                </CardContent>
-                <div className="hidden md:block">
-                  <Image src="https://img.goodfon.com/wallpaper/big/a/7a/android-robot-igrushka-zhest.webp" alt="Contact illustration" width={600} height={800} className="object-cover w-full h-full rounded-r-lg" data-ai-hint="robot technology" />
-                </div>
-            </div>
+        <Card className="max-w-xl mx-auto">
+            <CardContent className="p-8">
+                {isSubmitted ? (
+                    <div className="text-center animate-fade-in-up">
+                        <CheckCircle className="mx-auto h-16 w-16 text-primary mb-4" />
+                        <h3 className="text-2xl font-bold mb-2">Message Sent!</h3>
+                        <p className="text-muted-foreground mb-6">Thanks for reaching out. We'll get back to you soon.</p>
+                        <Button onClick={() => { setIsSubmitted(false); form.reset(); }}>
+                            Send another message
+                        </Button>
+                    </div>
+                ) : (
+                  <Form {...form}>
+                      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-full">
+                      <FormField
+                          control={form.control}
+                          name="name"
+                          render={({ field }) => (
+                          <FormItem>
+                              <FormLabel>Full Name</FormLabel>
+                              <FormControl><Input placeholder="John Doe" {...field} /></FormControl>
+                              <FormMessage />
+                          </FormItem>
+                          )}
+                      />
+                      <FormField
+                          control={form.control}
+                          name="email"
+                          render={({ field }) => (
+                          <FormItem>
+                              <FormLabel>Email Address</FormLabel>
+                              <FormControl><Input placeholder="you@example.com" {...field} /></FormControl>
+                              <FormMessage />
+                          </FormItem>
+                          )}
+                      />
+                      <FormField
+                          control={form.control}
+                          name="message"
+                          render={({ field }) => (
+                          <FormItem>
+                              <FormLabel>Your Message</FormLabel>
+                              <FormControl><Textarea placeholder="Tell us about your project..." {...field} rows={5} /></FormControl>
+                              <FormMessage />
+                          </FormItem>
+                          )}
+                      />
+                      <Button type="submit" className="w-full">
+                          <Send className="mr-2 h-4 w-4" />
+                          Send Message
+                      </Button>
+                      </form>
+                  </Form>
+                )}
+            </CardContent>
         </Card>
       </div>
     </section>
