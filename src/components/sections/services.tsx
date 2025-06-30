@@ -34,9 +34,9 @@ const services = [
 ];
 
 const pricingData = {
-  'USA': { 'Custom Websites': 1000, 'Mobile Apps': 3000, 'Billing & Inventory Software': 7000, currency: 'USD' },
-  'India': { 'Custom Websites': 80000, 'Mobile Apps': 250000, 'Billing & Inventory Software': 500000, currency: 'INR' },
-  'Europe': { 'Custom Websites': 900, 'Mobile Apps': 2800, 'Billing & Inventory Software': 6500, currency: 'EUR' }
+  'USA': { 'Custom Websites': 199, 'Mobile Apps': 949, 'Billing & Inventory Software': 4999, currency: 'USD' },
+  'India': { 'Custom Websites': 15000, 'Mobile Apps': 75000, 'Billing & Inventory Software': 399000, currency: 'INR' },
+  'Europe': { 'Custom Websites': 185, 'Mobile Apps': 875, 'Billing & Inventory Software': 4600, currency: 'EUR' }
 };
 
 type Country = keyof typeof pricingData;
@@ -96,7 +96,7 @@ const ServicesSection = () => {
                   <CardTitle className="text-2xl font-bold font-headline">{service.title}</CardTitle>
                 </div>
                 <CardDescription className="mb-4">{service.description}</CardDescription>
-                <p className="font-bold text-4xl text-primary">From {formatPrice(pricingData[country][service.title as ServiceTitle])}</p>
+                <p className="font-bold text-4xl text-primary">From {formatPrice(pricingData[country][service.title as ServiceTitle])}{service.title === 'Billing & Inventory Software' ? '/year' : ''}</p>
               </CardContent>
             </Card>
           ))}
