@@ -34,15 +34,15 @@ const services = [
 
 const ServicesSection = () => {
   return (
-    <section id="services" className="h-screen w-full flex items-center justify-center snap-start bg-secondary/30">
-      <div className="container mx-auto px-4 py-16 text-center">
+    <section id="services" className="w-full bg-secondary/30">
+      <div className="container mx-auto px-4 py-24 sm:py-32 text-center">
         <h2 className="font-headline text-4xl md:text-5xl font-bold mb-4">Our Core Services</h2>
         <p className="max-w-2xl mx-auto text-lg text-muted-foreground mb-12">
           We offer a range of services to meet your business needs. Pricing may vary based on your location and project scope.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <Card key={index} className="overflow-hidden group transform transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+            <Card key={index} className="overflow-hidden group transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
               <CardHeader className="p-0 relative">
                 <Image src={service.image} alt={service.title} width={600} height={400} className="transition-transform duration-300 group-hover:scale-110" data-ai-hint={service.imageHint} />
                 {service.deal && (

@@ -1,10 +1,9 @@
 import { Button } from '@/components/ui/button';
-import { ArrowDown } from 'lucide-react';
 import Image from 'next/image';
 
 const HeroSection = () => {
   return (
-    <section id="hero" className="h-screen w-full flex items-center justify-center snap-start relative p-4">
+    <section id="hero" className="h-screen w-full flex items-center justify-center relative p-4">
       <div className="container mx-auto grid md:grid-cols-2 gap-8 items-center">
         <div className="animate-fade-in-up text-center md:text-left">
           <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter mb-4">
@@ -32,9 +31,6 @@ const HeroSection = () => {
           />
         </div>
       </div>
-      <a href="#services" aria-label="Scroll to next section" className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
-        <ArrowDown className="w-8 h-8 text-muted-foreground" />
-      </a>
     </section>
   );
 };

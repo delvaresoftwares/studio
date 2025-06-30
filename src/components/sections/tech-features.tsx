@@ -60,8 +60,8 @@ const TechFeatureCard = ({ featureName, icon }: { featureName: string; icon: Rea
 
 const TechFeaturesSection = () => {
   return (
-    <section id="features" className="h-screen w-full flex items-center justify-center snap-start">
-      <div className="container mx-auto px-4 py-16 text-center">
+    <section id="features" className="w-full">
+      <div className="container mx-auto px-4 py-24 sm:py-32 text-center">
         <h2 className="font-headline text-4xl md:text-5xl font-bold mb-4">Technology at the Core</h2>
         <p className="max-w-2xl mx-auto text-lg text-muted-foreground mb-12">
           We leverage the latest technologies to build robust and scalable solutions.

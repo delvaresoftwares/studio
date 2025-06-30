@@ -54,8 +54,8 @@ const CostEstimatorSection = () => {
   };
 
   return (
-    <section id="estimator" className="h-screen w-full flex items-center justify-center snap-start bg-secondary/30">
-      <div className="container mx-auto px-4 py-16">
+    <section id="estimator" className="w-full bg-secondary/30">
+      <div className="container mx-auto px-4 py-24 sm:py-32">
         <div className="text-center mb-12">
             <h2 className="font-headline text-4xl md:text-5xl font-bold mb-4">AI Project Cost Estimator</h2>
             <p className="max-w-2xl mx-auto text-lg text-muted-foreground">
