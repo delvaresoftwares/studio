@@ -5,8 +5,9 @@ import { estimateProjectCost } from "@/ai/flows/project-cost-estimator"
 import type { ProjectCostEstimatorInput, ProjectCostEstimatorOutput } from "@/ai/flows/project-cost-estimator"
 
 import { db } from '@/lib/firebase';
-import { collection, addDoc, getDocs, query, orderBy, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, orderBy, serverTimestamp, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import type { Timestamp } from 'firebase/firestore';
+import { revalidatePath } from "next/cache";
 
 export async function getTechFeatureDescriptionAction(featureName: string): Promise<string> {
   try {
@@ -42,6 +43,7 @@ export type Contact = {
   phone: string;
   message: string;
   createdAt: string;
+  read: boolean;
 }
 
 // Action to save contact info to Firestore
@@ -61,6 +63,7 @@ export async function saveContactInfoAction(formData: ContactFormData): Promise<
     await addDoc(contactsCollection, {
       ...formData,
       createdAt: serverTimestamp(),
+      read: false, // Default to unread
     });
     return { success: true };
   } catch (error: any) {
@@ -100,6 +103,7 @@ export async function getContactsAction(): Promise<{ contacts?: Contact[]; error
             phone: data.phone,
             message: data.message,
             createdAt: createdAt ? new Date(createdAt.seconds * 1000).toLocaleString() : 'N/A',
+            read: data.read || false,
         }
     });
     
@@ -110,5 +114,31 @@ export async function getContactsAction(): Promise<{ contacts?: Contact[]; error
         return { error: "Could not fetch contacts: Permission denied. Ensure your Firestore security rules are deployed correctly." };
     }
     return { error: "Failed to fetch contacts from the database." };
+  }
+}
+
+// Action to mark a contact as read
+export async function markAsReadAction(id: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    const contactRef = doc(db, 'contacts', id);
+    await updateDoc(contactRef, { read: true });
+    revalidatePath('/admin');
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error marking as read:", error);
+    return { success: false, error: "Failed to update contact status." };
+  }
+}
+
+// Action to delete a contact
+export async function deleteContactAction(id: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    const contactRef = doc(db, 'contacts', id);
+    await deleteDoc(contactRef);
+    revalidatePath('/admin');
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error deleting contact:", error);
+    return { success: false, error: "Failed to delete contact." };
   }
 }
