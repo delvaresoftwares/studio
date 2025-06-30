@@ -1,6 +1,7 @@
 'use client';
 import Logo from '@/components/logo';
 import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 const navLinks = [
   { name: 'Services', href: '#services' },
@@ -24,9 +25,12 @@ const Header = () => {
             </a>
           ))}
         </nav>
-        <Button asChild>
-          <a href="#contact">Contact Us</a>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button asChild>
+            <a href="#contact">Contact Us</a>
+          </Button>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );
