@@ -1,10 +1,14 @@
-import { Puzzle } from 'lucide-react';
+import Image from 'next/image';
 
 const Logo = () => {
   return (
-    <div className="flex items-center justify-center h-10 w-10 bg-primary rounded-lg shadow-md">
-      <Puzzle className="w-6 h-6 text-primary-foreground" />
-    </div>
+    <Image 
+      src="https://res.cloudinary.com/dt4mweku7/image/upload/v1751266408/buissware_h6bmig.png" 
+      alt="Delver Logo" 
+      width={40} 
+      height={40} 
+      className="rounded-lg"
+    />
   );
 };
 
