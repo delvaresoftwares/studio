@@ -38,17 +38,26 @@ const ContactSection = () => {
 
   const onSubmit = async (data: FormValues) => {
     setIsLoading(true);
-    const result = await saveContactInfoAction(data);
-    setIsLoading(false);
-
-    if (result.success) {
-      setIsSubmitted(true);
-    } else {
-      toast({
+    try {
+      const result = await saveContactInfoAction(data);
+      if (result.success) {
+        setIsSubmitted(true);
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Submission Failed",
+          description: result.error || "An unknown error occurred.",
+        });
+      }
+    } catch (error) {
+       console.error("Error submitting contact form:", error);
+       toast({
         variant: "destructive",
-        title: "Submission Failed",
-        description: result.error,
+        title: "Submission Error",
+        description: "Could not send message. Please ensure your Firebase configuration is correct and try again.",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
