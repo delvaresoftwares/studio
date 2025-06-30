@@ -151,7 +151,7 @@ const TicTacToe = () => {
 
 
   return (
-    <div className="p-4 rounded-xl bg-card/60 border border-white/10 shadow-xl backdrop-blur-lg">
+    <div className="p-4 rounded-xl bg-card/60 border border-white/10 shadow-xl backdrop-blur-xl">
         <div className="flex justify-between items-center mb-4">
             <div className="text-xl font-bold font-headline w-48">{status}</div>
             <Button variant="ghost" size="icon" onClick={resetGame}>

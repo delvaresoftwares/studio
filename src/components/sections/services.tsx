@@ -35,7 +35,7 @@ const services = [
 
 const pricingData = {
   'USA': { 'Custom Websites': 199, 'Mobile Apps': 949, 'Billing & Inventory Software': 4999, currency: 'USD' },
-  'India': { 'Custom Websites': 15000, 'Mobile Apps': 75000, 'Billing & Inventory Software': 399000, currency: 'INR' },
+  'India': { 'Custom Websites': 15000, 'Mobile Apps': 75000, 'Billing & Inventory Software': 399999, currency: 'INR' },
   'Europe': { 'Custom Websites': 185, 'Mobile Apps': 875, 'Billing & Inventory Software': 4600, currency: 'EUR' }
 };
 
@@ -83,7 +83,7 @@ const ServicesSection = () => {
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <Card key={index} className="overflow-hidden group transition-all duration-300 hover:-translate-y-2 hover:shadow-primary/20 hover:border-primary">
+            <Card key={index} className="overflow-hidden group">
               <CardHeader className="p-0 relative">
                 <Image src={service.image} alt={service.title} width={600} height={400} className="transition-transform duration-300 group-hover:scale-110 object-cover aspect-[3/2]" data-ai-hint={service.imageHint} />
                 {service.deal && (
@@ -96,7 +96,7 @@ const ServicesSection = () => {
                   <CardTitle className="text-2xl font-bold font-headline">{service.title}</CardTitle>
                 </div>
                 <CardDescription className="mb-4">{service.description}</CardDescription>
-                <p className="font-bold text-4xl text-primary">From {formatPrice(pricingData[country][service.title as ServiceTitle])}{service.title === 'Billing & Inventory Software' ? '/year' : ''}</p>
+                <p className="font-bold text-4xl text-primary">Starts from {formatPrice(pricingData[country][service.title as ServiceTitle])}{service.title === 'Billing & Inventory Software' ? '/year' : ''}</p>
               </CardContent>
             </Card>
           ))}

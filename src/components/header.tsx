@@ -12,7 +12,7 @@ const navLinks = [
 
 const Header = () => {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/40 backdrop-blur-lg border-b">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/40 backdrop-blur-xl border-b">
       <div className="container mx-auto flex items-center justify-between h-20 px-4">
         <a href="#hero" className="flex items-center gap-3">
           <Logo />
