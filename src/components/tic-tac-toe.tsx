@@ -8,7 +8,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type Player = 'X' | 'O';
 type SquareValue = Player | null;
-type Difficulty = 'easy' | 'hard' | 'impossible';
+type Difficulty = 'easy' | 'hard';
 
 const Square = ({ value, onSquareClick }: { value: SquareValue; onSquareClick: () => void }) => {
   return (
@@ -44,37 +44,6 @@ const TicTacToe = () => {
     return null;
   };
 
-  const minimax = (board: SquareValue[], isMaximizing: boolean): number => {
-    const winner = calculateWinner(board);
-    if (winner === 'O') return 10;
-    if (winner === 'X') return -10;
-    if (!board.includes(null)) return 0;
-
-    if (isMaximizing) {
-      let bestScore = -Infinity;
-      for (let i = 0; i < 9; i++) {
-        if (board[i] === null) {
-          board[i] = 'O';
-          let score = minimax(board, false);
-          board[i] = null;
-          bestScore = Math.max(score, bestScore);
-        }
-      }
-      return bestScore;
-    } else {
-      let bestScore = Infinity;
-      for (let i = 0; i < 9; i++) {
-        if (board[i] === null) {
-          board[i] = 'X';
-          let score = minimax(board, true);
-          board[i] = null;
-          bestScore = Math.min(score, bestScore);
-        }
-      }
-      return bestScore;
-    }
-  };
-
   const findBestMove = (currentSquares: SquareValue[], difficulty: Difficulty): number => {
     const getAvailableMoves = () => {
       return currentSquares.map((s, i) => s === null ? i : null).filter((v): v is number => v !== null);
@@ -83,23 +52,6 @@ const TicTacToe = () => {
     if (difficulty === 'easy') {
       const availableMoves = getAvailableMoves();
       return availableMoves[Math.floor(Math.random() * availableMoves.length)];
-    }
-
-    if (difficulty === 'impossible') {
-      let bestScore = -Infinity;
-      let move = -1;
-      for (let i = 0; i < 9; i++) {
-        if (currentSquares[i] === null) {
-          const newBoard = [...currentSquares];
-          newBoard[i] = 'O';
-          let score = minimax(newBoard, false);
-          if (score > bestScore) {
-            bestScore = score;
-            move = i;
-          }
-        }
-      }
-      return move;
     }
 
     if (difficulty === 'hard') {
@@ -204,7 +156,6 @@ const TicTacToe = () => {
           <TabsList>
             <TabsTrigger value="easy">Easy</TabsTrigger>
             <TabsTrigger value="hard">Hard</TabsTrigger>
-            <TabsTrigger value="impossible">Impossible</TabsTrigger>
           </TabsList>
         </Tabs>
         <div className={cn("grid grid-cols-3 gap-3", (gameOver || !isPlayerNext) && "pointer-events-none opacity-70")}>
