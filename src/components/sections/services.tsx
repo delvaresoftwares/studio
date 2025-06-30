@@ -34,9 +34,9 @@ const services = [
 ];
 
 const pricingData = {
-  'USA': { 'Custom Websites': 1500, 'Mobile Apps': 5000, 'Billing & Inventory Software': 10000, currency: 'USD' },
-  'India': { 'Custom Websites': 125000, 'Mobile Apps': 400000, 'Billing & Inventory Software': 800000, currency: 'INR' },
-  'Europe': { 'Custom Websites': 1400, 'Mobile Apps': 4500, 'Billing & Inventory Software': 9000, currency: 'EUR' }
+  'USA': { 'Custom Websites': 1000, 'Mobile Apps': 3000, 'Billing & Inventory Software': 7000, currency: 'USD' },
+  'India': { 'Custom Websites': 80000, 'Mobile Apps': 250000, 'Billing & Inventory Software': 500000, currency: 'INR' },
+  'Europe': { 'Custom Websites': 900, 'Mobile Apps': 2800, 'Billing & Inventory Software': 6500, currency: 'EUR' }
 };
 
 type Country = keyof typeof pricingData;

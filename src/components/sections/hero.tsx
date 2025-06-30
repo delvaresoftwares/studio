@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { Briefcase, Calculator } from 'lucide-react';
 
 const HeroSection = () => {
   return (
@@ -14,10 +15,16 @@ const HeroSection = () => {
           </p>
           <div className="flex gap-4 justify-center md:justify-start">
             <Button size="lg" asChild>
-              <a href="#services">Our Services</a>
+              <a href="#services">
+                <Briefcase />
+                Our Services
+              </a>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <a href="#contact">Get a Quote</a>
+              <a href="#estimator">
+                <Calculator />
+                Estimate Cost
+              </a>
             </Button>
           </div>
         </div>
