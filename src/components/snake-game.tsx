@@ -114,13 +114,15 @@ const SnakeGame = () => {
     }, [path, food, gameOver]);
     
     const handleGridClick = (x: number, y: number) => {
+        // This guard prevents placing a new apple while one is already on the board or the game is over.
         if (gameOver || food) return;
 
         const isSnakeBody = snake.some(segment => segment.x === x && segment.y === y);
         if (isSnakeBody) {
             setMessage('Cannot place an apple on the snake!');
             setTimeout(() => {
-                if (!food) setMessage('Click on the grid to place an apple!');
+                // Revert message only if it hasn't changed (e.g., user hasn't successfully placed an apple elsewhere).
+                setMessage(prev => prev === 'Cannot place an apple on the snake!' ? 'Click on the grid to place an apple!' : prev);
             }, 2000);
             return;
         }
@@ -158,7 +160,10 @@ const SnakeGame = () => {
                 </div>
             </div>
             <div
-                className="grid bg-secondary rounded-lg shadow-inner relative cursor-pointer"
+                className={cn(
+                    "grid bg-secondary rounded-lg shadow-inner relative",
+                    !food && !gameOver && "cursor-pointer"
+                )}
                 style={{
                     gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)`,
                     width: isFullscreen ? 'calc(100vh - 120px)' : 'min(80vw, 480px)',
@@ -191,7 +196,7 @@ const SnakeGame = () => {
                                     isSnakeHead ? 'bg-primary rounded-md scale-110' : '',
                                     isSnake ? 'bg-primary/70 rounded-sm' : '',
                                     isFood ? 'bg-destructive rounded-full animate-pulse' : '',
-                                    'hover:bg-green-500/20'
+                                    !food && !gameOver && 'hover:bg-green-500/20'
                                 )}
                             />
                         </div>
