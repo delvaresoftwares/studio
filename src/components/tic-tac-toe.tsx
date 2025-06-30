@@ -14,8 +14,8 @@ const Square = ({ value, onSquareClick }: { value: SquareValue; onSquareClick: (
       className="w-24 h-24 bg-secondary/50 rounded-lg flex items-center justify-center shadow-md transition-all duration-200 ease-in-out hover:bg-primary/20 backdrop-blur-sm"
       onClick={onSquareClick}
     >
-      {value === 'X' && <X className="w-12 h-12 text-foreground" />}
-      {value === 'O' && <Circle className="w-12 h-12 text-primary" />}
+      {value === 'X' && <X className="w-12 h-12 text-foreground transition-all duration-300 [text-shadow:0_0_8px_hsl(var(--foreground))]" />}
+      {value === 'O' && <Circle className="w-12 h-12 text-primary transition-all duration-300 [text-shadow:0_0_8px_hsl(var(--primary))]" />}
     </button>
   );
 };

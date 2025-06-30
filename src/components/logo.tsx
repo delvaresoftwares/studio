@@ -7,7 +7,7 @@ const Logo = () => {
       alt="Delvare Logo" 
       width={40} 
       height={40} 
-      className="rounded-lg"
+      className="rounded-lg transition-all hover:drop-shadow-[0_0_8px_hsl(var(--primary))]"
     />
   );
 };

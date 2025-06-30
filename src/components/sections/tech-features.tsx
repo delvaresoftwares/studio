@@ -44,7 +44,7 @@ const TechFeatureCard = ({ featureName, icon, tldr }: { featureName: string; ico
   }, [featureName]);
 
   return (
-    <Card className="flex flex-col h-full transform transition-transform duration-300 hover:-translate-y-2">
+    <Card className="flex flex-col h-full transition-all duration-300 hover:-translate-y-2 hover:shadow-primary/20 hover:border-primary">
       <CardHeader>
         <div className="flex items-center gap-4">
           {icon}

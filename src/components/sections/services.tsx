@@ -83,7 +83,7 @@ const ServicesSection = () => {
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <Card key={index} className="overflow-hidden group transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+            <Card key={index} className="overflow-hidden group transition-all duration-300 hover:-translate-y-2 hover:shadow-primary/20 hover:border-primary">
               <CardHeader className="p-0 relative">
                 <Image src={service.image} alt={service.title} width={600} height={400} className="transition-transform duration-300 group-hover:scale-110 object-cover aspect-[3/2]" data-ai-hint={service.imageHint} />
                 {service.deal && (
