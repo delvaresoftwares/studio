@@ -48,8 +48,24 @@ export async function saveContactInfoAction(formData: ContactFormData): Promise<
       submittedAt: serverTimestamp(),
     });
     return { success: true };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error saving contact info to Firestore:", error);
-    return { success: false, error: "Failed to send message. This could be due to incorrect Firebase credentials or Firestore security rules." };
+    let errorMessage = "An unknown error occurred while sending your message.";
+    if (error.code) {
+        switch (error.code) {
+            case 'permission-denied':
+                errorMessage = "Submission failed due to a permissions issue. Have you deployed the firestore.rules file to your project?";
+                break;
+            case 'unauthenticated':
+                errorMessage = "Submission failed because the request was unauthenticated. Please check your Firebase configuration.";
+                break;
+            case 'not-found':
+                 errorMessage = "Could not connect to the database. Have you created a Firestore database in your Firebase project?";
+                 break;
+            default:
+                errorMessage = `A Firebase error occurred: ${error.code}. Please check your configuration and security rules.`;
+        }
+    }
+    return { success: false, error: errorMessage };
   }
 }
