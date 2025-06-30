@@ -22,61 +22,88 @@ const Square = ({ value, onSquareClick }: { value: SquareValue; onSquareClick: (
 
 const TicTacToe = () => {
   const [squares, setSquares] = useState<SquareValue[]>(Array(9).fill(null));
-  const [xIsNext, setXIsNext] = useState(true);
-  const [status, setStatus] = useState('');
+  const [isPlayerNext, setIsPlayerNext] = useState(true);
+  const [status, setStatus] = useState('Your turn!');
+  const [gameOver, setGameOver] = useState(false);
 
-  const handleClick = (i: number) => {
-    if (calculateWinner(squares) || squares[i]) {
+  const calculateWinner = (currentSquares: SquareValue[]) => {
+    const lines = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      [0, 4, 8], [2, 4, 6]
+    ];
+    for (let i = 0; i < lines.length; i++) {
+      const [a, b, c] = lines[i];
+      if (currentSquares[a] && currentSquares[a] === currentSquares[b] && currentSquares[a] === currentSquares[c]) {
+        return currentSquares[a];
+      }
+    }
+    return null;
+  };
+
+  const handlePlayerClick = (i: number) => {
+    if (gameOver || squares[i] || !isPlayerNext) {
       return;
     }
-    const nextSquares = squares.slice();
-    nextSquares[i] = xIsNext ? 'X' : 'O';
-    setSquares(nextSquares);
-    setXIsNext(!xIsNext);
+    const newSquares = squares.slice();
+    newSquares[i] = 'X';
+    setSquares(newSquares);
+    setIsPlayerNext(false);
   };
 
   const resetGame = () => {
     setSquares(Array(9).fill(null));
-    setXIsNext(true);
+    setIsPlayerNext(true);
+    setGameOver(false);
+    setStatus('Your turn!');
   };
 
   useEffect(() => {
     const winner = calculateWinner(squares);
-    if (winner) {
-      setStatus(`Winner: ${winner}`);
-    } else if (squares.every(Boolean)) {
-      setStatus('Draw!');
-    } else {
-      setStatus(`Next player: ${xIsNext ? 'X' : 'O'}`);
-    }
-  }, [squares, xIsNext]);
+    const isDraw = squares.every(Boolean);
 
-  function calculateWinner(squares: SquareValue[]) {
-    const lines = [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
-      [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
-      [0, 4, 8], [2, 4, 6]             // diagonals
-    ];
-    for (let i = 0; i < lines.length; i++) {
-      const [a, b, c] = lines[i];
-      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-        return squares[a];
-      }
+    if (winner) {
+      setStatus(winner === 'X' ? 'You Win!' : 'PC Wins!');
+      setGameOver(true);
+    } else if (isDraw) {
+      setStatus("It's a Draw!");
+      setGameOver(true);
+    } else {
+      setStatus(isPlayerNext ? 'Your turn!' : 'PC is thinking...');
     }
-    return null;
-  }
+
+    // PC's turn
+    if (!isPlayerNext && !winner && !isDraw) {
+      const timeoutId = setTimeout(() => {
+        const availableSquares = squares
+          .map((value, index) => (value === null ? index : null))
+          .filter((val): val is number => val !== null);
+        
+        if (availableSquares.length > 0) {
+          const randomMove = availableSquares[Math.floor(Math.random() * availableSquares.length)];
+          const newSquares = squares.slice();
+          newSquares[randomMove] = 'O';
+          setSquares(newSquares);
+          setIsPlayerNext(true);
+        }
+      }, 700);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [squares, isPlayerNext]);
+
 
   return (
     <div className="p-4 rounded-xl bg-card border shadow-xl">
         <div className="flex justify-between items-center mb-4">
-            <div className="text-xl font-bold font-headline">{status}</div>
+            <div className="text-xl font-bold font-headline w-48">{status}</div>
             <Button variant="ghost" size="icon" onClick={resetGame}>
                 <RotateCcw className="w-5 h-5" />
             </Button>
         </div>
-        <div className="grid grid-cols-3 gap-3">
+        <div className={cn("grid grid-cols-3 gap-3", (gameOver || !isPlayerNext) && "pointer-events-none opacity-70")}>
             {squares.map((square, i) => (
-                <Square key={i} value={square} onSquareClick={() => handleClick(i)} />
+                <Square key={i} value={square} onSquareClick={() => handlePlayerClick(i)} />
             ))}
         </div>
     </div>
