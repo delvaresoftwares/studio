@@ -99,7 +99,7 @@ const ContactSection = () => {
                     )}
                 </CardContent>
                 <div className="hidden md:block">
-                  <Image src="https://placehold.co/600x800.png" alt="Contact illustration" width={600} height={800} className="object-cover w-full h-full rounded-r-lg" data-ai-hint="contact us" />
+                  <Image src="https://placehold.co/600x800.png" alt="Contact illustration" width={600} height={800} className="object-cover w-full h-full rounded-r-lg" data-ai-hint="modern business" />
                 </div>
             </div>
         </Card>

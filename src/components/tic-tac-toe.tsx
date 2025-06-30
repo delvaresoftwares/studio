@@ -41,55 +41,66 @@ const TicTacToe = () => {
     return null;
   };
 
-  const findBestMove = (board: SquareValue[]): number => {
-    // 1. Check if AI can win in the next move
+  const findBestMove = (currentSquares: SquareValue[]): number => {
+    const player: Player = 'O';
+    const opponent: Player = 'X';
+
+    // 1. Check for a winning move for AI
     for (let i = 0; i < 9; i++) {
-      if (board[i] === null) {
-        const tempBoard = [...board];
-        tempBoard[i] = 'O';
-        if (calculateWinner(tempBoard) === 'O') {
+      if (currentSquares[i] === null) {
+        const nextSquares = [...currentSquares];
+        nextSquares[i] = player;
+        if (calculateWinner(nextSquares) === player) {
           return i;
         }
       }
     }
 
-    // 2. Check if player can win in the next move, and block them
+    // 2. Block the opponent's winning move
     for (let i = 0; i < 9; i++) {
-      if (board[i] === null) {
-        const tempBoard = [...board];
-        tempBoard[i] = 'X';
-        if (calculateWinner(tempBoard) === 'X') {
+      if (currentSquares[i] === null) {
+        const nextSquares = [...currentSquares];
+        nextSquares[i] = opponent;
+        if (calculateWinner(nextSquares) === opponent) {
           return i;
         }
       }
     }
 
-    // 3. Try to take the center square
-    if (board[4] === null) {
+    // 3. Try to take the center
+    if (currentSquares[4] === null) {
       return 4;
     }
 
-    // 4. Try to take one of the corner squares
-    const corners = [0, 2, 6, 8];
-    const availableCorners = corners.filter(i => board[i] === null);
-    if (availableCorners.length > 0) {
-      return availableCorners[Math.floor(Math.random() * availableCorners.length)];
+    // 4. Try to take the opposite corner
+    const opposites: {[key: number]: number} = { 0: 8, 2: 6, 6: 2, 8: 0 };
+    for (const cornerStr in opposites) {
+      const corner = parseInt(cornerStr, 10);
+      const opposite = opposites[corner];
+      if (currentSquares[corner] === opponent && currentSquares[opposite] === null) {
+        return opposite;
+      }
     }
-
-    // 5. Take any available side
-    const sides = [1, 3, 5, 7];
-    const availableSides = sides.filter(i => board[i] === null);
-    if (availableSides.length > 0) {
-      return availableSides[Math.floor(Math.random() * availableSides.length)];
-    }
-
-    // Fallback for any remaining square
-    const availableSquares = board
-      .map((value, index) => (value === null ? index : null))
-      .filter((val): val is number => val !== null);
     
-    return availableSquares[0];
+    // 5. Try to take an empty corner
+    const corners = [0, 2, 6, 8];
+    const emptyCorners = corners.filter(i => currentSquares[i] === null);
+    if (emptyCorners.length > 0) {
+      return emptyCorners[Math.floor(Math.random() * emptyCorners.length)];
+    }
+
+    // 6. Try to take an empty side
+    const sides = [1, 3, 5, 7];
+    const emptySides = sides.filter(i => currentSquares[i] === null);
+    if (emptySides.length > 0) {
+      return emptySides[Math.floor(Math.random() * emptySides.length)];
+    }
+
+    // Fallback (should not be reached in a normal game)
+    const available = currentSquares.map((s, i) => s === null ? i : null).filter((v): v is number => v !== null);
+    return available[0];
   };
+
 
   const handlePlayerClick = (i: number) => {
     if (gameOver || squares[i] || !isPlayerNext) {

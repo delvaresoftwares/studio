@@ -12,7 +12,7 @@ const services = [
     title: "Custom Websites",
     description: "Beautiful, responsive, and high-performing websites that captivate your audience and grow your brand.",
     icon: <Code className="w-10 h-10 text-primary" />,
-    image: "https://placehold.co/600x400.png",
+    image: "https://www.justinmind.com/wp-content/uploads/2020/02/website-background-design-guide.png",
     imageHint: "website design",
     deal: "20% OFF"
   },
@@ -20,14 +20,14 @@ const services = [
     title: "Mobile Apps",
     description: "Intuitive and powerful iOS and Android applications to connect with your users on the go.",
     icon: <Smartphone className="w-10 h-10 text-primary" />,
-    image: "https://placehold.co/600x400.png",
+    image: "https://c0.wallpaperflare.com/preview/260/841/181/concept-development-device-flat.jpg",
     imageHint: "mobile app",
   },
   {
     title: "Billing & Inventory Software",
     description: "Streamline your operations with custom software for billing, inventory, and resource management.",
     icon: <Warehouse className="w-10 h-10 text-primary" />,
-    image: "https://placehold.co/600x400.png",
+    image: "https://media.istockphoto.com/id/917884972/photo/businessperson-checking-invoice-on-computer.jpg?s=612x612&w=0&k=20&c=poJnPJ0nYZUDRM2-ccfhwFhWaZhfTIt6ISY-W-QgQJM=",
     imageHint: "inventory software",
     deal: "Free Consultation"
   }
@@ -85,7 +85,7 @@ const ServicesSection = () => {
           {services.map((service, index) => (
             <Card key={index} className="overflow-hidden group transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
               <CardHeader className="p-0 relative">
-                <Image src={service.image} alt={service.title} width={600} height={400} className="transition-transform duration-300 group-hover:scale-110" data-ai-hint={service.imageHint} />
+                <Image src={service.image} alt={service.title} width={600} height={400} className="transition-transform duration-300 group-hover:scale-110 object-cover aspect-[3/2]" data-ai-hint={service.imageHint} />
                 {service.deal && (
                   <Badge className="absolute top-4 right-4 bg-primary text-primary-foreground text-sm py-1 px-3">{service.deal}</Badge>
                 )}
@@ -96,7 +96,7 @@ const ServicesSection = () => {
                   <CardTitle className="text-2xl font-bold font-headline">{service.title}</CardTitle>
                 </div>
                 <CardDescription className="mb-4">{service.description}</CardDescription>
-                <p className="font-bold text-3xl text-primary">From {formatPrice(pricingData[country][service.title as ServiceTitle])}</p>
+                <p className="font-bold text-4xl text-primary">From {formatPrice(pricingData[country][service.title as ServiceTitle])}</p>
               </CardContent>
             </Card>
           ))}

@@ -4,24 +4,32 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTechFeatureDescriptionAction } from '@/app/actions';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ShieldCheck, LineChart, Cpu } from 'lucide-react';
+import { ShieldCheck, LineChart, Cpu, Laptop } from 'lucide-react';
 
 const features = [
   {
     name: "Cyber Security",
-    icon: <ShieldCheck className="w-8 h-8 text-primary" />
+    icon: <ShieldCheck className="w-8 h-8 text-primary" />,
+    tldr: "Protecting your digital assets with robust security measures."
   },
   {
     name: "Digital Marketing",
-    icon: <LineChart className="w-8 h-8 text-primary" />
+    icon: <LineChart className="w-8 h-8 text-primary" />,
+    tldr: "Expanding your reach and engaging with your target audience."
   },
   {
     name: "AI Integration",
-    icon: <Cpu className="w-8 h-8 text-primary" />
+    icon: <Cpu className="w-8 h-8 text-primary" />,
+    tldr: "Leveraging artificial intelligence to build smarter solutions."
+  },
+  {
+    name: "Software Development",
+    icon: <Laptop className="w-8 h-8 text-primary" />,
+    tldr: "Building custom websites and mobile applications for your needs."
   }
 ];
 
-const TechFeatureCard = ({ featureName, icon }: { featureName: string; icon: React.ReactNode }) => {
+const TechFeatureCard = ({ featureName, icon, tldr }: { featureName: string; icon: React.ReactNode; tldr: string; }) => {
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -44,6 +52,7 @@ const TechFeatureCard = ({ featureName, icon }: { featureName: string; icon: Rea
         </div>
       </CardHeader>
       <CardContent className="flex-grow">
+        <p className="font-semibold text-muted-foreground mb-3">{tldr}</p>
         {loading ? (
           <div className="space-y-2">
             <Skeleton className="h-4 w-full" />
@@ -51,7 +60,7 @@ const TechFeatureCard = ({ featureName, icon }: { featureName: string; icon: Rea
             <Skeleton className="h-4 w-3/4" />
           </div>
         ) : (
-          <p className="text-muted-foreground">{description}</p>
+          <p className="text-muted-foreground text-sm">{description}</p>
         )}
       </CardContent>
     </Card>
@@ -66,9 +75,9 @@ const TechFeaturesSection = () => {
         <p className="max-w-2xl mx-auto text-lg text-muted-foreground mb-12">
           We leverage the latest technologies to build robust and scalable solutions.
         </p>
-        <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature) => (
-            <TechFeatureCard key={feature.name} featureName={feature.name} icon={feature.icon} />
+            <TechFeatureCard key={feature.name} featureName={feature.name} icon={feature.icon} tldr={feature.tldr} />
           ))}
         </div>
       </div>
