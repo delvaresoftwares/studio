@@ -1,8 +1,8 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Only allow creating (writing) new contact documents.
-    // This prevents anyone from reading, updating, or deleting contact info from the client.
+    // Only allow new contacts to be created.
+    // Disallow reading, updating, or deleting from the client.
     match /contacts/{contactId} {
       allow read, update, delete: if false;
       allow create: if true;
