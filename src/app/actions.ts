@@ -3,7 +3,10 @@
 import { generateTechFeatureDescription } from "@/ai/flows/tech-feature-descriptions"
 import { estimateProjectCost } from "@/ai/flows/project-cost-estimator"
 import type { ProjectCostEstimatorInput, ProjectCostEstimatorOutput } from "@/ai/flows/project-cost-estimator"
-import { Resend } from 'resend';
+
+import { db } from '@/lib/firebase';
+import { collection, addDoc, getDocs, query, orderBy, serverTimestamp } from 'firebase/firestore';
+import type { Timestamp } from 'firebase/firestore';
 
 export async function getTechFeatureDescriptionAction(featureName: string): Promise<string> {
   try {
@@ -32,38 +35,80 @@ export type ContactFormData = {
   message: string;
 };
 
+export type Contact = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  createdAt: string;
+}
+
+// Action to save contact info to Firestore
 export async function saveContactInfoAction(formData: ContactFormData): Promise<{ success: boolean; error?: string }> {
   // 1. Validate environment variables
-  if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === "YOUR_RESEND_API_KEY") {
-    console.error("Resend API key is not set up. Please create and populate a .env.local file.");
+  if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
+    console.error("Firebase config is not set up. Please create and populate a .env.local file.");
     return { 
       success: false, 
-      error: "The contact form is not yet configured. Please follow the instructions in the README to set up Resend." 
+      error: "The contact form is not yet configured. Please follow the instructions in the README." 
     };
   }
-
-  const resend = new Resend(process.env.RESEND_API_KEY);
-  const toEmail = 'you@example.com'; // IMPORTANT: Replace with your email address in src/app/actions.ts
-
-  // 2. Send the email
+  
+  // 2. Save data to Firestore
   try {
-    await resend.emails.send({
-      from: 'Delvare Contact Form <onboarding@resend.dev>', // This is a default for testing. See README.
-      to: toEmail,
-      subject: `New Contact Form Submission from ${formData.name}`,
-      reply_to: formData.email,
-      html: `
-        <h1>New Contact Submission</h1>
-        <p><strong>Name:</strong> ${formData.name}</p>
-        <p><strong>Email:</strong> ${formData.email}</p>
-        <p><strong>Phone:</strong> ${formData.phone}</p>
-        <p><strong>Message:</strong></p>
-        <p>${formData.message.replace(/\n/g, '<br>')}</p>
-      `,
+    const contactsCollection = collection(db, 'contacts');
+    await addDoc(contactsCollection, {
+      ...formData,
+      createdAt: serverTimestamp(),
     });
     return { success: true };
   } catch (error: any) {
-    console.error("Error sending email with Resend:", error);
-    return { success: false, error: "An error occurred while sending your message. Please check your Resend configuration and try again." };
+    console.error("Error saving to Firestore:", error);
+    // Provide a more specific error message if it's a permission issue
+    if (error.code === 'permission-denied') {
+        return { 
+            success: false, 
+            error: "Failed to submit: Permission denied. Please check your Firestore security rules as per the README." 
+        };
+    }
+    return { 
+        success: false, 
+        error: "An error occurred while saving your message. Please try again." 
+    };
+  }
+}
+
+// Action to get all contacts from Firestore
+export async function getContactsAction(): Promise<{ contacts?: Contact[]; error?: string }> {
+  if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
+    return { error: "Firebase is not configured on the server." };
+  }
+
+  try {
+    const contactsCollection = collection(db, 'contacts');
+    const q = query(contactsCollection, orderBy('createdAt', 'desc'));
+    const querySnapshot = await getDocs(q);
+    
+    const contacts = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        const createdAt = data.createdAt as Timestamp;
+        return {
+            id: doc.id,
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+            message: data.message,
+            createdAt: createdAt ? new Date(createdAt.seconds * 1000).toLocaleString() : 'N/A',
+        }
+    });
+    
+    return { contacts };
+  } catch (error: any) {
+    console.error("Error fetching contacts:", error);
+     if (error.code === 'permission-denied') {
+        return { error: "Could not fetch contacts: Permission denied. Ensure your Firestore security rules are deployed correctly." };
+    }
+    return { error: "Failed to fetch contacts from the database." };
   }
 }

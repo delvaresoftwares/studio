@@ -54,7 +54,7 @@ const ContactSection = () => {
        toast({
         variant: "destructive",
         title: "Submission Error",
-        description: "Could not send message. Please ensure your Firebase configuration is correct and try again.",
+        description: "Could not send message. Please try again later.",
       });
     } finally {
       setIsLoading(false);

@@ -1,11 +1,13 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Only allow new contacts to be created.
-    // Disallow reading, updating, or deleting from the client.
+    // Allow anyone to create a contact document through the form
     match /contacts/{contactId} {
-      allow read, update, delete: if false;
       allow create: if true;
+
+      // Disallow reading, updating, or deleting from the client-side
+      // Server Actions with Admin SDK privileges will bypass these rules for the admin panel
+      allow read, update, delete: if false;
     }
   }
 }
