@@ -15,7 +15,7 @@ const Header = () => {
       <div className="container mx-auto flex items-center justify-between h-20 px-4">
         <a href="#hero" className="flex items-center gap-3">
           <Logo />
-           <span className="font-bold text-xl">Delver</span>
+           <span className="font-bold text-xl">Delvare</span>
         </a>
         <nav className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (

@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Delver: Software Solutions',
+  title: 'Delvare: Software Solutions',
   description: 'Custom Software Solutions for Your Business',
 };
 
