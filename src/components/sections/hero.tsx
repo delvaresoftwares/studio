@@ -10,7 +10,7 @@ const HeroSection = () => {
             Build. Launch. Succeed.
           </h1>
           <p className="max-w-xl mx-auto md:mx-0 text-lg md:text-xl text-muted-foreground mb-8">
-            Buissware provides cutting-edge software solutions tailored to your business needs. From websites to complex inventory systems, we deliver excellence.
+            Delver provides cutting-edge software solutions tailored to your business needs. From websites to complex inventory systems, we deliver excellence.
           </p>
           <div className="flex gap-4 justify-center md:justify-start">
             <Button size="lg" asChild>
@@ -24,7 +24,7 @@ const HeroSection = () => {
         <div className="hidden md:flex justify-center animate-fade-in-up">
           <Image 
             src="https://res.cloudinary.com/dt4mweku7/image/upload/v1751266409/buissware_amykyt.gif" 
-            alt="Buissware services animation" 
+            alt="Delver services animation" 
             width={500} 
             height={500} 
             unoptimized 

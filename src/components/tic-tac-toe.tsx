@@ -11,7 +11,7 @@ type SquareValue = Player | null;
 const Square = ({ value, onSquareClick }: { value: SquareValue; onSquareClick: () => void }) => {
   return (
     <button
-      className="w-24 h-24 bg-secondary rounded-lg flex items-center justify-center shadow-md transition-all duration-200 ease-in-out hover:bg-primary/20"
+      className="w-24 h-24 bg-secondary/50 rounded-lg flex items-center justify-center shadow-md transition-all duration-200 ease-in-out hover:bg-primary/20 backdrop-blur-sm"
       onClick={onSquareClick}
     >
       {value === 'X' && <X className="w-12 h-12 text-foreground" />}
@@ -41,6 +41,56 @@ const TicTacToe = () => {
     return null;
   };
 
+  const findBestMove = (board: SquareValue[]): number => {
+    // 1. Check if AI can win in the next move
+    for (let i = 0; i < 9; i++) {
+      if (board[i] === null) {
+        const tempBoard = [...board];
+        tempBoard[i] = 'O';
+        if (calculateWinner(tempBoard) === 'O') {
+          return i;
+        }
+      }
+    }
+
+    // 2. Check if player can win in the next move, and block them
+    for (let i = 0; i < 9; i++) {
+      if (board[i] === null) {
+        const tempBoard = [...board];
+        tempBoard[i] = 'X';
+        if (calculateWinner(tempBoard) === 'X') {
+          return i;
+        }
+      }
+    }
+
+    // 3. Try to take the center square
+    if (board[4] === null) {
+      return 4;
+    }
+
+    // 4. Try to take one of the corner squares
+    const corners = [0, 2, 6, 8];
+    const availableCorners = corners.filter(i => board[i] === null);
+    if (availableCorners.length > 0) {
+      return availableCorners[Math.floor(Math.random() * availableCorners.length)];
+    }
+
+    // 5. Take any available side
+    const sides = [1, 3, 5, 7];
+    const availableSides = sides.filter(i => board[i] === null);
+    if (availableSides.length > 0) {
+      return availableSides[Math.floor(Math.random() * availableSides.length)];
+    }
+
+    // Fallback for any remaining square
+    const availableSquares = board
+      .map((value, index) => (value === null ? index : null))
+      .filter((val): val is number => val !== null);
+    
+    return availableSquares[0];
+  };
+
   const handlePlayerClick = (i: number) => {
     if (gameOver || squares[i] || !isPlayerNext) {
       return;
@@ -60,7 +110,7 @@ const TicTacToe = () => {
 
   useEffect(() => {
     const winner = calculateWinner(squares);
-    const isDraw = squares.every(Boolean);
+    const isDraw = !winner && squares.every(Boolean);
 
     if (winner) {
       setStatus(winner === 'X' ? 'You Win!' : 'PC Wins!');
@@ -75,16 +125,12 @@ const TicTacToe = () => {
     // PC's turn
     if (!isPlayerNext && !winner && !isDraw) {
       const timeoutId = setTimeout(() => {
-        const availableSquares = squares
-          .map((value, index) => (value === null ? index : null))
-          .filter((val): val is number => val !== null);
-        
-        if (availableSquares.length > 0) {
-          const randomMove = availableSquares[Math.floor(Math.random() * availableSquares.length)];
-          const newSquares = squares.slice();
-          newSquares[randomMove] = 'O';
-          setSquares(newSquares);
-          setIsPlayerNext(true);
+        const bestMove = findBestMove(squares);
+        if (bestMove !== undefined) {
+            const newSquares = squares.slice();
+            newSquares[bestMove] = 'O';
+            setSquares(newSquares);
+            setIsPlayerNext(true);
         }
       }, 700);
 
@@ -94,7 +140,7 @@ const TicTacToe = () => {
 
 
   return (
-    <div className="p-4 rounded-xl bg-card border shadow-xl">
+    <div className="p-4 rounded-xl bg-card/60 border border-white/10 shadow-xl backdrop-blur-lg">
         <div className="flex justify-between items-center mb-4">
             <div className="text-xl font-bold font-headline w-48">{status}</div>
             <Button variant="ghost" size="icon" onClick={resetGame}>
