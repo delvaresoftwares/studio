@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Image from "next/image";
-import { Code, Smartphone, Warehouse } from "lucide-react";
+import { Code, Smartphone, Warehouse, Mail, Calculator } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const services = [
@@ -61,7 +61,7 @@ const ServicesSection = () => {
   };
 
   return (
-    <section id="services" className="w-full bg-secondary/30">
+    <section id="services" className="w-full bg-secondary">
       <div className="container mx-auto px-4 py-24 sm:py-32 text-center">
         <h2 className="font-headline text-4xl md:text-5xl font-bold mb-4">Our Core Services</h2>
         <p className="max-w-2xl mx-auto text-lg text-muted-foreground mb-8">
@@ -71,7 +71,7 @@ const ServicesSection = () => {
             <div className="flex items-center gap-4">
                 <span className="text-muted-foreground">Show prices in:</span>
                  <Select onValueChange={(value) => setCountry(value as Country)} defaultValue={country}>
-                    <SelectTrigger className="w-[180px] bg-card/80">
+                    <SelectTrigger className="w-[180px] bg-card">
                         <SelectValue placeholder="Select country" />
                     </SelectTrigger>
                     <SelectContent>
@@ -105,7 +105,7 @@ const ServicesSection = () => {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent className="p-6 flex-grow flex flex-col bg-card/40">
+              <CardContent className="p-6 flex-grow flex flex-col bg-card">
                 <CardDescription className="mb-6 flex-grow">{service.description}</CardDescription>
                 <div className="mb-6">
                   <p className="text-sm text-muted-foreground">Starts from</p>
@@ -113,9 +113,20 @@ const ServicesSection = () => {
                     <span className="text-base font-normal text-muted-foreground">{service.title === 'Billing & Inventory Software' ? '/year' : ''}</span>
                   </p>
                 </div>
-                <Button asChild className="w-full mt-auto">
-                  <a href="#contact">Get a Quote</a>
-                </Button>
+                <div className="mt-auto grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <Button asChild>
+                        <a href="#contact">
+                            <Mail />
+                            Get a Quote
+                        </a>
+                    </Button>
+                    <Button asChild variant="outline">
+                        <a href="#estimator">
+                            <Calculator />
+                            Estimate
+                        </a>
+                    </Button>
+                </div>
               </CardContent>
             </Card>
           ))}
