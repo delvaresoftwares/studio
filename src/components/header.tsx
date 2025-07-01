@@ -16,7 +16,10 @@ const Header = () => {
       <div className="container mx-auto flex items-center justify-between h-20 px-4">
         <a href="#hero" className="flex items-center gap-3">
           <Logo />
-           <span className="font-bold text-xl">Delvare</span>
+          <div className="flex flex-col">
+            <span className="font-bold text-xl leading-tight">Delvare</span>
+            <span className="text-xs text-muted-foreground leading-tight">IT Solutions</span>
+          </div>
         </a>
         <nav className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (

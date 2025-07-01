@@ -29,7 +29,7 @@ const services = [
     icon: <Warehouse className="w-10 h-10 text-primary" />,
     image: "https://media.istockphoto.com/id/917884972/photo/businessperson-checking-invoice-on-computer.jpg?s=612x612&w=0&k=20&c=poJnPJ0nYZUDRM2-ccfhwFhWaZhfTIt6ISY-W-QgQJM=",
     imageHint: "inventory software",
-    deal: "Free Consultation"
+    deal: "Annual Plans"
   }
 ];
 
