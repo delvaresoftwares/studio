@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { RotateCcw, Expand, Minimize, MousePointerClick } from 'lucide-react';
+import { RotateCcw, Expand, Minimize } from 'lucide-react';
 
 const GRID_SIZE = 20;
 const INITIAL_SNAKE = [
@@ -18,21 +18,21 @@ type Position = { x: number; y: number };
 
 const SnakeGame = () => {
     const [snake, setSnake] = useState<Position[]>(INITIAL_SNAKE);
-    const [food, setFood] = useState<Position | null>(null);
+    const [food, setFood] = useState<Position[]>([]);
     const [path, setPath] = useState<Position[]>([]);
     const [gameOver, setGameOver] = useState(false);
     const [score, setScore] = useState(0);
-    const [message, setMessage] = useState('Click on the grid to place an apple!');
+    const [message, setMessage] = useState('Click on the grid to place apples!');
     const [isFullscreen, setIsFullscreen] = useState(false);
     const gameContainerRef = useRef<HTMLDivElement>(null);
 
     const resetGame = useCallback(() => {
         setSnake(INITIAL_SNAKE);
-        setFood(null);
+        setFood([]);
         setPath([]);
         setGameOver(false);
         setScore(0);
-        setMessage('Click on the grid to place an apple!');
+        setMessage('Click on the grid to place apples!');
     }, []);
 
     const findPath = useCallback((start: Position, end: Position, currentSnake: Position[]): Position[] | null => {
@@ -70,11 +70,28 @@ const SnakeGame = () => {
         }
         return null;
     }, []);
+
+    const findPathToNearestFood = useCallback((start: Position, foods: Position[], currentSnake: Position[]): Position[] | null => {
+        let shortestPath: Position[] | null = null;
+        for (const foodItem of foods) {
+            const currentPath = findPath(start, foodItem, currentSnake);
+            if (currentPath && (!shortestPath || currentPath.length < shortestPath.length)) {
+                shortestPath = currentPath;
+            }
+        }
+        return shortestPath;
+    }, [findPath]);
     
     useEffect(() => {
-        if (!food || gameOver) return;
+        if (gameOver) return;
 
-        const newPath = findPath(snake[0], food, snake);
+        if (food.length === 0) {
+            setPath([]);
+            setMessage('Click on the grid to place apples!');
+            return;
+        }
+
+        const newPath = findPathToNearestFood(snake[0], food, snake);
 
         if (newPath) {
             setPath(newPath);
@@ -83,10 +100,10 @@ const SnakeGame = () => {
             setGameOver(true);
             setMessage('No path for the snake! Game Over.');
         }
-    }, [food, snake, gameOver, findPath]);
+    }, [food, snake, gameOver, findPathToNearestFood]);
 
     useEffect(() => {
-        if (gameOver || path.length === 0 || !food) return;
+        if (gameOver || path.length === 0) return;
 
         const gameInterval = setInterval(() => {
             setSnake(prevSnake => {
@@ -95,11 +112,11 @@ const SnakeGame = () => {
                 
                 newSnake.unshift(newHead);
 
-                if (newHead.x === food?.x && newHead.y === food?.y) {
+                const foodIndex = food.findIndex(f => f.x === newHead.x && f.y === newHead.y);
+
+                if (foodIndex !== -1) {
                     setScore(s => s + 1);
-                    setFood(null);
-                    setPath([]);
-                    setMessage('Yum! Place another apple.');
+                    setFood(prevFood => prevFood.filter((_, index) => index !== foodIndex));
                 } else {
                     newSnake.pop();
                 }
@@ -111,22 +128,17 @@ const SnakeGame = () => {
         }, GAME_SPEED);
 
         return () => clearInterval(gameInterval);
-    }, [path, food, gameOver]);
+    }, [path, gameOver, food]);
     
     const handleGridClick = (x: number, y: number) => {
-        // This guard prevents placing a new apple while one is already on the board or the game is over.
-        if (gameOver || food) return;
+        if (gameOver) return;
 
         const isSnakeBody = snake.some(segment => segment.x === x && segment.y === y);
         if (isSnakeBody) {
             setMessage('Cannot place an apple on the snake!');
-            setTimeout(() => {
-                // Revert message only if it hasn't changed (e.g., user hasn't successfully placed an apple elsewhere).
-                setMessage(prev => prev === 'Cannot place an apple on the snake!' ? 'Click on the grid to place an apple!' : prev);
-            }, 2000);
             return;
         }
-        setFood({ x, y });
+        setFood(prevFood => [...prevFood, { x, y }]);
     };
 
     const toggleFullscreen = () => {
@@ -162,20 +174,19 @@ const SnakeGame = () => {
             <div
                 className={cn(
                     "grid bg-secondary rounded-lg shadow-inner relative",
-                    !food && !gameOver && "cursor-pointer"
+                    !gameOver && "cursor-pointer"
                 )}
                 style={{
                     gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)`,
-                    width: isFullscreen ? 'calc(100vh - 120px)' : 'min(80vw, 480px)',
-                    height: isFullscreen ? 'calc(100vh - 120px)' : 'min(80vw, 480px)',
+                    width: isFullscreen ? 'calc(100vh - 150px)' : 'min(80vw, 480px)',
+                    height: isFullscreen ? 'calc(100vh - 150px)' : 'min(80vw, 480px)',
                     margin: '0 auto',
                 }}
             >
-                {(gameOver || !food) && (
+                {gameOver && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 z-10 rounded-lg pointer-events-none">
                         <p className="text-2xl font-bold text-white text-center p-4">{message}</p>
-                        {gameOver && <Button onClick={resetGame} className="mt-4 pointer-events-auto">Play Again</Button>}
-                        {!gameOver && !food && <MousePointerClick className="w-10 h-10 text-white animate-pulse" />}
+                        <Button onClick={resetGame} className="mt-4 pointer-events-auto">Play Again</Button>
                     </div>
                 )}
                 {Array.from({ length: GRID_SIZE * GRID_SIZE }).map((_, i) => {
@@ -183,7 +194,7 @@ const SnakeGame = () => {
                     const y = Math.floor(i / GRID_SIZE);
                     const isSnake = snake.some(seg => seg.x === x && seg.y === y);
                     const isSnakeHead = snake[0].x === x && snake[0].y === y;
-                    const isFood = food?.x === x && food?.y === y;
+                    const isFood = food.some(f => f.x === x && f.y === y);
                     return (
                         <div
                             key={i}
@@ -196,13 +207,16 @@ const SnakeGame = () => {
                                     isSnakeHead ? 'bg-primary rounded-md scale-110' : '',
                                     isSnake ? 'bg-primary/70 rounded-sm' : '',
                                     isFood ? 'bg-destructive rounded-full animate-pulse' : '',
-                                    !food && !gameOver && 'hover:bg-green-500/20'
+                                    !gameOver && 'hover:bg-green-500/20'
                                 )}
                             />
                         </div>
                     );
                 })}
             </div>
+             <div className="text-center mt-4 font-medium text-muted-foreground">
+                <p>{message}</p>
+             </div>
         </Card>
     );
 };
