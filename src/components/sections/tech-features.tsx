@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardTitle, CardDescription } from "@/components/ui/card";
 import { getTechFeatureDescriptionAction } from '@/app/actions';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ShieldCheck, LineChart, Cpu, Laptop } from 'lucide-react';
@@ -44,25 +44,23 @@ const TechFeatureCard = ({ featureName, icon, tldr }: { featureName: string; ico
   }, [featureName]);
 
   return (
-    <Card className="flex flex-col h-full">
-      <CardHeader>
-        <div className="flex items-center gap-4">
-          {icon}
-          <CardTitle className="font-headline text-xl">{featureName}</CardTitle>
-        </div>
-      </CardHeader>
-      <CardContent className="flex-grow">
-        <p className="font-semibold text-muted-foreground mb-3">{tldr}</p>
+    <Card className="group flex h-full flex-col items-center p-8 text-center transition-all duration-300 ease-in-out hover:-translate-y-2">
+      <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 ring-8 ring-primary/5 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary/20 group-hover:ring-primary/10">
+        {icon}
+      </div>
+      <CardTitle className="font-headline text-2xl mb-3">{featureName}</CardTitle>
+      <CardDescription className="mb-6 flex-grow font-semibold">{tldr}</CardDescription>
+      <div className="w-full">
         {loading ? (
           <div className="space-y-2">
             <Skeleton className="h-4 w-full" />
             <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-3/4" />
+            <Skeleton className="h-4 w-4/5 mx-auto" />
           </div>
         ) : (
-          <p className="text-muted-foreground text-sm">{description}</p>
+          <p className="text-muted-foreground/80 text-sm">{description}</p>
         )}
-      </CardContent>
+      </div>
     </Card>
   );
 };
