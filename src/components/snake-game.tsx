@@ -16,13 +16,26 @@ const GAME_SPEED = 100;
 
 type Position = { x: number; y: number };
 
+const fruitTypes = [
+  { type: 'apple', points: 1, color: 'bg-red-500' },
+  { type: 'orange', points: 3, color: 'bg-orange-500' },
+  { type: 'pear', points: 5, color: 'bg-yellow-300' }
+];
+
+type FoodItem = {
+  position: Position;
+  type: 'apple' | 'orange' | 'pear';
+  points: number;
+};
+
+
 const SnakeGame = () => {
     const [snake, setSnake] = useState<Position[]>(INITIAL_SNAKE);
-    const [food, setFood] = useState<Position[]>([]);
+    const [food, setFood] = useState<FoodItem[]>([]);
     const [path, setPath] = useState<Position[]>([]);
     const [gameOver, setGameOver] = useState(false);
     const [score, setScore] = useState(0);
-    const [message, setMessage] = useState('Click on the grid to place apples!');
+    const [message, setMessage] = useState('Click on the grid to place some fruit!');
     const [isFullscreen, setIsFullscreen] = useState(false);
     const gameContainerRef = useRef<HTMLDivElement>(null);
 
@@ -32,7 +45,7 @@ const SnakeGame = () => {
         setPath([]);
         setGameOver(false);
         setScore(0);
-        setMessage('Click on the grid to place apples!');
+        setMessage('Click on the grid to place some fruit!');
     }, []);
 
     const findPath = useCallback((start: Position, end: Position, currentSnake: Position[]): Position[] | null => {
@@ -71,10 +84,10 @@ const SnakeGame = () => {
         return null;
     }, []);
 
-    const findPathToNearestFood = useCallback((start: Position, foods: Position[], currentSnake: Position[]): Position[] | null => {
+    const findPathToNearestFood = useCallback((start: Position, foods: FoodItem[], currentSnake: Position[]): Position[] | null => {
         let shortestPath: Position[] | null = null;
         for (const foodItem of foods) {
-            const currentPath = findPath(start, foodItem, currentSnake);
+            const currentPath = findPath(start, foodItem.position, currentSnake);
             if (currentPath && (!shortestPath || currentPath.length < shortestPath.length)) {
                 shortestPath = currentPath;
             }
@@ -87,7 +100,7 @@ const SnakeGame = () => {
 
         if (food.length === 0) {
             setPath([]);
-            setMessage('Click on the grid to place apples!');
+            setMessage('Click on the grid to place some fruit!');
             return;
         }
 
@@ -112,11 +125,15 @@ const SnakeGame = () => {
                 
                 newSnake.unshift(newHead);
 
-                const foodIndex = food.findIndex(f => f.x === newHead.x && f.y === newHead.y);
+                const foodIndex = food.findIndex(f => f.position.x === newHead.x && f.position.y === newHead.y);
 
                 if (foodIndex !== -1) {
-                    setScore(s => s + 1);
+                    const eatenFood = food[foodIndex];
+                    setScore(s => s + eatenFood.points);
                     setFood(prevFood => prevFood.filter((_, index) => index !== foodIndex));
+                     for (let i = 0; i < eatenFood.points; i++) {
+                        newSnake.push({ ...newSnake[newSnake.length - 1] });
+                    }
                 } else {
                     newSnake.pop();
                 }
@@ -135,10 +152,23 @@ const SnakeGame = () => {
 
         const isSnakeBody = snake.some(segment => segment.x === x && segment.y === y);
         if (isSnakeBody) {
-            setMessage('Cannot place an apple on the snake!');
+            setMessage('Cannot place food on the snake!');
             return;
         }
-        setFood(prevFood => [...prevFood, { x, y }]);
+
+        const isFoodHere = food.some(f => f.position.x === x && f.position.y === y);
+        if (isFoodHere) {
+            return;
+        }
+
+        const randomFruit = fruitTypes[Math.floor(Math.random() * fruitTypes.length)];
+        const newFood: FoodItem = {
+            position: { x, y },
+            type: randomFruit.type as 'apple' | 'orange' | 'pear',
+            points: randomFruit.points
+        };
+
+        setFood(prevFood => [...prevFood, newFood]);
     };
 
     const toggleFullscreen = () => {
@@ -194,7 +224,8 @@ const SnakeGame = () => {
                     const y = Math.floor(i / GRID_SIZE);
                     const isSnake = snake.some(seg => seg.x === x && seg.y === y);
                     const isSnakeHead = snake[0].x === x && snake[0].y === y;
-                    const isFood = food.some(f => f.x === x && f.y === y);
+                    const foodItem = food.find(f => f.position.x === x && f.position.y === y);
+
                     return (
                         <div
                             key={i}
@@ -206,7 +237,7 @@ const SnakeGame = () => {
                                     'w-full h-full transition-colors duration-100',
                                     isSnakeHead ? 'bg-primary rounded-md scale-110' : '',
                                     isSnake ? 'bg-primary/70 rounded-sm' : '',
-                                    isFood ? 'bg-destructive rounded-full animate-pulse' : '',
+                                    foodItem ? `${fruitTypes.find(ft => ft.type === foodItem.type)?.color || 'bg-destructive'} rounded-full animate-breath` : '',
                                     !gameOver && 'hover:bg-green-500/20'
                                 )}
                             />
