@@ -3,6 +3,7 @@
 const BackgroundDecor = () => {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden bg-background pointer-events-none">
+       <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,hsl(var(--primary)/0.1),transparent)]"></div>
       <div className="absolute top-0 left-0 h-full w-full">
         <span
           className="absolute top-[10%] left-[5%] h-32 w-32 rounded-full bg-primary/5 blur-3xl animate-float"

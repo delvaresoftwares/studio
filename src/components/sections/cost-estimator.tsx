@@ -54,7 +54,7 @@ const CostEstimatorSection = () => {
   };
 
   return (
-    <section id="estimator" className="w-full">
+    <section id="estimator" className="w-full bg-secondary">
       <div className="container mx-auto px-4 py-24 sm:py-32">
         <div className="text-center mb-12">
             <h2 className="font-headline text-4xl md:text-5xl font-bold mb-4">AI Project Cost Estimator</h2>
@@ -63,7 +63,7 @@ const CostEstimatorSection = () => {
             </p>
         </div>
         <div className="grid lg:grid-cols-2 gap-12 items-start">
-          <Card>
+          <Card className="bg-card/50 backdrop-blur-lg border border-border/20 shadow-lg">
             <CardHeader>
               <CardTitle>Project Details</CardTitle>
             </CardHeader>
@@ -148,7 +148,7 @@ const CostEstimatorSection = () => {
           </Card>
           
           <div className="h-full">
-            <Card className="min-h-full">
+            <Card className="min-h-full bg-card/50 backdrop-blur-lg border border-border/20 shadow-lg">
                 <CardHeader>
                     <CardTitle>Estimation Result</CardTitle>
                     <CardDescription>Your project cost estimate will appear here.</CardDescription>
@@ -165,7 +165,7 @@ const CostEstimatorSection = () => {
                         <div className="space-y-6 animate-fade-in-up">
                             <div>
                                 <h3 className="text-lg font-medium text-muted-foreground">Estimated Cost</h3>
-                                <p className="text-4xl font-bold text-primary">
+                                <p className="text-5xl font-bold text-primary">
                                     ${estimation.estimatedCost.toLocaleString()}
                                 </p>
                             </div>

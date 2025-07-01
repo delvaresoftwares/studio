@@ -75,7 +75,7 @@ const ContactSection = () => {
                 Have a project in mind or just want to say hi? We'd love to hear from you.
             </p>
         </div>
-        <Card className="max-w-xl mx-auto">
+        <Card className="max-w-xl mx-auto bg-card/50 backdrop-blur-lg border border-border/20 shadow-lg">
             <CardContent className="p-8">
                 {isSubmitted ? (
                     <div className="text-center animate-fade-in-up">

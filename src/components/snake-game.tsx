@@ -195,7 +195,7 @@ const SnakeGame = () => {
     }, []);
 
     return (
-        <Card ref={gameContainerRef} className="p-4 rounded-xl bg-card/60 border shadow-xl w-auto backdrop-blur-xl data-[fullscreen=true]:h-full data-[fullscreen=true]:w-full" data-fullscreen={isFullscreen}>
+        <Card ref={gameContainerRef} className="p-4 rounded-xl bg-card/60 backdrop-blur-md border border-border/20 shadow-xl w-auto data-[fullscreen=true]:h-full data-[fullscreen=true]:w-full" data-fullscreen={isFullscreen}>
              <div className="flex justify-between items-center mb-4">
                 <div className="text-xl font-bold font-headline">Score: {score}</div>
                 <div className="flex items-center gap-2">

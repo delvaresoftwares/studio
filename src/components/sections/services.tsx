@@ -118,7 +118,7 @@ const ServicesSection = () => {
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
           {services.map((service, index) => (
-            <Card key={index} className="flex flex-col text-left overflow-hidden group transition-all duration-300 hover:shadow-primary/20 hover:-translate-y-2">
+            <Card key={index} className="flex flex-col text-left overflow-hidden group transition-all duration-300 hover:shadow-primary/20 hover:-translate-y-2 bg-card/50 backdrop-blur-lg border border-border/20 hover:border-primary/40">
               <CardHeader className="p-0 relative">
                 <Image 
                   src={service.image} 
@@ -139,7 +139,7 @@ const ServicesSection = () => {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent className="p-6 flex-grow flex flex-col bg-card">
+              <CardContent className="p-6 flex-grow flex flex-col">
                 <CardDescription className="mb-6 flex-grow">{service.description}</CardDescription>
                 <div className="mb-6">
                   <p className="text-sm text-muted-foreground">Starts from</p>
