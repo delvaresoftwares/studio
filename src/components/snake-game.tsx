@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { RotateCcw, Expand, Minimize } from 'lucide-react';
+import { RotateCcw, Expand, Minimize, Apple } from 'lucide-react';
 
 const GRID_SIZE = 20;
 const INITIAL_SNAKE = [
@@ -16,15 +16,21 @@ const GAME_SPEED = 100;
 
 type Position = { x: number; y: number };
 
+const PearIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 512 512" fill="currentColor" {...props}>
+    <path d="M352,256c-23.6,0-44.5,12.1-55.8,30.6c-13.8-4.1-28.1-6.6-42.2-6.6c-14.1,0-28.4,2.5-42.2,6.6 C199.5,268.1,178.6,256,152,256C85.5,256,32,309.5,32,376c0,44.2,35.8,80,80,80h288c44.2,0,80-35.8,80-80 C480,309.5,426.5,256,352,256z" />
+    <path d="M336,224c-17.7,0-32-14.3-32-32V64c0-35.3-28.7-64-64-64s-64,28.7-64,64v128c0,17.7-14.3,32-32,32s-32-14.3-32-32V96h32 V64h-32c0-17.7-14.3-32-32-32s-32,14.3-32,32v128c0,53,43,96,96,96h128c53,0,96-43,96-96V192c0-17.7-14.3-32-32-32s-32,14.3-32,32v32 H336z" />
+  </svg>
+);
+
 const fruitTypes = [
-  { type: 'apple', points: 1, color: 'bg-red-500' },
-  { type: 'orange', points: 3, color: 'bg-orange-500' },
-  { type: 'pear', points: 5, color: 'bg-yellow-300' }
+  { type: 'apple', points: 1, icon: <Apple className="w-full h-full p-0.5 text-red-500" /> },
+  { type: 'pear', points: 5, icon: <PearIcon className="w-full h-full p-0.5 text-yellow-400" /> }
 ];
 
 type FoodItem = {
   position: Position;
-  type: 'apple' | 'orange' | 'pear';
+  type: 'apple' | 'pear';
   points: number;
 };
 
@@ -164,7 +170,7 @@ const SnakeGame = () => {
         const randomFruit = fruitTypes[Math.floor(Math.random() * fruitTypes.length)];
         const newFood: FoodItem = {
             position: { x, y },
-            type: randomFruit.type as 'apple' | 'orange' | 'pear',
+            type: randomFruit.type as 'apple' | 'pear',
             points: randomFruit.points
         };
 
@@ -203,8 +209,7 @@ const SnakeGame = () => {
             </div>
             <div
                 className={cn(
-                    "grid bg-secondary rounded-lg shadow-inner relative",
-                    !gameOver && "cursor-pointer"
+                    "grid bg-secondary rounded-lg shadow-inner relative"
                 )}
                 style={{
                     gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)`,
@@ -225,6 +230,7 @@ const SnakeGame = () => {
                     const isSnake = snake.some(seg => seg.x === x && seg.y === y);
                     const isSnakeHead = snake[0].x === x && snake[0].y === y;
                     const foodItem = food.find(f => f.position.x === x && f.position.y === y);
+                    const fruitIcon = foodItem ? fruitTypes.find(ft => ft.type === foodItem.type)?.icon : null;
 
                     return (
                         <div
@@ -232,15 +238,18 @@ const SnakeGame = () => {
                             className="aspect-square"
                             onClick={() => handleGridClick(x, y)}
                         >
-                            <div
-                                className={cn(
-                                    'w-full h-full transition-colors duration-100',
-                                    isSnakeHead ? 'bg-primary rounded-md scale-110' : '',
-                                    isSnake ? 'bg-primary/70 rounded-sm' : '',
-                                    foodItem ? `${fruitTypes.find(ft => ft.type === foodItem.type)?.color || 'bg-destructive'} rounded-full animate-breath` : '',
-                                    !gameOver && 'hover:bg-green-500/20'
-                                )}
-                            />
+                            {isSnake ? (
+                                <div className={cn(
+                                    'w-full h-full',
+                                    isSnakeHead ? 'bg-primary rounded-md scale-110' : 'bg-primary/70 rounded-sm'
+                                )} />
+                            ) : foodItem ? (
+                                <div className="w-full h-full animate-breath p-0.5">
+                                   {fruitIcon}
+                                </div>
+                            ) : (
+                                 <div className={cn('w-full h-full', !gameOver && 'cursor-pointer', !gameOver && 'hover:bg-green-500/20')} />
+                            )}
                         </div>
                     );
                 })}
