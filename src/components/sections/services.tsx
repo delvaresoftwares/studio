@@ -1,11 +1,11 @@
 'use client'
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Image from "next/image";
-import { Code, Smartphone, Warehouse, Mail, Calculator } from "lucide-react";
+import { Code, Smartphone, Warehouse, Mail, Calculator, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const services = [
@@ -43,15 +43,49 @@ const pricingData = {
 type Country = keyof typeof pricingData;
 type ServiceTitle = keyof (typeof pricingData)['USA'];
 
+const europeanCountryCodes = ['AL', 'AD', 'AM', 'AT', 'BY', 'BE', 'BA', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FO', 'FI', 'FR', 'DE', 'GI', 'GR', 'HU', 'IS', 'IE', 'IM', 'IT', 'LV', 'LI', 'LT', 'LU', 'MT', 'MD', 'MC', 'ME', 'NL', 'MK', 'NO', 'PL', 'PT', 'RO', 'RU', 'SM', 'RS', 'SK', 'SI', 'ES', 'SE', 'CH', 'TR', 'UA', 'GB', 'VA'];
+
 
 const ServicesSection = () => {
-  const [country, setCountry] = useState<Country>('USA');
+  const [country, setCountry] = useState<Country | null>(null);
+  const [isLocating, setIsLocating] = useState(true);
 
-  const formatPrice = (price: number) => {
+  useEffect(() => {
+    const fetchCountry = async () => {
+      setIsLocating(true);
+      try {
+        const response = await fetch('https://ipapi.co/json/');
+        if (!response.ok) {
+          throw new Error('Failed to fetch location');
+        }
+        const data = await response.json();
+        const countryCode = data.country_code;
+        
+        if (countryCode === 'US') {
+          setCountry('USA');
+        } else if (countryCode === 'IN') {
+          setCountry('India');
+        } else if (europeanCountryCodes.includes(countryCode)) {
+          setCountry('Europe');
+        } else {
+          setCountry('USA'); // Default
+        }
+      } catch (error) {
+        console.error("Could not auto-detect location:", error);
+        setCountry('USA'); // Fallback on error
+      } finally {
+        setIsLocating(false);
+      }
+    };
+
+    fetchCountry();
+  }, []);
+
+  const formatPrice = (price: number, selectedCountry: Country) => {
     try {
       return new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: pricingData[country].currency,
+        currency: pricingData[selectedCountry].currency,
         minimumFractionDigits: 0,
       }).format(price);
     } catch (e) {
@@ -70,9 +104,9 @@ const ServicesSection = () => {
         <div className="flex justify-center mb-12">
             <div className="flex items-center gap-4">
                 <span className="text-muted-foreground">Show prices in:</span>
-                 <Select onValueChange={(value) => setCountry(value as Country)} defaultValue={country}>
+                 <Select onValueChange={(value) => setCountry(value as Country)} value={country || ''} disabled={isLocating}>
                     <SelectTrigger className="w-[180px] bg-card">
-                        <SelectValue placeholder="Select country" />
+                        <SelectValue placeholder={isLocating ? "Detecting..." : "Select country"} />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="USA">USA (USD)</SelectItem>
@@ -109,9 +143,16 @@ const ServicesSection = () => {
                 <CardDescription className="mb-6 flex-grow">{service.description}</CardDescription>
                 <div className="mb-6">
                   <p className="text-sm text-muted-foreground">Starts from</p>
-                  <p className="font-bold text-4xl text-primary">{formatPrice(pricingData[country][service.title as ServiceTitle])}
-                    <span className="text-base font-normal text-muted-foreground">{service.title === 'Billing & Inventory Software' ? '/year' : ''}</span>
-                  </p>
+                  <div className="font-bold text-4xl text-primary h-11 flex items-center">
+                    {country ? (
+                      <>
+                        {formatPrice(pricingData[country][service.title as ServiceTitle], country)}
+                        <span className="text-base font-normal text-muted-foreground ml-1">{service.title === 'Billing & Inventory Software' ? '/year' : ''}</span>
+                      </>
+                    ) : (
+                      <Loader2 className="w-8 h-8 animate-spin" />
+                    )}
+                  </div>
                 </div>
                 <div className="mt-auto grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <Button asChild>
