@@ -1,3 +1,4 @@
+
 // src/ai/flows/project-cost-estimator.ts
 'use server';
 
@@ -33,11 +34,14 @@ export type ProjectCostEstimatorInput = z.infer<typeof ProjectCostEstimatorInput
 const ProjectCostEstimatorOutputSchema = z.object({
   estimatedCost: z
     .number()
-    .describe('The estimated cost of the project in the appropriate local currency (e.g., USD, INR, EUR). For subscription models, this should be the monthly cost.'),
+    .describe('The estimated cost of the project. This must be a raw number without any currency symbols, commas, or other formatting.'),
+  currency: z
+    .enum(['USD', 'INR', 'EUR'])
+    .describe('The currency for the estimated cost (e.g., USD, INR, EUR).'),
   costJustification: z
     .string()
     .describe(
-      'A detailed breakdown of why the project will cost this much, including estimates of time and resources required. Clearly state if it is a one-time fee or a monthly subscription, and mention the currency (e.g., USD, INR, EUR).'
+      'A detailed breakdown of why the project will cost this much, including estimates of time and resources required. Clearly state if it is a one-time fee or a monthly subscription.'
     ),
 });
 export type ProjectCostEstimatorOutput = z.infer<typeof ProjectCostEstimatorOutputSchema>;
@@ -59,8 +63,10 @@ const prompt = ai.definePrompt({
     *   If the location is in or is "India", use **INR**.
     *   If the location is in or is "Europe", use **EUR**.
     *   For "USA" or any other location, use **USD**.
-2.  **Estimate Cost:** Based on the user's request and the pricing for the determined currency, provide an \`estimatedCost\`. The output number should NOT contain any currency symbols or commas.
-3.  **Justify Cost:** In the \`costJustification\`, clearly state the recommended service, plan, and currency (e.g., "Mid-Tier Plan for Mobile App in INR"). Explain your choice and whether it's a one-time fee or monthly subscription.
+2.  **Estimate Cost & Currency:** Based on the user's request and the pricing for the determined currency:
+    *   Set the \`estimatedCost\` field with the appropriate numeric value. **This must be a raw number without any currency symbols or commas.**
+    *   Set the \`currency\` field to the correct currency code ('USD', 'INR', or 'EUR').
+3.  **Justify Cost:** In the \`costJustification\`, clearly state the recommended service and plan. Explain your choice and whether it's a one-time fee or monthly subscription. Do NOT mention the currency in the justification, as it is handled in a separate field.
 
 **PRICING GUIDELINES (per location):**
 

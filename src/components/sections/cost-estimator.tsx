@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -169,7 +170,12 @@ const CostEstimatorSection = () => {
                             <div>
                                 <h3 className="text-lg font-medium text-muted-foreground">Estimated Cost</h3>
                                 <p className="text-5xl font-bold text-primary">
-                                    ${estimation.estimatedCost.toLocaleString()}
+                                  {new Intl.NumberFormat('en-US', {
+                                    style: 'currency',
+                                    currency: estimation.currency,
+                                    minimumFractionDigits: 0,
+                                    maximumFractionDigits: 0,
+                                  }).format(estimation.estimatedCost)}
                                 </p>
                             </div>
                             <div>
