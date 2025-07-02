@@ -7,7 +7,7 @@ const HeroSection = () => {
     <section id="hero" className="w-full flex items-center justify-center relative min-h-screen p-4">
       <div className="container mx-auto grid md:grid-cols-2 gap-8 items-center pt-20 pb-10">
         <div className="animate-fade-in-up text-center md:text-left">
-          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-4 text-foreground drop-shadow-sm">
+          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary via-green-400 to-white" style={{textShadow: '0 0 20px hsl(var(--primary)/0.5)'}}>
             Build. Launch. Succeed.
           </h1>
           <p className="max-w-xl mx-auto md:mx-0 text-lg md:text-xl text-muted-foreground mb-8">
@@ -28,14 +28,17 @@ const HeroSection = () => {
             </Button>
           </div>
         </div>
-        <div className="hidden md:flex justify-center animate-fade-in-up">
-          <Image 
-            src="https://res.cloudinary.com/dt4mweku7/image/upload/v1751266409/buissware_amykyt.gif" 
-            alt="Delvare services animation" 
-            width={500} 
-            height={500} 
-            unoptimized 
-          />
+        <div className="hidden md:flex justify-center items-center">
+            <div className="animate-float" style={{animationDuration: '8s'}}>
+              <Image 
+                src="https://res.cloudinary.com/dt4mweku7/image/upload/v1751266409/buissware_amykyt.gif" 
+                alt="Delvare services animation" 
+                width={500} 
+                height={500} 
+                unoptimized 
+                className="drop-shadow-[0_0_35px_hsl(var(--primary)/0.3)]"
+              />
+            </div>
         </div>
       </div>
     </section>

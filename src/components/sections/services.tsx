@@ -105,7 +105,7 @@ const ServicesSection = () => {
             <div className="flex items-center gap-4">
                 <span className="text-muted-foreground">Show prices in:</span>
                  <Select onValueChange={(value) => setCountry(value as Country)} value={country || ''} disabled={isLocating}>
-                    <SelectTrigger className="w-[180px] bg-card">
+                    <SelectTrigger className="w-[180px] bg-card/50 backdrop-blur-sm">
                         <SelectValue placeholder={isLocating ? "Detecting..." : "Select country"} />
                     </SelectTrigger>
                     <SelectContent>
@@ -118,7 +118,7 @@ const ServicesSection = () => {
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
           {services.map((service, index) => (
-            <Card key={index} className="flex flex-col text-left overflow-hidden group transition-all duration-300 hover:-translate-y-2 bg-card shadow-xl hover:shadow-primary/20">
+            <Card key={index} className="flex flex-col text-left overflow-hidden group transition-all duration-300 hover:-translate-y-2 bg-card/50 backdrop-blur-sm border border-border/20 hover:border-primary/50 shadow-lg hover:shadow-primary/20">
               <CardHeader className="p-0 relative">
                 <Image 
                   src={service.image} 
@@ -128,7 +128,7 @@ const ServicesSection = () => {
                   className="transition-transform duration-500 group-hover:scale-110 object-cover aspect-[3/2]" 
                   data-ai-hint={service.imageHint} 
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
                  {service.deal && (
                   <Badge className="absolute top-4 right-4 bg-primary text-primary-foreground text-sm py-1 px-3 shadow-lg">{service.deal}</Badge>
                 )}
