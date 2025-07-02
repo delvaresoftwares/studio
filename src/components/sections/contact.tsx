@@ -12,6 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Send, CheckCircle, Loader2 } from 'lucide-react';
 import { saveContactInfoAction } from '@/app/actions';
 import { useToast } from "@/hooks/use-toast";
+import { cn } from '@/lib/utils';
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]\d{3}[)])?[\s-]?\d{3}[\s-]?\d{4}$/
@@ -67,15 +68,18 @@ const ContactSection = () => {
   }
 
   return (
-    <section id="contact" className="w-full bg-secondary min-h-screen flex items-center justify-center">
-      <div className="container mx-auto px-4 py-24 sm:py-32">
+    <section id="contact" className="w-full relative py-24 sm:py-32">
+      <div className="container mx-auto px-4">
         <div className="text-center mb-12">
             <h2 className="font-headline text-4xl md:text-5xl font-bold mb-4">Get In Touch</h2>
             <p className="max-w-2xl mx-auto text-lg text-muted-foreground">
                 Have a project in mind or just want to say hi? We'd love to hear from you.
             </p>
         </div>
-        <Card className="max-w-xl mx-auto bg-card shadow-xl">
+        <Card className={cn(
+          "max-w-xl mx-auto glass-card transition-all duration-300",
+          "hover:shadow-[0_0_40px_hsl(var(--primary)/0.3)]"
+        )}>
             <CardContent className="p-8">
                 {isSubmitted ? (
                     <div className="text-center animate-fade-in-up">
@@ -96,7 +100,7 @@ const ContactSection = () => {
                             render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Full Name</FormLabel>
-                                <FormControl><Input placeholder="John Doe" {...field} /></FormControl>
+                                <FormControl><Input className="bg-transparent" placeholder="John Doe" {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                             )}
@@ -107,7 +111,7 @@ const ContactSection = () => {
                             render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Email Address</FormLabel>
-                                <FormControl><Input type="email" placeholder="you@example.com" {...field} /></FormControl>
+                                <FormControl><Input className="bg-transparent" type="email" placeholder="you@example.com" {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                             )}
@@ -119,7 +123,7 @@ const ContactSection = () => {
                           render={({ field }) => (
                           <FormItem>
                               <FormLabel>Phone Number</FormLabel>
-                              <FormControl><Input type="tel" placeholder="(123) 456-7890" {...field} /></FormControl>
+                              <FormControl><Input className="bg-transparent" type="tel" placeholder="(123) 456-7890" {...field} /></FormControl>
                               <FormMessage />
                           </FormItem>
                           )}
@@ -130,7 +134,7 @@ const ContactSection = () => {
                           render={({ field }) => (
                           <FormItem>
                               <FormLabel>Your Message</FormLabel>
-                              <FormControl><Textarea placeholder="Tell us about your project..." {...field} rows={5} /></FormControl>
+                              <FormControl><Textarea className="bg-transparent" placeholder="Tell us about your project..." {...field} rows={5} /></FormControl>
                               <FormMessage />
                           </FormItem>
                           )}

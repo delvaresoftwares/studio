@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { X, Circle, RotateCcw } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card } from '@/components/ui/card';
 
 type Player = 'X' | 'O';
 type SquareValue = Player | null;
@@ -13,7 +14,7 @@ type Difficulty = 'easy' | 'hard';
 const Square = ({ value, onSquareClick }: { value: SquareValue; onSquareClick: () => void }) => {
   return (
     <button
-      className="w-24 h-24 bg-secondary rounded-lg flex items-center justify-center shadow-md transition-all duration-200 ease-in-out hover:bg-primary/20"
+      className="w-24 h-24 bg-background/50 rounded-lg flex items-center justify-center shadow-md transition-all duration-200 ease-in-out hover:bg-primary/20"
       onClick={onSquareClick}
     >
       {value === 'X' && <X className="w-12 h-12 text-foreground transition-all duration-300 [text-shadow:0_0_8px_hsl(var(--foreground))]" />}
@@ -138,7 +139,7 @@ const TicTacToe = () => {
 
 
   return (
-    <div className="p-4 rounded-xl bg-card shadow-xl">
+    <Card className="glass-card p-4">
         <div className="flex justify-between items-center mb-4">
             <div className="text-xl font-bold font-headline w-48">{status}</div>
             <Button variant="ghost" size="icon" onClick={resetGame}>
@@ -153,7 +154,7 @@ const TicTacToe = () => {
           }}
           className="mb-4 flex justify-center"
         >
-          <TabsList>
+          <TabsList className="glass-card border-0">
             <TabsTrigger value="easy">Easy</TabsTrigger>
             <TabsTrigger value="hard">Hard</TabsTrigger>
           </TabsList>
@@ -163,7 +164,7 @@ const TicTacToe = () => {
                 <Square key={i} value={square} onSquareClick={() => handlePlayerClick(i)} />
             ))}
         </div>
-    </div>
+    </Card>
   );
 };
 

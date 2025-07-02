@@ -196,7 +196,7 @@ const SnakeGame = () => {
     }, []);
 
     return (
-        <Card ref={gameContainerRef} className="p-4 rounded-xl bg-card shadow-xl w-auto data-[fullscreen=true]:h-full data-[fullscreen=true]:w-full" data-fullscreen={isFullscreen}>
+        <Card ref={gameContainerRef} className="glass-card p-4 w-auto data-[fullscreen=true]:h-full data-[fullscreen=true]:w-full" data-fullscreen={isFullscreen}>
              <div className="flex justify-between items-center mb-4">
                 <div className="text-xl font-bold font-headline">Score: {score}</div>
                 <div className="flex items-center gap-2">
@@ -210,7 +210,7 @@ const SnakeGame = () => {
             </div>
             <div
                 className={cn(
-                    "grid bg-secondary rounded-lg shadow-inner relative"
+                    "grid bg-background/50 rounded-lg shadow-inner relative"
                 )}
                 style={{
                     gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)`,
@@ -220,7 +220,7 @@ const SnakeGame = () => {
                 }}
             >
                 {gameOver && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 z-10 rounded-lg">
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 z-10 rounded-lg">
                         <p className="text-2xl font-bold text-white text-center p-4">{message}</p>
                         <Button onClick={resetGame} className="mt-4">Play Again</Button>
                     </div>

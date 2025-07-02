@@ -5,6 +5,7 @@ import { Card, CardContent, CardTitle, CardDescription } from "@/components/ui/c
 import { getTechFeatureDescriptionAction } from '@/app/actions';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ShieldCheck, LineChart, Cpu, Laptop } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const features = [
   {
@@ -44,31 +45,33 @@ const TechFeatureCard = ({ featureName, icon, tldr }: { featureName: string; ico
   }, [featureName]);
 
   return (
-    <Card className="group flex h-full flex-col p-8 text-center transition-all duration-300 ease-in-out hover:-translate-y-2 bg-card/50 backdrop-blur-sm border border-border/20 hover:border-primary/50 shadow-lg hover:shadow-primary/20">
-      <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary/20 mx-auto">
-        {icon}
-      </div>
-      <CardTitle className="font-headline text-2xl mb-3">{featureName}</CardTitle>
-      <CardDescription className="mb-6 flex-grow font-semibold text-muted-foreground">{tldr}</CardDescription>
-      <div className="w-full">
-        {loading ? (
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-4/5 mx-auto" />
-          </div>
-        ) : (
-          <p className="text-muted-foreground/80 text-sm">{description}</p>
-        )}
-      </div>
-    </Card>
+    <div className="group relative rounded-xl p-px bg-gradient-to-b from-white/10 to-transparent transition-all duration-300 hover:bg-white/20">
+      <Card className="glass-card h-full flex flex-col p-8 text-center transition-all duration-300 ease-in-out group-hover:-translate-y-2 group-hover:shadow-[0_0_40px_hsl(var(--primary)/0.3)]">
+        <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary/20 mx-auto">
+          {icon}
+        </div>
+        <CardTitle className="font-headline text-2xl mb-3">{featureName}</CardTitle>
+        <CardDescription className="mb-6 flex-grow font-semibold text-muted-foreground">{tldr}</CardDescription>
+        <div className="w-full min-h-[60px]">
+          {loading ? (
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-4/5 mx-auto" />
+            </div>
+          ) : (
+            <p className="text-muted-foreground/80 text-sm">{description}</p>
+          )}
+        </div>
+      </Card>
+    </div>
   );
 };
 
 const TechFeaturesSection = () => {
   return (
-    <section id="features" className="w-full bg-secondary min-h-screen flex items-center justify-center">
-      <div className="container mx-auto px-4 py-24 sm:py-32 text-center">
+    <section id="features" className="w-full relative py-24 sm:py-32">
+      <div className="container mx-auto px-4 text-center">
         <h2 className="font-headline text-4xl md:text-5xl font-bold mb-4">Technology at the Core</h2>
         <p className="max-w-2xl mx-auto text-lg text-muted-foreground mb-12">
           We leverage the latest technologies to build robust and scalable solutions.

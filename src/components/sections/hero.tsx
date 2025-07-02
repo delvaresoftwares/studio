@@ -4,10 +4,10 @@ import { Briefcase, Calculator } from 'lucide-react';
 
 const HeroSection = () => {
   return (
-    <section id="hero" className="w-full flex items-center justify-center relative min-h-screen p-4">
-      <div className="container mx-auto grid md:grid-cols-2 gap-8 items-center pt-20 pb-10">
+    <section id="hero" className="w-full flex items-center justify-center relative min-h-screen p-4 overflow-hidden">
+      <div className="container mx-auto grid md:grid-cols-2 gap-8 items-center pt-20 pb-10 z-10">
         <div className="animate-fade-in-up text-center md:text-left">
-          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary via-green-400 to-white" style={{textShadow: '0 0 20px hsl(var(--primary)/0.5)'}}>
+          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary via-green-400 to-white" style={{textShadow: '0 0 40px hsl(var(--primary)/0.7)'}}>
             Build. Launch. Succeed.
           </h1>
           <p className="max-w-xl mx-auto md:mx-0 text-lg md:text-xl text-muted-foreground mb-8">
@@ -36,7 +36,7 @@ const HeroSection = () => {
                 width={500} 
                 height={500} 
                 unoptimized 
-                className="drop-shadow-[0_0_35px_hsl(var(--primary)/0.3)]"
+                className="drop-shadow-[0_0_50px_hsl(var(--primary)/0.4)]"
               />
             </div>
         </div>

@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Loader2, Wand2 } from 'lucide-react';
 import type { ProjectCostEstimatorOutput } from '@/ai/flows/project-cost-estimator';
+import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
   projectDescription: z.string().min(50, { message: 'Please provide a detailed description of at least 50 characters.' }),
@@ -54,16 +55,18 @@ const CostEstimatorSection = () => {
   };
 
   return (
-    <section id="estimator" className="w-full min-h-screen flex items-center justify-center">
-      <div className="container mx-auto px-4 py-24 sm:py-32">
+    <section id="estimator" className="w-full py-24 sm:py-32">
+      <div className="container mx-auto px-4">
         <div className="text-center mb-12">
             <h2 className="font-headline text-4xl md:text-5xl font-bold mb-4">AI Project Cost Estimator</h2>
             <p className="max-w-2xl mx-auto text-lg text-muted-foreground">
                 Fill out the form to get an AI-powered cost estimation for your custom project.
             </p>
         </div>
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
-          <Card className="bg-card shadow-xl p-2">
+        <div className="grid lg:grid-cols-2 gap-8 items-start">
+          <Card className={cn("glass-card transition-all duration-300",
+              "hover:shadow-[0_0_40px_hsl(var(--primary)/0.3)]"
+          )}>
             <CardHeader>
               <CardTitle>Project Details</CardTitle>
             </CardHeader>
@@ -77,7 +80,7 @@ const CostEstimatorSection = () => {
                       <FormItem>
                         <FormLabel>Project Description</FormLabel>
                         <FormControl>
-                          <Textarea placeholder="Describe your project: features, goals, target audience..." {...field} rows={6} />
+                          <Textarea className="bg-transparent" placeholder="Describe your project: features, goals, target audience..." {...field} rows={6} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -91,7 +94,7 @@ const CostEstimatorSection = () => {
                         <FormItem>
                           <FormLabel>Your Location</FormLabel>
                           <FormControl>
-                            <Input placeholder="e.g., San Francisco, CA" {...field} />
+                            <Input className="bg-transparent" placeholder="e.g., San Francisco, CA" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -105,7 +108,7 @@ const CostEstimatorSection = () => {
                           <FormLabel>Urgency</FormLabel>
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                 <FormControl>
-                                    <SelectTrigger><SelectValue placeholder="Select urgency" /></SelectTrigger>
+                                    <SelectTrigger className="bg-transparent"><SelectValue placeholder="Select urgency" /></SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
                                     <SelectItem value="low">Low</SelectItem>
@@ -125,7 +128,7 @@ const CostEstimatorSection = () => {
                           <FormLabel>Complexity</FormLabel>
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                 <FormControl>
-                                    <SelectTrigger><SelectValue placeholder="Select complexity" /></SelectTrigger>
+                                    <SelectTrigger className="bg-transparent"><SelectValue placeholder="Select complexity" /></SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
                                     <SelectItem value="simple">Simple</SelectItem>
@@ -147,8 +150,8 @@ const CostEstimatorSection = () => {
             </CardContent>
           </Card>
           
-          <div className="h-full">
-            <Card className="min-h-full bg-card shadow-xl p-2">
+          <div className="h-full sticky top-24">
+            <Card className="min-h-full glass-card">
                 <CardHeader>
                     <CardTitle>Estimation Result</CardTitle>
                     <CardDescription>Your project cost estimate will appear here.</CardDescription>

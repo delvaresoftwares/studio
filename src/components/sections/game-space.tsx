@@ -4,9 +4,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import dynamic from "next/dynamic";
 import { Card } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const GameLoadingSkeleton = () => (
-  <Card className="p-4 rounded-xl bg-card shadow-xl w-[min(80vw,480px)] h-[min(80vw,580px)] flex items-center justify-center">
+  <Card className="glass-card p-4 w-[min(80vw,480px)] h-[min(80vw,580px)] flex items-center justify-center">
     <div className="text-center text-muted-foreground">
         <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4" />
         <p>Loading Game...</p>
@@ -26,7 +27,7 @@ const TicTacToe = dynamic(() => import('@/components/tic-tac-toe'), {
 
 const GameSpaceSection = () => {
     return (
-        <section id="game-space" className="w-full flex flex-col items-center justify-center py-24 sm:py-32 bg-secondary min-h-screen">
+        <section id="game-space" className="w-full flex flex-col items-center justify-center py-24 sm:py-32">
             <div className="text-center mb-12 px-4">
                 <h2 className="font-headline text-4xl md:text-5xl font-bold mb-4">Game On!</h2>
                 <p className="max-w-2xl mx-auto text-lg text-muted-foreground">
@@ -34,7 +35,7 @@ const GameSpaceSection = () => {
                 </p>
             </div>
             <Tabs defaultValue="snake" className="w-full max-w-max flex flex-col items-center">
-                <TabsList>
+                <TabsList className="glass-card border-0">
                     <TabsTrigger value="snake">Snake</TabsTrigger>
                     <TabsTrigger value="tictactoe">Tic-Tac-Toe</TabsTrigger>
                 </TabsList>
