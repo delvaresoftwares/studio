@@ -26,7 +26,7 @@ const TicTacToe = dynamic(() => import('@/components/tic-tac-toe'), {
 
 const GameSpaceSection = () => {
     return (
-        <section id="game-space" className="w-full flex flex-col items-center justify-center py-24 sm:py-32 bg-secondary min-h-screen snap-start">
+        <section id="game-space" className="w-full flex flex-col items-center justify-center py-24 sm:py-32 bg-secondary min-h-screen">
             <div className="text-center mb-12 px-4">
                 <h2 className="font-headline text-4xl md:text-5xl font-bold mb-4">Game On!</h2>
                 <p className="max-w-2xl mx-auto text-lg text-muted-foreground">

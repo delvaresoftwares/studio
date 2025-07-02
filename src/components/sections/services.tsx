@@ -95,7 +95,7 @@ const ServicesSection = () => {
   };
 
   return (
-    <section id="services" className="w-full min-h-screen snap-start flex items-center justify-center">
+    <section id="services" className="w-full min-h-screen flex items-center justify-center">
       <div className="container mx-auto px-4 py-24 sm:py-32 text-center">
         <h2 className="font-headline text-4xl md:text-5xl font-bold mb-4">Our Core Services</h2>
         <p className="max-w-2xl mx-auto text-lg text-muted-foreground mb-8">

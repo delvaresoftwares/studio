@@ -18,25 +18,16 @@ const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      // The scroll listener is on the `main` element now
-      const mainEl = document.querySelector('main');
-      if (mainEl) {
-        setScrolled(mainEl.scrollTop > 50);
-      }
+      setScrolled(window.scrollY > 50);
     };
 
-    const mainEl = document.querySelector('main');
-    if (mainEl) {
-      mainEl.addEventListener('scroll', handleScroll);
-    }
-    
+    window.addEventListener('scroll', handleScroll);
+
     // Initial check
     handleScroll();
 
     return () => {
-      if (mainEl) {
-        mainEl.removeEventListener('scroll', handleScroll);
-      }
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 

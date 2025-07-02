@@ -67,7 +67,7 @@ const TechFeatureCard = ({ featureName, icon, tldr }: { featureName: string; ico
 
 const TechFeaturesSection = () => {
   return (
-    <section id="features" className="w-full bg-secondary min-h-screen snap-start flex items-center justify-center">
+    <section id="features" className="w-full bg-secondary min-h-screen flex items-center justify-center">
       <div className="container mx-auto px-4 py-24 sm:py-32 text-center">
         <h2 className="font-headline text-4xl md:text-5xl font-bold mb-4">Technology at the Core</h2>
         <p className="max-w-2xl mx-auto text-lg text-muted-foreground mb-12">

@@ -4,7 +4,7 @@ import { Briefcase, Calculator } from 'lucide-react';
 
 const HeroSection = () => {
   return (
-    <section id="hero" className="w-full flex items-center justify-center relative min-h-screen p-4 snap-start">
+    <section id="hero" className="w-full flex items-center justify-center relative min-h-screen p-4">
       <div className="container mx-auto grid md:grid-cols-2 gap-8 items-center pt-20 pb-10">
         <div className="animate-fade-in-up text-center md:text-left">
           <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-4 text-foreground drop-shadow-sm">
