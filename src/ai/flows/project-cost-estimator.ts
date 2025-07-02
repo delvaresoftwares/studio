@@ -14,6 +14,9 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const ProjectCostEstimatorInputSchema = z.object({
+  projectType: z
+    .enum(['website', 'mobile', 'billing'])
+    .describe('The type of project.'),
   projectDescription: z
     .string()
     .describe('A detailed description of the custom software project.'),
@@ -59,7 +62,10 @@ const prompt = ai.definePrompt({
   prompt: `You are an expert project cost estimator for "Delvare Software Solutions". Your task is to provide an accurate cost estimate based on the user's inputs. You must strictly adhere to the output format.
 
 **CRITICAL INSTRUCTIONS:**
-1.  **Analyze Project Type:** First, determine if the \`projectDescription\` is for a "Custom Website", a "Mobile App", or "Billing & Inventory Software".
+1.  **Project Type:** The project type is '{{projectType}}'.
+    *   If '{{projectType}}' is 'website', use the "Custom Websites" pricing.
+    *   If '{{projectType}}' is 'mobile', use the "Mobile Apps" pricing.
+    *   If '{{projectType}}' is 'billing', use the "Billing & Inventory Software" pricing.
 2.  **Determine Currency:** Based on the user's \`location\`:
     *   If the location is "India" or a city in India, use **INR**.
     *   If the location is in Europe, use **EUR**.
@@ -68,7 +74,7 @@ const prompt = ai.definePrompt({
 4.  **Format Output:**
     *   \`estimatedCost\`: This MUST be a raw number. DO NOT include currency symbols, commas, or any text. For example, for $4,999, the value must be \`4999\`.
     *   \`currency\`: Set this to the correct three-letter code: 'USD', 'INR', or 'EUR'.
-    *   \`costJustification\`: Provide a brief explanation. Mention the project type, the selected plan (based on complexity), and whether it's a one-time fee or a monthly subscription.
+    *   \`costJustification\`: Provide a brief explanation based on the project description. Mention the project type, the selected plan (based on complexity), and whether it's a one-time fee or a monthly subscription.
 
 **PRICING GUIDELINES:**
 The price is determined by \`complexity\` (simple, medium, complex).
@@ -121,6 +127,7 @@ The price is determined by \`complexity\` (simple, medium, complex).
 *   **Complex Plan:** All Medium features + unlimited store locations and unlimited employees.
 
 **USER INPUT:**
+*   Project Type: {{projectType}}
 *   Project Description: {{{projectDescription}}}
 *   Location: {{{location}}}
 *   Urgency: {{{urgency}}}
@@ -138,6 +145,9 @@ const estimateProjectCostFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    return output!;
+    if (!output) {
+      throw new Error('The AI model failed to generate a valid estimate. The output was null.');
+    }
+    return output;
   }
 );

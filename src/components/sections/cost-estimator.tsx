@@ -17,6 +17,7 @@ import type { ProjectCostEstimatorOutput } from '@/ai/flows/project-cost-estimat
 import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
+  projectType: z.enum(['website', 'mobile', 'billing'], { required_error: "Please select a project type." }),
   projectDescription: z.string().min(50, { message: 'Please provide a detailed description of at least 50 characters.' }),
   location: z.string().min(2, { message: 'Location is required.' }),
   urgency: z.enum(['low', 'medium', 'high']),
@@ -33,6 +34,7 @@ const CostEstimatorSection = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      projectType: undefined,
       projectDescription: '',
       location: '',
       urgency: 'medium',
@@ -87,7 +89,27 @@ const CostEstimatorSection = () => {
                       </FormItem>
                     )}
                   />
-                  <div className="grid md:grid-cols-3 gap-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <FormField
+                      control={form.control}
+                      name="projectType"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Project Type</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                    <SelectTrigger className="bg-transparent"><SelectValue placeholder="Select a project type" /></SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    <SelectItem value="website">Custom Website</SelectItem>
+                                    <SelectItem value="mobile">Mobile App</SelectItem>
+                                    <SelectItem value="billing">Billing & Inventory Software</SelectItem>
+                                </SelectContent>
+                            </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                     <FormField
                       control={form.control}
                       name="location"
@@ -95,7 +117,7 @@ const CostEstimatorSection = () => {
                         <FormItem>
                           <FormLabel>Your Location</FormLabel>
                           <FormControl>
-                            <Input className="bg-transparent" placeholder="e.g., San Francisco, CA" {...field} />
+                            <Input className="bg-transparent" placeholder="e.g., India" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
