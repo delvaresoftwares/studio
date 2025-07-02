@@ -25,7 +25,7 @@ const BackgroundDecor = () => {
           className="fixed inset-0 -z-50 h-full w-full bg-cover bg-center bg-no-repeat bg-fixed"
           style={{
             backgroundImage:
-              "url('https://img.freepik.com/premium-vector/abstract-green-wavy-lines-isolated-white-background-creative-line-art-background-wave-design_500695-907.jpg')",
+              "url('https://media.istockphoto.com/id/1311448321/vector/abstract-background-with-wavy-green-lines-on-a-white-background.jpg?s=612x612&w=0&k=20&c=p-sOxgw-u_o_nUnD3rO-L5aZlUuI10h22EfO3sYc2y8=')",
           }}
         >
             <div className="absolute inset-0 bg-white/30 backdrop-blur-sm" />
