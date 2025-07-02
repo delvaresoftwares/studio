@@ -13,7 +13,7 @@ type Difficulty = 'easy' | 'hard';
 const Square = ({ value, onSquareClick }: { value: SquareValue; onSquareClick: () => void }) => {
   return (
     <button
-      className="w-24 h-24 bg-secondary/50 rounded-lg flex items-center justify-center shadow-md transition-all duration-200 ease-in-out hover:bg-primary/20 backdrop-blur-sm"
+      className="w-24 h-24 bg-secondary rounded-lg flex items-center justify-center shadow-md transition-all duration-200 ease-in-out hover:bg-primary/20"
       onClick={onSquareClick}
     >
       {value === 'X' && <X className="w-12 h-12 text-foreground transition-all duration-300 [text-shadow:0_0_8px_hsl(var(--foreground))]" />}
@@ -138,7 +138,7 @@ const TicTacToe = () => {
 
 
   return (
-    <div className="p-4 rounded-xl bg-card/60 backdrop-blur-md border border-border/20 shadow-xl">
+    <div className="p-4 rounded-xl bg-card shadow-xl">
         <div className="flex justify-between items-center mb-4">
             <div className="text-xl font-bold font-headline w-48">{status}</div>
             <Button variant="ghost" size="icon" onClick={resetGame}>

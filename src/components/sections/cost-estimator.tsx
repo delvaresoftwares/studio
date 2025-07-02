@@ -54,7 +54,7 @@ const CostEstimatorSection = () => {
   };
 
   return (
-    <section id="estimator" className="w-full">
+    <section id="estimator" className="w-full min-h-screen snap-start flex items-center justify-center">
       <div className="container mx-auto px-4 py-24 sm:py-32">
         <div className="text-center mb-12">
             <h2 className="font-headline text-4xl md:text-5xl font-bold mb-4">AI Project Cost Estimator</h2>
@@ -63,7 +63,7 @@ const CostEstimatorSection = () => {
             </p>
         </div>
         <div className="grid lg:grid-cols-2 gap-12 items-start">
-          <Card className="bg-card/50 backdrop-blur-xl border border-border/10 shadow-xl p-2">
+          <Card className="bg-card shadow-xl p-2">
             <CardHeader>
               <CardTitle>Project Details</CardTitle>
             </CardHeader>
@@ -148,7 +148,7 @@ const CostEstimatorSection = () => {
           </Card>
           
           <div className="h-full">
-            <Card className="min-h-full bg-card/50 backdrop-blur-xl border border-border/10 shadow-xl p-2">
+            <Card className="min-h-full bg-card shadow-xl p-2">
                 <CardHeader>
                     <CardTitle>Estimation Result</CardTitle>
                     <CardDescription>Your project cost estimate will appear here.</CardDescription>

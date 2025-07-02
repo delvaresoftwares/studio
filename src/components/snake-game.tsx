@@ -41,7 +41,7 @@ const SnakeGame = () => {
     const [path, setPath] = useState<Position[]>([]);
     const [gameOver, setGameOver] = useState(false);
     const [score, setScore] = useState(0);
-    const [message, setMessage] = useState('Click on the grid to place some fruit!');
+    const [message, setMessage] = useState('Click on the grid to place apples!');
     const [isFullscreen, setIsFullscreen] = useState(false);
     const gameContainerRef = useRef<HTMLDivElement>(null);
 
@@ -51,7 +51,7 @@ const SnakeGame = () => {
         setPath([]);
         setGameOver(false);
         setScore(0);
-        setMessage('Click on the grid to place some fruit!');
+        setMessage('Click on the grid to place apples!');
     }, []);
 
     const findPath = useCallback((start: Position, end: Position, currentSnake: Position[]): Position[] | null => {
@@ -106,7 +106,7 @@ const SnakeGame = () => {
 
         if (food.length === 0) {
             setPath([]);
-            setMessage('Click on the grid to place some fruit!');
+            setMessage('Click on the grid to place apples!');
             return;
         }
 
@@ -116,6 +116,7 @@ const SnakeGame = () => {
             setPath(newPath);
             setMessage('Snake is on its way!');
         } else {
+            setPath([]);
             setGameOver(true);
             setMessage('No path for the snake! Game Over.');
         }
@@ -195,7 +196,7 @@ const SnakeGame = () => {
     }, []);
 
     return (
-        <Card ref={gameContainerRef} className="p-4 rounded-xl bg-card/60 backdrop-blur-md border border-border/20 shadow-xl w-auto data-[fullscreen=true]:h-full data-[fullscreen=true]:w-full" data-fullscreen={isFullscreen}>
+        <Card ref={gameContainerRef} className="p-4 rounded-xl bg-card shadow-xl w-auto data-[fullscreen=true]:h-full data-[fullscreen=true]:w-full" data-fullscreen={isFullscreen}>
              <div className="flex justify-between items-center mb-4">
                 <div className="text-xl font-bold font-headline">Score: {score}</div>
                 <div className="flex items-center gap-2">
@@ -219,9 +220,9 @@ const SnakeGame = () => {
                 }}
             >
                 {gameOver && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 z-10 rounded-lg pointer-events-none">
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 z-10 rounded-lg">
                         <p className="text-2xl font-bold text-white text-center p-4">{message}</p>
-                        <Button onClick={resetGame} className="mt-4 pointer-events-auto">Play Again</Button>
+                        <Button onClick={resetGame} className="mt-4">Play Again</Button>
                     </div>
                 )}
                 {Array.from({ length: GRID_SIZE * GRID_SIZE }).map((_, i) => {

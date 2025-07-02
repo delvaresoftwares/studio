@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 
 const GameLoadingSkeleton = () => (
-  <Card className="p-4 rounded-xl bg-card/60 backdrop-blur-md border border-border/20 shadow-xl w-[min(80vw,480px)] h-[min(80vw,580px)] flex items-center justify-center">
+  <Card className="p-4 rounded-xl bg-card shadow-xl w-[min(80vw,480px)] h-[min(80vw,580px)] flex items-center justify-center">
     <div className="text-center text-muted-foreground">
         <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4" />
         <p>Loading Game...</p>
@@ -26,7 +26,7 @@ const TicTacToe = dynamic(() => import('@/components/tic-tac-toe'), {
 
 const GameSpaceSection = () => {
     return (
-        <section id="game-space" className="w-full flex flex-col items-center justify-center py-24 sm:py-32 bg-secondary">
+        <section id="game-space" className="w-full flex flex-col items-center justify-center py-24 sm:py-32 bg-secondary min-h-screen snap-start">
             <div className="text-center mb-12 px-4">
                 <h2 className="font-headline text-4xl md:text-5xl font-bold mb-4">Game On!</h2>
                 <p className="max-w-2xl mx-auto text-lg text-muted-foreground">
