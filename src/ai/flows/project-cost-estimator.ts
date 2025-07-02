@@ -18,7 +18,7 @@ const ProjectCostEstimatorInputSchema = z.object({
     .describe('A detailed description of the custom software project.'),
   location: z
     .string()
-    .describe('The location of the customer (e.g., city, state).'),
+    .describe('The location of the customer (e.g., city, state, country).'),
   urgency: z
     .string()
     .describe(
@@ -33,11 +33,11 @@ export type ProjectCostEstimatorInput = z.infer<typeof ProjectCostEstimatorInput
 const ProjectCostEstimatorOutputSchema = z.object({
   estimatedCost: z
     .number()
-    .describe('The estimated cost of the project in USD. For subscription models, this should be the monthly cost.'),
+    .describe('The estimated cost of the project in the appropriate local currency (e.g., USD, INR, EUR). For subscription models, this should be the monthly cost.'),
   costJustification: z
     .string()
     .describe(
-      'A detailed breakdown of why the project will cost this much, including estimates of time and resources required. Clearly state if it is a one-time fee or a monthly subscription.'
+      'A detailed breakdown of why the project will cost this much, including estimates of time and resources required. Clearly state if it is a one-time fee or a monthly subscription, and mention the currency (e.g., USD, INR, EUR).'
     ),
 });
 export type ProjectCostEstimatorOutput = z.infer<typeof ProjectCostEstimatorOutputSchema>;
@@ -52,41 +52,72 @@ const prompt = ai.definePrompt({
   name: 'projectCostEstimatorPrompt',
   input: {schema: ProjectCostEstimatorInputSchema},
   output: {schema: ProjectCostEstimatorOutputSchema},
-  prompt: `You are an expert project cost estimator and senior sales engineer for "Delvare Software Solutions". Your estimates must be professional, well-justified, and based on the pricing guidelines provided below. You must respond in USD.
+  prompt: `You are an expert project cost estimator and senior sales engineer for "Delvare Software Solutions". Your estimates must be professional, well-justified, and based on the pricing guidelines provided below.
 
-**PRICING GUIDELINES:**
+**YOUR PRIMARY TASK:**
+1.  **Determine Currency:** Analyze the user's \`location\` input.
+    *   If the location is in or is "India", use **INR**.
+    *   If the location is in or is "Europe", use **EUR**.
+    *   For "USA" or any other location, use **USD**.
+2.  **Estimate Cost:** Based on the user's request and the pricing for the determined currency, provide an \`estimatedCost\`. The output number should NOT contain any currency symbols or commas.
+3.  **Justify Cost:** In the \`costJustification\`, clearly state the recommended service, plan, and currency (e.g., "Mid-Tier Plan for Mobile App in INR"). Explain your choice and whether it's a one-time fee or monthly subscription.
 
-**1. Custom Websites (One-Time Cost)**
-*   **Simple/Basic Plan:** $4,999 (e.g., brochure site, portfolio, simple landing pages)
-*   **Mid-Tier Plan:** $19,999 (e.g., standard e-commerce, basic web application, customer portals)
-*   **Strong/Complex Plan:** $29,999+ (e.g., large-scale platforms, custom marketplaces, complex features)
+**PRICING GUIDELINES (per location):**
 
-**2. Mobile Apps (One-Time Cost)**
-*   **Starting Plan:** $25,999 (e.g., simple app with core features for one platform)
-*   **Mid-Tier Plan:** $75,999 (e.g., app for both iOS & Android, more complex features, backend integration)
-*   **Strong/Complex Plan:** $99,999+ (e.g., enterprise-grade apps, real-time features, advanced security)
+**USA (USD):**
+*   **Custom Websites (One-Time Cost):**
+    *   Simple/Basic: $4,999
+    *   Mid-Tier: $19,999
+    *   Strong/Complex: $29,999+
+*   **Mobile Apps (One-Time Cost):**
+    *   Starting: $25,999
+    *   Mid-Tier: $75,999
+    *   Strong/Complex: $99,999+
+*   **Billing & Inventory Software (Subscription):**
+    *   Basic: $299/month
+    *   Mid: $2,999/month
+    *   Strong: $9,999/month
 
-**3. Billing & Inventory Software (Subscription Model)**
-*   **Basic Plan:** $299/month. Includes: Admin panel, billing, accounting, returns, sales, purchases, inventory, stock management, and SKU tracking.
-*   **Mid Plan:** $2,999/month. Includes: All Basic features + support for 2 store locations and up to 10 employees.
-*   **Strong Plan:** $9,999/month. Includes: All Mid features + unlimited store locations and unlimited employees.
+**India (INR):**
+*   **Custom Websites (One-Time Cost):**
+    *   Simple/Basic: ₹9,999
+    *   Mid-Tier: ₹49,999
+    *   Strong/Complex: ₹99,999+
+*   **Mobile Apps (One-Time Cost):**
+    *   Starting: ₹39,999
+    *   Mid-Tier: ₹1,49,999
+    *   Strong/Complex: ₹2,49,999+
+*   **Billing & Inventory Software (Subscription):**
+    *   Basic: ₹4,999/month
+    *   Mid: ₹24,999/month
+    *   Strong: ₹74,999/month
 
-**YOUR TASK:**
-Analyze the user's request based on the following inputs. Determine the most appropriate service (Website, App, or Billing Software) and recommend a specific plan (e.g., "Mid-Tier Plan for Mobile App" or "Basic Plan for Billing Software").
+**Europe (EUR):**
+*   **Custom Websites (One-Time Cost):**
+    *   Simple/Basic: €4,600
+    *   Mid-Tier: €18,000
+    *   Strong/Complex: €28,000+
+*   **Mobile Apps (One-Time Cost):**
+    *   Starting: €24,000
+    *   Mid-Tier: €70,000
+    *   Strong/Complex: €95,000+
+*   **Billing & Inventory Software (Subscription):**
+    *   Basic: €275/month
+    *   Mid: €2,750/month
+    *   Strong: €9,000/month
 
-**Inputs:**
+**Billing & Inventory Software Feature Tiers (Same for all regions):**
+*   **Basic Plan:** Admin panel, billing, accounting, returns, sales, purchases, inventory, stock management, and SKU tracking.
+*   **Mid Plan:** All Basic features + support for 2 store locations and up to 10 employees.
+*   **Strong Plan:** All Mid features + unlimited store locations and unlimited employees.
+
+**Analyze the following user inputs:**
 *   Project Description: {{{projectDescription}}}
 *   Location: {{{location}}}
 *   Urgency: {{{urgency}}}
 *   Complexity: {{{complexity}}}
 
-**RESPONSE REQUIREMENTS:**
-1.  **estimatedCost:** Provide the cost in USD. For Billing Software, this MUST be the monthly subscription cost. For Websites and Apps, this should be the starting price for the chosen tier.
-2.  **costJustification:**
-    *   Start by clearly stating the recommended service and plan.
-    *   Explain *why* you chose that plan based on the user's project description and complexity.
-    *   Clearly state whether the cost is a **one-time fee** or a **recurring monthly subscription**.
-    *   Briefly mention how urgency and location can influence the final quote, but base your primary estimate on the plan's price.
+Briefly mention how urgency and location can influence the final quote, but base your primary estimate on the plan's price for the determined region.
 `,
 });
 

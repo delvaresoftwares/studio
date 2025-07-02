@@ -31,7 +31,7 @@ const services = [
 
 const pricingData = {
   'USA': { 'Custom Websites': 4999, 'Mobile Apps': 25999, 'Billing & Inventory Software': 299, currency: 'USD' },
-  'India': { 'Custom Websites': 415000, 'Mobile Apps': 2160000, 'Billing & Inventory Software': 25000, currency: 'INR' },
+  'India': { 'Custom Websites': 9999, 'Mobile Apps': 39999, 'Billing & Inventory Software': 4999, currency: 'INR' },
   'Europe': { 'Custom Websites': 4600, 'Mobile Apps': 24000, 'Billing & Inventory Software': 275, currency: 'EUR' }
 };
 
