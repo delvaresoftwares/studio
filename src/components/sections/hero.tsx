@@ -9,14 +9,14 @@ const HeroSection = () => {
       <div className="container mx-auto grid md:grid-cols-2 gap-8 items-center pt-20 pb-10 z-10">
         <div className="animate-fade-in-up text-center md:text-left">
           <h1 className={cn(
-            "hero-headline-shadow font-headline text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent"
+            "hero-headline-shadow font-headline text-5xl md:text-7xl font-extrabold tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent"
             )}>
             Build. Launch. Succeed.
           </h1>
-          <p className="max-w-xl mx-auto md:mx-0 text-lg md:text-xl text-muted-foreground mb-8">
+          <p className="max-w-xl mx-auto md:mx-0 text-base md:text-lg text-muted-foreground mb-8">
             Delvare provides cutting-edge software solutions tailored to your business needs. From websites to complex inventory systems, we deliver excellence.
           </p>
-          <div className="flex gap-4 justify-center md:justify-start">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
             <Button size="lg" asChild>
               <a href="#services">
                 <Briefcase />

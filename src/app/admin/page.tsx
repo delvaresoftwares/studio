@@ -149,7 +149,7 @@ export default function AdminPage() {
         <div className="container mx-auto">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
               <div>
-                <h1 className="text-4xl font-bold font-headline">Admin Panel</h1>
+                <h1 className="text-3xl sm:text-4xl font-bold font-headline">Admin Panel</h1>
                 <p className="text-muted-foreground">View contact form submissions.</p>
               </div>
               <Button variant="outline" onClick={() => setIsAuthenticated(false)}>
@@ -264,57 +264,59 @@ function ContactsTable({ contacts, isLoading, error, onView, onCopy, onDelete }:
   return (
      <Card>
       <CardContent className="p-0">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[50px]">Status</TableHead>
-              <TableHead>Received</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Contact Info</TableHead>
-              <TableHead>Message</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {contacts.length > 0 ? (
-              contacts.map((contact) => (
-                <TableRow key={contact.id} className={!contact.read ? 'font-bold' : 'font-normal'}>
-                  <TableCell>
-                    {!contact.read && <Badge>New</Badge>}
-                  </TableCell>
-                  <TableCell className="whitespace-nowrap">{contact.createdAt}</TableCell>
-                  <TableCell>{contact.name}</TableCell>
-                  <TableCell>
-                    <div className="flex flex-col">
-                      <span>{contact.email}</span>
-                      <span className="text-muted-foreground">{contact.phone}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="max-w-[250px] truncate">{contact.message}</TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon"><MoreHorizontal /></Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => onView(contact)}><Eye className="mr-2"/> View Details</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => onCopy(contact)}><Copy className="mr-2"/> Copy Lead</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => onDelete(contact)} className="text-destructive focus:text-destructive focus:bg-destructive/10"><Trash2 className="mr-2"/> Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
+        <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[50px]">Status</TableHead>
+                  <TableHead>Received</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Contact Info</TableHead>
+                  <TableHead>Message</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={6} className="text-center h-24">
-                  No contact submissions in this view.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              </TableHeader>
+              <TableBody>
+                {contacts.length > 0 ? (
+                  contacts.map((contact) => (
+                    <TableRow key={contact.id} className={!contact.read ? 'font-bold' : 'font-normal'}>
+                      <TableCell>
+                        {!contact.read && <Badge>New</Badge>}
+                      </TableCell>
+                      <TableCell className="whitespace-nowrap">{contact.createdAt}</TableCell>
+                      <TableCell>{contact.name}</TableCell>
+                      <TableCell>
+                        <div className="flex flex-col min-w-[200px]">
+                          <span className="truncate">{contact.email}</span>
+                          <span className="text-muted-foreground">{contact.phone}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="max-w-[250px] truncate">{contact.message}</TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon"><MoreHorizontal /></Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => onView(contact)}><Eye className="mr-2"/> View Details</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => onCopy(contact)}><Copy className="mr-2"/> Copy Lead</DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={() => onDelete(contact)} className="text-destructive focus:text-destructive focus:bg-destructive/10"><Trash2 className="mr-2"/> Delete</DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center h-24">
+                      No contact submissions in this view.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+        </div>
       </CardContent>
     </Card>
   );

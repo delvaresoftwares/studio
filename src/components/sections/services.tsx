@@ -14,7 +14,7 @@ const services = [
     title: "Custom Websites",
     description: "Beautiful, responsive, and high-performing websites that captivate your audience and grow your brand.",
     icon: <Code className="w-10 h-10" />,
-    image: "https://media.istockphoto.com/id/1352601968/photo/programming-code-abstract-technology-background-of-software-developer-and-computer-script.jpg?s=612x612&w=0&k=20&c=JjVz2LgNf9_O0N2i-5_D_Jjdnj21t2TZaLw7o_XmXeo=",
+    image: "https://img.goodfon.com/wallpaper/nbig/4/28/kod-programmirovanie-html-css.jpg",
     imageHint: "website development",
     deal: "20% OFF"
   },
@@ -22,14 +22,14 @@ const services = [
     title: "Mobile Apps",
     description: "Intuitive and powerful iOS and Android applications to connect with your users on the go.",
     icon: <Smartphone className="w-10 h-10" />,
-    image: "https://media.istockphoto.com/id/1249219337/photo/mobile-application-development-concept-with-person-using-a-laptop.jpg?s=612x612&w=0&k=20&c=N5a6c4Xg3gSDHhQ2GIs2yK0iVtMZTfS2sKxJvyiU3Rw=",
+    image: "https://c0.wallpaperflare.com/preview/83/523/800/technology-code-programming-computer.jpg",
     imageHint: "mobile app",
   },
   {
     title: "Billing & Inventory Software",
     description: "Streamline your operations with custom software for billing, inventory, and resource management.",
     icon: <Warehouse className="w-10 h-10" />,
-    image: "https://media.istockphoto.com/id/1311598658/photo/scanning-parcel-with-barcode-scanner-in-warehouse.jpg?s=612x612&w=0&k=20&c=T_o2krwn2s3eN2N-2k2gzUXg2OKjSAe0L5u3CxfUPjc=",
+    image: "https://www.justinmind.com/wp-content/uploads/2019/10/best-inventory-management-software-768x492.png",
     imageHint: "inventory software",
     deal: "Annual Plans"
   }
@@ -144,7 +144,7 @@ const ServicesSection = () => {
                   <CardDescription className="mb-6 flex-grow">{service.description}</CardDescription>
                   <div className="mb-6">
                     <p className="text-sm text-muted-foreground">Starts from</p>
-                    <div className="font-bold text-4xl text-primary h-11 flex items-center">
+                    <div className="font-bold text-3xl sm:text-4xl text-primary h-11 flex items-center">
                       {country ? (
                         <>
                           {formatPrice(pricingData[country][service.title as ServiceTitle], country)}

@@ -150,7 +150,7 @@ const CostEstimatorSection = () => {
             </CardContent>
           </Card>
           
-          <div className="h-full sticky top-24">
+          <div className="h-full lg:sticky top-24">
             <Card className="min-h-full glass-card">
                 <CardHeader>
                     <CardTitle>Estimation Result</CardTitle>
