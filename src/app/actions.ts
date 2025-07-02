@@ -49,8 +49,8 @@ export type Contact = {
 // Action to save contact info to Firestore
 export async function saveContactInfoAction(formData: ContactFormData): Promise<{ success: boolean; error?: string }> {
   // 1. Validate environment variables
-  if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
-    console.error("Firebase config is not set up. Please create and populate a .env.local file.");
+  if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID && !process.env.FIREBASE_PROJECT_ID) {
+    console.error("Firebase config is not set up. Please create and populate a .env.local file for local development, and ensure production secrets are set.");
     return { 
       success: false, 
       error: "The contact form is not yet configured. Please follow the instructions in the README." 
@@ -84,7 +84,7 @@ export async function saveContactInfoAction(formData: ContactFormData): Promise<
 
 // Action to get all contacts from Firestore
 export async function getContactsAction(): Promise<{ contacts?: Contact[]; error?: string }> {
-  if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
+  if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID && !process.env.FIREBASE_PROJECT_ID) {
     return { error: "Firebase is not configured on the server." };
   }
 

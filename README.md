@@ -10,9 +10,9 @@ To make your contact form ready for production, it needs to be connected to your
 
 Follow these steps to get it working:
 
-### 1. Create a `.env.local` File
+### 1. Create a `.env.local` File (For Local Development)
 
-Your Firebase project's unique identifiers (API keys) are needed to connect the app to your Firebase services.
+Your Firebase project's unique identifiers (API keys) are needed to connect the app to your Firebase services when running on your local machine.
 
 1.  Create a new file in the root of your project named `.env.local`.
 2.  Copy the entire content of the `.env` file into your new `.env.local` file.
@@ -39,4 +39,15 @@ To protect your data, you must deploy security rules. The rules in this project 
     firebase deploy --only firestore:rules
     ```
 
-With these steps completed, your contact form will securely save submissions to your Firestore database, and you can view them on the `/admin` page!
+### 4. Configure Production Secrets for AI Features
+
+To ensure the AI-powered features (like the Cost Estimator) work in your deployed application, you need to provide the necessary API key to the production environment.
+
+1.  **Get your API Key:** Go to [Google AI Studio](https://aistudio.google.com/app/apikey) and create a new API key.
+2.  **Store the Secret:** Go to the [Google Cloud Secret Manager](https://console.cloud.google.com/security/secret-manager) for your project (`delvare-software-solutions`).
+3.  Click **Create Secret**.
+4.  Name the secret `GOOGLE_API_KEY`.
+5.  In the "Secret value" field, paste your API key.
+6.  Click **Create Secret**.
+
+The `apphosting.yaml` file is already configured to use this secret in production. With these steps completed, your contact form will securely save submissions to your Firestore database, and you can view them on the `/admin` page!
