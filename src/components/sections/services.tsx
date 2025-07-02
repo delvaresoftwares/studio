@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import Image from "next/image";
 import { Code, Smartphone, Warehouse, Mail, Calculator, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -14,23 +13,17 @@ const services = [
     title: "Custom Websites",
     description: "Beautiful, responsive, and high-performing websites that captivate your audience and grow your brand.",
     icon: <Code className="w-10 h-10" />,
-    image: "https://img.goodfon.com/wallpaper/nbig/4/28/kod-programmirovanie-html-css.jpg",
-    imageHint: "website development",
     deal: "20% OFF"
   },
   {
     title: "Mobile Apps",
     description: "Intuitive and powerful iOS and Android applications to connect with your users on the go.",
     icon: <Smartphone className="w-10 h-10" />,
-    image: "https://c0.wallpaperflare.com/preview/83/523/800/technology-code-programming-computer.jpg",
-    imageHint: "mobile app",
   },
   {
     title: "Billing & Inventory Software",
     description: "Streamline your operations with custom software for billing, inventory, and resource management.",
     icon: <Warehouse className="w-10 h-10" />,
-    image: "https://www.justinmind.com/wp-content/uploads/2019/10/best-inventory-management-software-768x492.png",
-    imageHint: "inventory software",
     deal: "Annual Plans"
   }
 ];
@@ -119,55 +112,47 @@ const ServicesSection = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
           {services.map((service, index) => (
             <div key={index} className="group relative rounded-xl p-px bg-gradient-to-b from-border/50 to-transparent transition-all duration-300 hover:bg-gradient-to-br hover:from-primary hover:to-accent">
-              <Card className="glass-card h-full flex flex-col text-left overflow-hidden transition-all duration-300 group-hover:-translate-y-2">
-                <CardHeader className="p-0 relative">
-                  <Image 
-                    src={service.image} 
-                    alt={service.title} 
-                    width={600} 
-                    height={400} 
-                    className="transition-transform duration-500 group-hover:scale-110 object-cover aspect-[3/2]" 
-                    data-ai-hint={service.imageHint} 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+              <Card className="glass-card h-full flex flex-col text-center overflow-hidden transition-all duration-300 group-hover:-translate-y-2">
+                <CardHeader className="p-6 items-center flex-grow-0">
+                  <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 transition-all duration-300 group-hover:scale-110 group-hover:bg-accent/20 mx-auto">
+                      {React.cloneElement(service.icon, { className: 'w-10 h-10 text-primary' })}
+                  </div>
+                  <CardTitle className="font-headline text-2xl">{service.title}</CardTitle>
                   {service.deal && (
-                    <Badge className={cn("absolute top-4 right-4 text-sm py-1 px-3 shadow-lg", service.title === 'Billing & Inventory Software' ? 'bg-accent text-accent-foreground' : 'bg-primary text-primary-foreground')}>{service.deal}</Badge>
+                    <Badge className={cn("mt-2 text-sm py-1 px-3 shadow-lg", service.title === 'Billing & Inventory Software' ? 'bg-accent text-accent-foreground' : 'bg-primary text-primary-foreground')}>{service.deal}</Badge>
                   )}
-                  <div className="absolute bottom-0 left-0 p-6">
-                    <div className="flex items-center gap-4">
-                      {React.cloneElement(service.icon, { className: 'w-10 h-10 text-white' })}
-                      <CardTitle className="text-2xl font-bold font-headline text-white drop-shadow-md">{service.title}</CardTitle>
-                    </div>
-                  </div>
                 </CardHeader>
-                <CardContent className="p-6 flex-grow flex flex-col">
+                <CardContent className="p-6 pt-0 flex-grow flex flex-col">
                   <CardDescription className="mb-6 flex-grow">{service.description}</CardDescription>
-                  <div className="mb-6">
-                    <p className="text-sm text-muted-foreground">Starts from</p>
-                    <div className="font-bold text-3xl sm:text-4xl text-primary h-11 flex items-center">
-                      {country ? (
-                        <>
-                          {formatPrice(pricingData[country][service.title as ServiceTitle], country)}
-                          <span className="text-base font-normal text-muted-foreground ml-1">{service.title === 'Billing & Inventory Software' ? '/year' : ''}</span>
-                        </>
-                      ) : (
-                        <Loader2 className="w-8 h-8 animate-spin" />
-                      )}
+                  
+                  <div className="mt-auto space-y-6">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Starts from</p>
+                      <div className="font-bold text-3xl sm:text-4xl text-primary h-11 flex items-center justify-center">
+                        {country ? (
+                          <>
+                            {formatPrice(pricingData[country][service.title as ServiceTitle], country)}
+                            <span className="text-base font-normal text-muted-foreground ml-1">{service.title === 'Billing & Inventory Software' ? '/year' : ''}</span>
+                          </>
+                        ) : (
+                          <Loader2 className="w-8 h-8 animate-spin" />
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <div className="mt-auto grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <Button asChild>
-                          <a href="#contact">
-                              <Mail />
-                              Get a Quote
-                          </a>
-                      </Button>
-                      <Button asChild variant="outline">
-                          <a href="#estimator">
-                              <Calculator />
-                              Estimate
-                          </a>
-                      </Button>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <Button asChild>
+                            <a href="#contact">
+                                <Mail />
+                                Get a Quote
+                            </a>
+                        </Button>
+                        <Button asChild variant="outline">
+                            <a href="#estimator">
+                                <Calculator />
+                                Estimate
+                            </a>
+                        </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
