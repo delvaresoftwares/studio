@@ -11,27 +11,28 @@ import { cn } from "@/lib/utils";
 const services = [
   {
     title: "Custom Websites",
-    description: "Beautiful, responsive, and high-performing websites that captivate your audience and grow your brand.",
+    description: "High-performance, responsive websites built to scale. From simple portfolios to complex e-commerce platforms.",
     icon: <Code className="w-10 h-10" />,
-    deal: "20% OFF"
+    deal: "One-Time Cost"
   },
   {
     title: "Mobile Apps",
-    description: "Intuitive and powerful iOS and Android applications to connect with your users on the go.",
+    description: "Intuitive and powerful native iOS and Android applications to connect with your users on the go.",
     icon: <Smartphone className="w-10 h-10" />,
+    deal: "One-Time Cost"
   },
   {
     title: "Billing & Inventory Software",
-    description: "Streamline your operations with custom software for billing, inventory, and resource management.",
+    description: "A comprehensive suite to streamline your operations, including admin, billing, accounting, sales, purchasing, and multi-store/employee management.",
     icon: <Warehouse className="w-10 h-10" />,
-    deal: "Annual Plans"
+    deal: "Subscription Plans"
   }
 ];
 
 const pricingData = {
-  'USA': { 'Custom Websites': 199, 'Mobile Apps': 949, 'Billing & Inventory Software': 4999, currency: 'USD' },
-  'India': { 'Custom Websites': 15000, 'Mobile Apps': 75000, 'Billing & Inventory Software': 399999, currency: 'INR' },
-  'Europe': { 'Custom Websites': 185, 'Mobile Apps': 875, 'Billing & Inventory Software': 4600, currency: 'EUR' }
+  'USA': { 'Custom Websites': 4999, 'Mobile Apps': 25999, 'Billing & Inventory Software': 299, currency: 'USD' },
+  'India': { 'Custom Websites': 415000, 'Mobile Apps': 2160000, 'Billing & Inventory Software': 25000, currency: 'INR' },
+  'Europe': { 'Custom Websites': 4600, 'Mobile Apps': 24000, 'Billing & Inventory Software': 275, currency: 'EUR' }
 };
 
 type Country = keyof typeof pricingData;
@@ -132,7 +133,7 @@ const ServicesSection = () => {
                         {country ? (
                           <>
                             {formatPrice(pricingData[country][service.title as ServiceTitle], country)}
-                            <span className="text-base font-normal text-muted-foreground ml-1">{service.title === 'Billing & Inventory Software' ? '/year' : ''}</span>
+                            <span className="text-base font-normal text-muted-foreground ml-1">{service.title === 'Billing & Inventory Software' ? '/month' : ''}</span>
                           </>
                         ) : (
                           <Loader2 className="w-8 h-8 animate-spin" />
