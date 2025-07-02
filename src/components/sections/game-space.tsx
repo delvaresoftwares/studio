@@ -1,7 +1,28 @@
-import { Card, CardContent } from "@/components/ui/card";
+'use client';
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import TicTacToe from "@/components/tic-tac-toe";
-import SnakeGame from "@/components/snake-game";
+import dynamic from "next/dynamic";
+import { Card } from "@/components/ui/card";
+import { Loader2 } from "lucide-react";
+
+const GameLoadingSkeleton = () => (
+  <Card className="p-4 rounded-xl bg-card/60 backdrop-blur-md border border-border/20 shadow-xl w-[min(80vw,480px)] h-[min(80vw,580px)] flex items-center justify-center">
+    <div className="text-center text-muted-foreground">
+        <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4" />
+        <p>Loading Game...</p>
+    </div>
+  </Card>
+);
+
+const SnakeGame = dynamic(() => import('@/components/snake-game'), {
+  ssr: false,
+  loading: () => <GameLoadingSkeleton />,
+});
+
+const TicTacToe = dynamic(() => import('@/components/tic-tac-toe'), {
+  ssr: false,
+  loading: () => <GameLoadingSkeleton />,
+});
 
 const GameSpaceSection = () => {
     return (
