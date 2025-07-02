@@ -118,7 +118,7 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'fade-in-up': 'fade-in-up 0.5s ease-out forwards',
-        'breath': 'breath 2s ease-in-out infinite',
+        'breath': 'breath 3s ease-in-out infinite',
         'float': 'float 8s ease-in-out infinite',
       },
     },

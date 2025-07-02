@@ -33,8 +33,8 @@ const Footer = () => {
            <div className="flex flex-col items-center md:items-start">
              <h3 className="font-headline text-lg font-semibold mb-4">Legal</h3>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Terms of Service</a></li>
+                <li><a href="#" className="text-muted-foreground hover:text-accent transition-colors">Privacy Policy</a></li>
+                <li><a href="#" className="text-muted-foreground hover:text-accent transition-colors">Terms of Service</a></li>
               </ul>
           </div>
         </div>

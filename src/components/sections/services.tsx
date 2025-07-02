@@ -118,8 +118,8 @@ const ServicesSection = () => {
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
           {services.map((service, index) => (
-            <div key={index} className="group relative rounded-xl p-px bg-gradient-to-b from-white/10 to-transparent transition-all duration-300 hover:bg-white/20">
-              <Card className="glass-card h-full flex flex-col text-left overflow-hidden transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-[0_0_40px_hsl(var(--primary)/0.3)]">
+            <div key={index} className="group relative rounded-xl p-px bg-gradient-to-b from-border/50 to-transparent transition-all duration-300 hover:bg-gradient-to-br hover:from-primary hover:to-accent">
+              <Card className="glass-card h-full flex flex-col text-left overflow-hidden transition-all duration-300 group-hover:-translate-y-2">
                 <CardHeader className="p-0 relative">
                   <Image 
                     src={service.image} 
@@ -131,7 +131,7 @@ const ServicesSection = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
                   {service.deal && (
-                    <Badge className="absolute top-4 right-4 bg-primary text-primary-foreground text-sm py-1 px-3 shadow-lg">{service.deal}</Badge>
+                    <Badge className={cn("absolute top-4 right-4 text-sm py-1 px-3 shadow-lg", service.title === 'Billing & Inventory Software' ? 'bg-accent text-accent-foreground' : 'bg-primary text-primary-foreground')}>{service.deal}</Badge>
                   )}
                   <div className="absolute bottom-0 left-0 p-6">
                     <div className="flex items-center gap-4">
