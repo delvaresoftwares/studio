@@ -2,30 +2,9 @@
 
 const BackgroundDecor = () => {
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden bg-background pointer-events-none">
-       <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,hsl(var(--primary)/0.1),transparent)]"></div>
-      <div className="absolute top-0 left-0 h-full w-full">
-        <span
-          className="absolute top-[10%] left-[5%] h-32 w-32 rounded-full bg-primary/5 blur-3xl animate-float"
-          style={{ animationDuration: '10s', animationDelay: '0s' }}
-        ></span>
-        <span
-          className="absolute bottom-[20%] right-[10%] h-48 w-48 rounded-lg bg-accent/5 blur-3xl animate-float"
-          style={{ animationDuration: '12s', animationDelay: '1s' }}
-        ></span>
-        <span
-          className="absolute top-[30%] right-[30%] h-16 w-32 rounded-full bg-secondary/10 blur-2xl animate-float"
-          style={{ animationDuration: '15s', animationDelay: '2s' }}
-        ></span>
-        <span
-          className="absolute bottom-[5%] left-[15%] h-24 w-24 rounded-lg bg-primary/10 blur-3xl animate-float"
-          style={{ animationDuration: '8s', animationDelay: '3s' }}
-        ></span>
-        <span
-          className="absolute top-[55%] left-[45%] h-40 w-40 rounded-full bg-accent/5 blur-3xl animate-float"
-          style={{ animationDuration: '14s', animationDelay: '4s' }}
-        ></span>
-      </div>
+    <div className="fixed inset-0 -z-50 h-full w-full bg-background pointer-events-none">
+      <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,hsl(var(--border)/0.2)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border)/0.2)_1px,transparent_1px)] bg-[size:3rem_3rem]"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_500px_at_50%_200px,hsl(var(--primary)/0.1),transparent)]"></div>
     </div>
   );
 };

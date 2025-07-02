@@ -7,7 +7,7 @@ const HeroSection = () => {
     <section id="hero" className="w-full flex items-center justify-center relative min-h-screen p-4">
       <div className="container mx-auto grid md:grid-cols-2 gap-8 items-center pt-20 pb-10">
         <div className="animate-fade-in-up text-center md:text-left">
-          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter mb-4 bg-gradient-to-br from-foreground to-muted-foreground/70 bg-clip-text text-transparent drop-shadow-sm">
+          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-4 bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">
             Build. Launch. Succeed.
           </h1>
           <p className="max-w-xl mx-auto md:mx-0 text-lg md:text-xl text-muted-foreground mb-8">

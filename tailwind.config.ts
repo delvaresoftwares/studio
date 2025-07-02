@@ -17,8 +17,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['Arial', 'sans-serif'],
-        headline: ['Arial', 'sans-serif'],
+        body: ['var(--font-inter)', 'sans-serif'],
+        headline: ['var(--font-poppins)', 'sans-serif'],
         code: ['monospace'],
       },
       colors: {
@@ -107,7 +107,7 @@ export default {
         },
         'breath': {
           '0%, 100%': { transform: 'scale(1)' },
-          '50%': { transform: 'scale(1.08)' },
+          '50%': { transform: 'scale(1.05)' },
         },
         'float': {
           '0%, 100%': { transform: 'translateY(0px) scale(1)' },
@@ -118,7 +118,7 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'fade-in-up': 'fade-in-up 0.5s ease-out forwards',
-        'breath': 'breath 3s ease-in-out infinite',
+        'breath': 'breath 4s ease-in-out infinite',
         'float': 'float ease-in-out infinite',
       },
     },

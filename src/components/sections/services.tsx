@@ -95,7 +95,7 @@ const ServicesSection = () => {
   };
 
   return (
-    <section id="services" className="w-full bg-secondary">
+    <section id="services" className="w-full">
       <div className="container mx-auto px-4 py-24 sm:py-32 text-center">
         <h2 className="font-headline text-4xl md:text-5xl font-bold mb-4">Our Core Services</h2>
         <p className="max-w-2xl mx-auto text-lg text-muted-foreground mb-8">
@@ -118,7 +118,7 @@ const ServicesSection = () => {
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
           {services.map((service, index) => (
-            <Card key={index} className="flex flex-col text-left overflow-hidden group transition-all duration-300 hover:shadow-primary/20 hover:-translate-y-2 bg-card/50 backdrop-blur-lg border border-border/20 hover:border-primary/40">
+            <Card key={index} className="flex flex-col text-left overflow-hidden group transition-all duration-300 hover:-translate-y-2 bg-card/50 backdrop-blur-xl border border-border/10 shadow-xl hover:border-primary/20">
               <CardHeader className="p-0 relative">
                 <Image 
                   src={service.image} 

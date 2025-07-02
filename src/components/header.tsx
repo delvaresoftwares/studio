@@ -12,18 +12,15 @@ const navLinks = [
 
 const Header = () => {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/40 backdrop-blur-xl border-b">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b">
       <div className="container mx-auto flex items-center justify-between h-20 px-4">
         <a href="#hero" className="flex items-center gap-3">
           <Logo />
-          <div className="flex flex-col">
-            <span className="font-bold text-xl leading-tight">Delvare</span>
-            <span className="text-xs text-muted-foreground leading-tight">IT Solutions</span>
-          </div>
+          <span className="font-bold text-xl font-headline">Delvare</span>
         </a>
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => (
-            <a key={link.name} href={link.href} className="text-sm font-medium transition-colors hover:text-primary">
+            <a key={link.name} href={link.href} className="text-sm font-medium transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent">
               {link.name}
             </a>
           ))}

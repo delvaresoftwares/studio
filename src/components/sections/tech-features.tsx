@@ -44,7 +44,7 @@ const TechFeatureCard = ({ featureName, icon, tldr }: { featureName: string; ico
   }, [featureName]);
 
   return (
-    <Card className="group flex h-full flex-col items-center p-8 text-center transition-all duration-300 ease-in-out hover:-translate-y-2 bg-card/50 backdrop-blur-lg border border-border/20 shadow-lg hover:shadow-primary/20 hover:border-primary/40">
+    <Card className="group flex h-full flex-col items-center p-8 text-center transition-all duration-300 ease-in-out hover:-translate-y-2 bg-card/50 backdrop-blur-xl border border-border/10 shadow-xl hover:border-primary/20">
       <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 ring-8 ring-primary/5 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary/20 group-hover:ring-primary/10">
         {icon}
       </div>
@@ -67,7 +67,7 @@ const TechFeatureCard = ({ featureName, icon, tldr }: { featureName: string; ico
 
 const TechFeaturesSection = () => {
   return (
-    <section id="features" className="w-full">
+    <section id="features" className="w-full bg-secondary">
       <div className="container mx-auto px-4 py-24 sm:py-32 text-center">
         <h2 className="font-headline text-4xl md:text-5xl font-bold mb-4">Technology at the Core</h2>
         <p className="max-w-2xl mx-auto text-lg text-muted-foreground mb-12">

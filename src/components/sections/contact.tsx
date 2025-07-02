@@ -67,7 +67,7 @@ const ContactSection = () => {
   }
 
   return (
-    <section id="contact" className="w-full">
+    <section id="contact" className="w-full bg-secondary">
       <div className="container mx-auto px-4 py-24 sm:py-32">
         <div className="text-center mb-12">
             <h2 className="font-headline text-4xl md:text-5xl font-bold mb-4">Get In Touch</h2>
@@ -75,7 +75,7 @@ const ContactSection = () => {
                 Have a project in mind or just want to say hi? We'd love to hear from you.
             </p>
         </div>
-        <Card className="max-w-xl mx-auto bg-card/50 backdrop-blur-lg border border-border/20 shadow-lg">
+        <Card className="max-w-xl mx-auto bg-card/50 backdrop-blur-xl border border-border/10 shadow-xl">
             <CardContent className="p-8">
                 {isSubmitted ? (
                     <div className="text-center animate-fade-in-up">

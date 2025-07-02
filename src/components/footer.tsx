@@ -5,13 +5,13 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-secondary/50 border-t backdrop-blur-xl">
+    <footer className="bg-background border-t">
       <div className="container mx-auto px-4 py-8">
         <div className="grid md:grid-cols-3 gap-8 text-center md:text-left">
           <div className="flex flex-col items-center md:items-start">
             <a href="#hero" className="flex items-center gap-3 mb-4">
               <Logo />
-              <span className="font-bold text-xl">Delvare</span>
+              <span className="font-bold text-xl font-headline">Delvare</span>
             </a>
             <p className="text-sm text-muted-foreground max-w-xs">
               Crafting high-quality software solutions to drive your business forward.
