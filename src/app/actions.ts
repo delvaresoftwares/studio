@@ -4,7 +4,7 @@ import { generateTechFeatureDescription } from "@/ai/flows/tech-feature-descript
 import { estimateProjectCost } from "@/ai/flows/project-cost-estimator"
 import type { ProjectCostEstimatorInput, ProjectCostEstimatorOutput } from "@/ai/flows/project-cost-estimator"
 
-import { db } from '@/lib/firebase';
+import { db, app } from '@/lib/firebase';
 import { collection, addDoc, getDocs, query, orderBy, serverTimestamp, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import type { Timestamp } from 'firebase/firestore';
 import { revalidatePath } from "next/cache";
@@ -48,8 +48,8 @@ export type Contact = {
 
 // Action to save contact info to Firestore
 export async function saveContactInfoAction(formData: ContactFormData): Promise<{ success: boolean; error?: string }> {
-  // 1. Validate environment variables
-  if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID && !process.env.FIREBASE_PROJECT_ID) {
+  // 1. Validate that Firebase was initialized correctly
+  if (!app.options.projectId) {
     console.error("Firebase config is not set up. Please create and populate a .env.local file for local development, and ensure production secrets are set.");
     return { 
       success: false, 
@@ -84,7 +84,7 @@ export async function saveContactInfoAction(formData: ContactFormData): Promise<
 
 // Action to get all contacts from Firestore
 export async function getContactsAction(): Promise<{ contacts?: Contact[]; error?: string }> {
-  if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID && !process.env.FIREBASE_PROJECT_ID) {
+  if (!app.options.projectId) {
     return { error: "Firebase is not configured on the server." };
   }
 
