@@ -21,7 +21,7 @@ const siteConfig = {
   name: 'Delvare Software Solutions',
   title: 'Delvare Software Solutions | Custom Web, App & Billing Software',
   description: 'Delvare specializes in building high-performance custom websites, mobile apps, and billing & inventory software to help your business grow. Get an AI-powered cost estimate today.',
-  url: 'https://delvare-software-solutions.web.app',
+  url: 'https://delvare.vercel.app',
   ogImage: 'https://res.cloudinary.com/dt4mweku7/image/upload/v1751266409/buissware_amykyt.gif',
   icon: 'https://res.cloudinary.com/dt4mweku7/image/upload/v1751266408/buissware_h6bmig.png',
   keywords: ['custom software', 'web development', 'mobile apps', 'billing software', 'inventory management', 'delvare'],
