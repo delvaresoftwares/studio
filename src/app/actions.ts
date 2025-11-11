@@ -1,33 +1,118 @@
 'use server'
 
-import { generateTechFeatureDescription } from "@/ai/flows/tech-feature-descriptions"
-import { estimateProjectCost } from "@/ai/flows/project-cost-estimator"
-import type { ProjectCostEstimatorInput, ProjectCostEstimatorOutput } from "@/ai/flows/project-cost-estimator"
-
 import { db, app } from '@/lib/firebase';
 import { collection, addDoc, getDocs, query, orderBy, serverTimestamp, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import type { Timestamp } from 'firebase/firestore';
 import { revalidatePath } from "next/cache";
 
-export async function getTechFeatureDescriptionAction(featureName: string): Promise<string> {
-  try {
-    const result = await generateTechFeatureDescription({ featureName });
-    return result.description;
-  } catch (error) {
-    console.error("Error generating tech feature description:", error);
-    return "Could not load description at this time. Please try again later.";
+// --- START of New Cost Calculation Logic ---
+
+// Input and Output types, consistent with the frontend
+export type ProjectCostEstimatorInput = {
+  projectType: 'website' | 'mobile' | 'billing';
+  projectDescription: string;
+  location: string;
+  urgency: 'low' | 'medium' | 'high';
+  complexity: 'simple' | 'medium' | 'complex';
+};
+
+export type ProjectCostEstimatorOutput = {
+  estimatedCost: number;
+  currency: 'USD' | 'INR' | 'EUR';
+  costJustification: string;
+};
+
+// Pricing data structure
+const pricingData = {
+  USD: {
+    website: { simple: 4999, medium: 19999, complex: 29999, type: 'One-Time Fee' },
+    mobile: { simple: 25999, medium: 75999, complex: 99999, type: 'One-Time Fee' },
+    billing: { simple: 299, medium: 2999, complex: 9999, type: 'Monthly Subscription' },
+    features: { api: 1500, cloud: 2000, auth: 1000, admin: 2500, database: 1200 }
+  },
+  INR: {
+    website: { simple: 9999, medium: 49999, complex: 99999, type: 'One-Time Fee' },
+    mobile: { simple: 39999, medium: 149999, complex: 249999, type: 'One-Time Fee' },
+    billing: { simple: 4999, medium: 24999, complex: 74999, type: 'Monthly Subscription' },
+    features: { api: 15000, cloud: 20000, auth: 10000, admin: 25000, database: 12000 }
+  },
+  EUR: {
+    website: { simple: 4600, medium: 18000, complex: 28000, type: 'One-Time Fee' },
+    mobile: { simple: 24000, medium: 70000, complex: 95000, type: 'One-Time Fee' },
+    billing: { simple: 275, medium: 2750, complex: 9000, type: 'Monthly Subscription' },
+    features: { api: 1400, cloud: 1800, auth: 900, admin: 2300, database: 1100 }
   }
+};
+
+const europeanCountries = ['albania', 'andorra', 'armenia', 'austria', 'belarus', 'belgium', 'bosnia', 'bulgaria', 'croatia', 'cyprus', 'czech', 'denmark', 'estonia', 'finland', 'france', 'georgia', 'germany', 'greece', 'hungary', 'iceland', 'ireland', 'italy', 'latvia', 'liechtenstein', 'lithuania', 'luxembourg', 'malta', 'moldova', 'monaco', 'montenegro', 'netherlands', 'norway', 'poland', 'portugal', 'romania', 'russia', 'san marino', 'serbia', 'slovakia', 'slovenia', 'spain', 'sweden', 'switzerland', 'ukraine', 'united kingdom', 'vatican city'];
+
+function calculateProjectCost(input: ProjectCostEstimatorInput): ProjectCostEstimatorOutput {
+  const { projectType, projectDescription, location, complexity } = input;
+  const description = projectDescription.toLowerCase();
+  const loc = location.toLowerCase();
+
+  // Determine Currency
+  let currency: 'USD' | 'INR' | 'EUR' = 'USD';
+  if (loc.includes('india')) {
+    currency = 'INR';
+  } else if (europeanCountries.some(country => loc.includes(country))) {
+    currency = 'EUR';
+  }
+
+  const prices = pricingData[currency];
+  const projectPricing = prices[projectType];
+  let estimatedCost = projectPricing[complexity];
+  
+  let justification = `The estimate is based on the following selections:\n`;
+  justification += `- Project Type: ${projectType.charAt(0).toUpperCase() + projectType.slice(1)}\n`;
+  justification += `- Complexity: ${complexity.charAt(0).toUpperCase() + complexity.slice(1)}\n`;
+  justification += `- Payment Model: ${projectPricing.type}\n`;
+  justification += `\nBase cost: ${estimatedCost.toLocaleString()} ${currency}\n`;
+
+  // Feature detection
+  const detectedFeatures: string[] = [];
+  let featureCost = 0;
+
+  const featureKeywords = {
+    api: ['api', 'integration', 'connect'],
+    cloud: ['cloud', 'aws', 'azure', 'gcp', 'hosting'],
+    auth: ['auth', 'login', 'signup', 'user account'],
+    admin: ['admin panel', 'dashboard', 'manage content'],
+    database: ['database', 'storage', 'sql', 'mongodb'],
+  };
+
+  for (const [feature, keywords] of Object.entries(featureKeywords)) {
+    if (keywords.some(keyword => description.includes(keyword))) {
+      const cost = prices.features[feature as keyof typeof prices.features];
+      featureCost += cost;
+      detectedFeatures.push(`${feature.charAt(0).toUpperCase() + feature.slice(1)} (+${cost.toLocaleString()} ${currency})`);
+    }
+  }
+
+  if (detectedFeatures.length > 0) {
+    justification += `\nDetected Features:\n- ${detectedFeatures.join('\n- ')}\n`;
+  }
+  
+  estimatedCost += featureCost;
+  
+  justification += `\nTotal Estimated Cost: ${estimatedCost.toLocaleString()} ${currency}. This is an initial estimate; a final quote will be provided after a detailed consultation.`
+
+  return { estimatedCost, currency, costJustification: justification };
 }
+
 
 export async function getProjectCostEstimateAction(input: ProjectCostEstimatorInput): Promise<ProjectCostEstimatorOutput | { error: string }> {
   try {
-    const result = await estimateProjectCost(input);
+    const result = calculateProjectCost(input);
     return result;
   } catch (error) {
-    console.error("Error estimating project cost:", error);
-    return { error: "Failed to get cost estimation. There might be an issue with the service." };
+    console.error("Error calculating project cost:", error);
+    return { error: "Failed to calculate cost estimate. Please check your inputs and try again." };
   }
 }
+
+// --- END of New Cost Calculation Logic ---
+
 
 export type ContactFormData = {
   name: string;

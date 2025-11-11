@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { getProjectCostEstimateAction } from '@/app/actions';
+import { getProjectCostEstimateAction, type ProjectCostEstimatorOutput } from '@/app/actions';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -13,7 +13,6 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Loader2, Wand2 } from 'lucide-react';
-import type { ProjectCostEstimatorOutput } from '@/ai/flows/project-cost-estimator';
 import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
