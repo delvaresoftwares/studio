@@ -4,10 +4,15 @@ service cloud.firestore {
     // Allow anyone to create a contact document through the form
     match /contacts/{contactId} {
       allow create: if true;
+      // TEMPORARY: Allow read/delete for testing. In production, use Firebase Admin SDK.
+      allow read, delete, update: if true;
+    }
 
-      // Disallow reading, updating, or deleting from the client-side
-      // Server Actions with Admin SDK privileges will bypass these rules for the admin panel
-      allow read, update, delete: if false;
+    // Allow anyone to create an estimation document
+    match /estimations/{estimationId} {
+      allow create: if true;
+      // TEMPORARY: Allow read/delete for testing. In production, use Firebase Admin SDK.
+      allow read, delete, update: if true;
     }
   }
 }

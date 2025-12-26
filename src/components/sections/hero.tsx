@@ -32,16 +32,7 @@ const HeroSection = () => {
           </div>
         </div>
         <div className="hidden md:flex justify-center items-center">
-            <div className="animate-float" style={{animationDuration: '8s'}}>
-              <Image 
-                src="https://res.cloudinary.com/dt4mweku7/image/upload/v1751266409/buissware_amykyt.gif" 
-                alt="Delvare services animation" 
-                width={500} 
-                height={500} 
-                unoptimized 
-                className="hero-gif-shadow"
-              />
-            </div>
+             {/* GIF removed as per request */}
         </div>
       </div>
     </section>

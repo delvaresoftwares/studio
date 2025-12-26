@@ -132,7 +132,7 @@ const ServicesSection = () => {
                       <div className="font-bold text-3xl sm:text-4xl text-primary h-11 flex items-center justify-center">
                         {country ? (
                           <>
-                            {formatPrice(pricingData[country][service.title as ServiceTitle], country)}
+                            {formatPrice(pricingData[country][service.title as ServiceTitle] as number, country)}
                             <span className="text-base font-normal text-muted-foreground ml-1">{service.title === 'Billing & Inventory Software' ? '/month' : ''}</span>
                           </>
                         ) : (

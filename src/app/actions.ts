@@ -104,6 +104,24 @@ function calculateProjectCost(input: ProjectCostEstimatorInput): ProjectCostEsti
 export async function getProjectCostEstimateAction(input: ProjectCostEstimatorInput): Promise<ProjectCostEstimatorOutput | { error: string }> {
   try {
     const result = calculateProjectCost(input);
+    
+    // Save the estimation to Firestore as well
+    if (app.options.projectId) {
+      try {
+        const estimationsCollection = collection(db, 'estimations');
+        await addDoc(estimationsCollection, {
+          ...input,
+          ...result,
+          createdAt: serverTimestamp(),
+          read: false,
+        });
+      } catch (dbError) {
+        console.error("Error saving estimation to Firestore:", dbError);
+        // We don't fail the whole action if just saving fails, 
+        // but we log it.
+      }
+    }
+
     return result;
   } catch (error) {
     console.error("Error calculating project cost:", error);
@@ -169,6 +187,9 @@ export async function saveContactInfoAction(formData: ContactFormData): Promise<
 
 // Action to get all contacts from Firestore
 export async function getContactsAction(): Promise<{ contacts?: Contact[]; error?: string }> {
+  console.log("getContactsAction started");
+  console.log("Firebase Config Project ID:", app.options.projectId);
+  
   if (!app.options.projectId) {
     return { error: "Firebase is not configured on the server." };
   }
@@ -198,7 +219,7 @@ export async function getContactsAction(): Promise<{ contacts?: Contact[]; error
      if (error.code === 'permission-denied') {
         return { error: "Could not fetch contacts: Permission denied. Ensure your Firestore security rules are deployed correctly." };
     }
-    return { error: "Failed to fetch contacts from the database." };
+    return { error: `Failed to fetch contacts: ${error.message}` };
   }
 }
 
@@ -227,3 +248,80 @@ export async function deleteContactAction(id: string): Promise<{ success: boolea
     return { success: false, error: "Failed to delete contact." };
   }
 }
+
+export type Estimation = {
+  id: string;
+  projectType: string;
+  projectDescription: string;
+  location: string;
+  urgency: string;
+  complexity: string;
+  estimatedCost: number;
+  currency: string;
+  costJustification: string;
+  createdAt: string;
+  read: boolean;
+}
+
+// Action to get all estimations from Firestore
+export async function getEstimationsAction(): Promise<{ estimations?: Estimation[]; error?: string }> {
+  if (!app.options.projectId) {
+    return { error: "Firebase is not configured on the server." };
+  }
+
+  try {
+    const estimationsCollection = collection(db, 'estimations');
+    const q = query(estimationsCollection, orderBy('createdAt', 'desc'));
+    const querySnapshot = await getDocs(q);
+    
+    const estimations = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        const createdAt = data.createdAt as Timestamp;
+        return {
+            id: doc.id,
+            projectType: data.projectType,
+            projectDescription: data.projectDescription,
+            location: data.location,
+            urgency: data.urgency,
+            complexity: data.complexity,
+            estimatedCost: data.estimatedCost,
+            currency: data.currency,
+            costJustification: data.costJustification,
+            createdAt: createdAt ? new Date(createdAt.seconds * 1000).toLocaleString() : 'N/A',
+            read: data.read || false,
+        }
+    });
+    
+    return { estimations };
+  } catch (error: any) {
+    console.error("Error fetching estimations:", error);
+    return { error: "Failed to fetch estimations from the database." };
+  }
+}
+
+// Action to mark an estimation as read
+export async function markEstimationAsReadAction(id: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    const estimationRef = doc(db, 'estimations', id);
+    await updateDoc(estimationRef, { read: true });
+    revalidatePath('/admin');
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error marking estimation as read:", error);
+    return { success: false, error: "Failed to update estimation status." };
+  }
+}
+
+// Action to delete an estimation
+export async function deleteEstimationAction(id: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    const estimationRef = doc(db, 'estimations', id);
+    await deleteDoc(estimationRef);
+    revalidatePath('/admin');
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error deleting estimation:", error);
+    return { success: false, error: "Failed to delete estimation." };
+  }
+}
+
