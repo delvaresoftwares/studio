@@ -1,4 +1,4 @@
-import type {Metadata} from 'next';
+import type { Metadata } from 'next';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -18,13 +18,13 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 const siteConfig = {
-  name: 'Delvare Software Solutions',
-  title: 'Delvare Software Solutions | Custom Web, App & Billing Software',
-  description: 'Delvare specializes in building high-performance custom websites, mobile apps, and billing & inventory software to help your business grow. Get an AI-powered cost estimate today.',
+  name: 'XAAS by Delvare',
+  title: 'XAAS by Delvare | Anything as a Service',
+  description: 'Elite software engineering, cloud infrastructure, and security solutions. Scale your business with Delvare\'s futuristic Anything-as-a-Service model.',
   url: 'https://delvare.vercel.app',
   ogImage: 'https://res.cloudinary.com/dt4mweku7/image/upload/v1751266409/buissware_amykyt.gif',
   icon: 'https://res.cloudinary.com/dt4mweku7/image/upload/v1751266408/buissware_h6bmig.png',
-  keywords: ['custom software', 'web development', 'mobile apps', 'billing software', 'inventory management', 'delvare'],
+  keywords: ['XAAS', 'Delvare', 'software engineering', 'cloud infrastructure', 'security engineering', 'business analysis', 'MNC'],
 };
 
 export const metadata: Metadata = {
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   keywords: siteConfig.keywords,
-  authors: [{ name: "Delvare Software Solutions" }],
-  creator: "Delvare Software Solutions",
+  authors: [{ name: "Delvare MNC" }],
+  creator: "Delvare MNC",
 
   icons: {
     icon: siteConfig.icon,
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
         url: siteConfig.ogImage,
         width: 500,
         height: 500,
-        alt: 'Delvare services animation'
+        alt: 'XAAS by Delvare'
       }
     ],
     locale: 'en_US',
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     images: [siteConfig.ogImage],
     creator: '@delvare',
   },
-  
+
   robots: {
     index: true,
     follow: true,
@@ -92,7 +92,7 @@ export default function RootLayout({
       <body className="font-body antialiased">
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >

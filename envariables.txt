@@ -1,0 +1,19 @@
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyCVNkm6Je-9tlFYffLuBcby6os4Ivwz-i0",
+    authDomain: "delvaresoft.firebaseapp.com",
+    projectId: "delvaresoft",
+    storageBucket: "delvaresoft.firebasestorage.app",
+    messagingSenderId: "459015996374",
+    appId: "1:459015996374:web:6f4f046de3bae08ee71a77"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+</script>

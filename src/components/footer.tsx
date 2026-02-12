@@ -5,43 +5,58 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-background/80 backdrop-blur-sm border-t border-white/10">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-3 gap-10 text-center md:text-left">
-          <div className="flex flex-col items-center md:items-start">
-            <a href="#hero" className="flex items-center gap-3 mb-4">
+    <footer className="bg-background relative border-t border-white/5 pt-16 pb-8 overflow-hidden">
+      {/* Footer Ambient Glow */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none" />
+
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="grid md:grid-cols-4 gap-12 mb-16">
+          <div className="md:col-span-2 space-y-6">
+            <a href="#hero" className="flex items-center gap-3">
               <Logo />
-              <span className="font-bold text-xl font-headline">Delvare</span>
             </a>
-            <p className="text-sm text-muted-foreground max-w-xs">
-              Crafting high-quality software solutions to drive your business forward.
+            <p className="text-muted-foreground text-lg max-w-sm leading-relaxed">
+              Advancing the world through Anything-as-a-Service. We build, maintain, and secure the digital core of modern enterprises.
             </p>
           </div>
-          <div className="flex flex-col items-center md:items-start">
-            <h3 className="font-headline text-lg font-semibold mb-4">Contact Us</h3>
-            <ul className="space-y-2 text-sm">
-              <li className="flex items-center gap-2 justify-center md:justify-start">
-                <Mail className="w-4 h-4 text-primary" />
-                <a href="mailto:delvaresoftwares@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">delvaresoftwares@gmail.com</a>
+
+          <div className="space-y-6">
+            <h3 className="font-headline text-xl font-bold">Quick Links</h3>
+            <ul className="space-y-4 text-muted-foreground font-medium">
+              <li><a href="#services" className="hover:text-emerald-500 transition-colors">Services</a></li>
+              <li><a href="#careers" className="hover:text-emerald-500 transition-colors">Careers & Academy</a></li>
+              <li><a href="#estimator" className="hover:text-emerald-500 transition-colors">Cost Estimator</a></li>
+            </ul>
+          </div>
+
+          <div className="space-y-6">
+            <h3 className="font-headline text-xl font-bold">Contact</h3>
+            <ul className="space-y-4 text-muted-foreground font-medium">
+              <li className="flex items-center gap-3">
+                <div className="h-8 w-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+                  <Mail className="w-4 h-4 text-emerald-500" />
+                </div>
+                <a href="mailto:delvaresoftwares@gmail.com" className="hover:text-emerald-500 transition-colors">delvaresoftwares@gmail.com</a>
               </li>
-              <li className="flex items-center gap-2 justify-center md:justify-start">
-                <Phone className="w-4 h-4 text-primary" />
-                <a href="tel:8606281125" className="text-muted-foreground hover:text-primary transition-colors">8606281125</a>
+              <li className="flex items-center gap-3">
+                <div className="h-8 w-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+                  <Phone className="w-4 h-4 text-emerald-500" />
+                </div>
+                <a href="tel:8606281125" className="hover:text-emerald-500 transition-colors">8606281125</a>
               </li>
             </ul>
           </div>
-           <div className="flex flex-col items-center md:items-start">
-             <h3 className="font-headline text-lg font-semibold mb-4">Legal</h3>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="text-muted-foreground hover:text-accent transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-accent transition-colors">Terms of Service</a></li>
-              </ul>
-          </div>
         </div>
-        <div className="mt-12 pt-8 border-t border-white/10 text-center text-sm text-muted-foreground flex flex-col sm:flex-row justify-between items-center gap-2">
-            <p className="flex items-center gap-2">
-              <Copyright className="w-4 h-4" /> {currentYear} Delvare Software Solutions. All Rights Reserved.
-            </p>
+
+        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-muted-foreground font-medium flex items-center gap-2">
+            <Copyright className="w-4 h-4 shrink-0" /> {currentYear} XAAS by Delvare MNC. All Rights Reserved.
+          </p>
+          <div className="flex gap-8 text-sm font-bold text-muted-foreground uppercase tracking-widest">
+            <a href="#" className="hover:text-emerald-500 transition-colors">Privacy</a>
+            <a href="#" className="hover:text-emerald-500 transition-colors">Terms</a>
+            <a href="#" className="hover:text-emerald-500 transition-colors">Security</a>
+          </div>
         </div>
       </div>
     </footer>

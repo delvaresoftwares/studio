@@ -1,4 +1,4 @@
-import type {Config} from 'tailwindcss';
+import type { Config } from 'tailwindcss';
 
 export default {
   darkMode: ['class'],
@@ -113,6 +113,18 @@ export default {
           '0%, 100%': { transform: 'translateY(0px)' },
           '50%': { transform: 'translateY(-20px)' },
         },
+        'marquee': {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        'marquee-reverse': {
+          '0%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+        'shine': {
+          '0%': { transform: 'translateX(-150%) skewX(-12deg)' },
+          '100%': { transform: 'translateX(150%) skewX(-12deg)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -120,6 +132,9 @@ export default {
         'fade-in-up': 'fade-in-up 0.5s ease-out forwards',
         'breath': 'breath 3s ease-in-out infinite',
         'float': 'float 8s ease-in-out infinite',
+        'marquee': 'marquee 25s linear infinite',
+        'marquee-reverse': 'marquee-reverse 25s linear infinite',
+        'shine': 'shine 1.5s ease-in-out infinite',
       },
     },
   },
