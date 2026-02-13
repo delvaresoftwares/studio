@@ -48,33 +48,41 @@ const HeroSection = () => {
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/5 border border-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.2)] backdrop-blur-md animate-fade-in-up">
               <Sparkles className="w-4 h-4 text-emerald-400 animate-pulse" />
               <span className="text-xs font-bold uppercase tracking-widest text-emerald-300">
-                The Future of Engineering
+                Anything as a Service
               </span>
             </div>
 
             {/* Main Headline */}
             <h1 className="font-headline font-black text-6xl md:text-8xl lg:text-9xl tracking-tighter leading-[0.9] text-transparent bg-clip-text bg-gradient-to-br from-white via-white/90 to-white/40 animate-fade-in-up [animation-delay:200ms]">
-              Building <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-500 animate-shine bg-[length:200%_auto]">
-                Delvare
+                XAAS
               </span>
               <span className="text-emerald-500">.</span>
             </h1>
 
             {/* Subheadline */}
             <p className="max-w-xl mx-auto lg:mx-0 text-xl md:text-2xl text-muted-foreground font-medium leading-relaxed animate-fade-in-up [animation-delay:400ms]">
-              We engineer elite digital ecosystems. From <span className="text-white font-bold">Concept</span> to <span className="text-white font-bold">Scale</span>, we are your unfair advantage in the digital age.
+              Resolve all your technical and business oriented problems with our <span className="text-white font-bold">Scalable</span> and <span className="text-white font-bold">Secure</span>, well-optimized and customized solutions built according to your convenience.
             </p>
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start pt-6 animate-fade-in-up [animation-delay:600ms]">
-              <Button size="xl" className="h-16 px-10 text-lg font-bold bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl shadow-[0_20px_50px_-15px_rgba(16,185,129,0.5)] hover:shadow-[0_20px_50px_-10px_rgba(16,185,129,0.8)] hover:scale-105 transition-all duration-300 group">
-                Start Project
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <Button
+                size="xl"
+                className="h-16 px-10 text-lg font-bold bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl shadow-[0_20px_50px_-15px_rgba(16,185,129,0.5)] hover:shadow-[0_20px_50px_-10px_rgba(16,185,129,0.8)] hover:scale-105 transition-all duration-300 group"
+                onClick={() => document.getElementById('estimator')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                AI Estimator
+                <Sparkles className="ml-2 w-5 h-5 group-hover:rotate-12 transition-transform" />
               </Button>
-              <Button size="xl" variant="outline" className="h-16 px-10 text-lg font-bold border-white/20 hover:bg-white/5 rounded-2xl backdrop-blur-sm group hover:border-emerald-500/50 transition-all duration-300">
-                <Terminal className="mr-3 w-5 h-5 text-muted-foreground group-hover:text-emerald-400" />
-                View Technology
+              <Button
+                size="xl"
+                variant="outline"
+                className="h-16 px-10 text-lg font-bold border-white/20 hover:bg-white/5 rounded-2xl backdrop-blur-sm group hover:border-emerald-500/50 transition-all duration-300"
+                onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                Services
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
 
@@ -139,14 +147,16 @@ const HeroSection = () => {
                 </div>
               </div>
 
-              {/* Orbital 4: AI (Bottom Left) */}
+              {/* Orbital 4: Dynamic Keywords (Bottom Left) */}
               <div className="absolute bottom-20 left-0 w-52 h-44 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 flex flex-col justify-between shadow-2xl animate-float [animation-delay:3000ms] hover:scale-110 hover:bg-white/10 transition-all cursor-default group/card">
                 <div className="w-12 h-12 rounded-2xl bg-purple-500/20 flex items-center justify-center text-purple-400 group-hover/card:bg-purple-500 group-hover/card:text-white transition-colors">
                   <Cpu className="w-6 h-6" />
                 </div>
                 <div className="space-y-1">
-                  <h3 className="font-headline font-bold text-white text-xl">AI Core</h3>
-                  <p className="text-sm text-muted-foreground">Neural Networks</p>
+                  <h3 className={cn("font-headline font-bold text-white text-xl transition-opacity duration-300", fade ? "opacity-100" : "opacity-0")}>
+                    {keywords[keywordIndex]}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">Active Module</p>
                 </div>
               </div>
             </div>

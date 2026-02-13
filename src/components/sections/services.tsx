@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Code, Smartphone, Cloud, PenTool, BarChart, ShieldCheck, ArrowRight, Zap, Check } from 'lucide-react';
+import { Code, Smartphone, Cloud, PenTool, BarChart, ShieldCheck, ArrowRight, Zap, Check, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useLocation } from '@/hooks/use-location';
 
 const services = [
   {
@@ -64,17 +65,44 @@ const services = [
   },
 ];
 
-const pricingData = {
-  'USA': { currency: 'USD', symbol: '$', rate: 1 },
-  'India': { currency: 'INR', symbol: '₹', rate: 83 }, // Approx rate
-  'Europe': { currency: 'EUR', symbol: '€', rate: 0.92 } // Approx rate
+// Comprehensive pricing database mock
+const pricingData: Record<string, { currency: string, symbol: string, rate: number, name: string }> = {
+  'US': { currency: 'USD', symbol: '$', rate: 1, name: 'United States' },
+  'GB': { currency: 'GBP', symbol: '£', rate: 0.79, name: 'United Kingdom' },
+  'EU': { currency: 'EUR', symbol: '€', rate: 0.92, name: 'Europe' },
+  'IN': { currency: 'INR', symbol: '₹', rate: 83, name: 'India' },
+  'CA': { currency: 'CAD', symbol: 'C$', rate: 1.35, name: 'Canada' },
+  'AU': { currency: 'AUD', symbol: 'A$', rate: 1.52, name: 'Australia' },
+  'JP': { currency: 'JPY', symbol: '¥', rate: 150, name: 'Japan' },
+  'CN': { currency: 'CNY', symbol: '¥', rate: 7.2, name: 'China' },
+  'AE': { currency: 'AED', symbol: 'dh', rate: 3.67, name: 'UAE' },
+  'SG': { currency: 'SGD', symbol: 'S$', rate: 1.34, name: 'Singapore' },
+  'DE': { currency: 'EUR', symbol: '€', rate: 0.92, name: 'Germany' }, // Fallback to EU currency
+  'FR': { currency: 'EUR', symbol: '€', rate: 0.92, name: 'France' },
+  // Default fallback
+  'Global': { currency: 'USD', symbol: '$', rate: 1, name: 'Global' }
 };
 
 const ServicesSection = () => {
-  const [region, setRegion] = useState<'USA' | 'India' | 'Europe'>('USA');
+  const { countryCode, isLoading } = useLocation();
+  const [currentRegion, setCurrentRegion] = useState('Global');
+
+  useEffect(() => {
+    if (!isLoading && countryCode) {
+      // Check if exact code exists, else check for EU countries or fallback
+      if (pricingData[countryCode]) {
+        setCurrentRegion(countryCode);
+      } else if (['DE', 'FR', 'IT', 'ES', 'NL'].includes(countryCode)) {
+        setCurrentRegion('EU');
+      } else {
+        setCurrentRegion('Global');
+      }
+    }
+  }, [countryCode, isLoading]);
 
   const formatPrice = (basePrice: number) => {
-    const { currency, rate, symbol } = pricingData[region];
+    const data = pricingData[currentRegion] || pricingData['Global'];
+    const { currency, rate } = data;
     const value = Math.round(basePrice * rate);
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: currency, maximumFractionDigits: 0 }).format(value);
   };
@@ -87,56 +115,62 @@ const ServicesSection = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-          <div className="max-w-2xl">
-            <Badge variant="outline" className="mb-4 border-emerald-500/30 text-emerald-500">Our Expertise</Badge>
-            <h2 className="font-headline text-5xl md:text-7xl font-black tracking-tight mb-6">
-              Engineering <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">The Impossible.</span>
+          <div className="max-w-3xl">
+            <Badge variant="outline" className="mb-4 border-emerald-500/30 text-emerald-500 animate-fade-in-up">
+              Engineering the Possibility
+            </Badge>
+            <h2 className="font-headline text-5xl md:text-7xl font-black tracking-tight mb-6 animate-fade-in-up [animation-delay:100ms]">
+              Solutions <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">
+                Beyond Limits.
+              </span>
             </h2>
-            <p className="text-xl text-muted-foreground leading-relaxed">
+            <p className="text-xl text-muted-foreground leading-relaxed animate-fade-in-up [animation-delay:200ms]">
               We deliver full-cycle software development services that adapt to your business needs and grow with your ambition.
             </p>
           </div>
 
-          {/* Region Selector */}
-          <div className="flex items-center gap-1 p-1 bg-secondary/50 backdrop-blur-md rounded-full border border-white/10">
-            {Object.keys(pricingData).map((r) => (
-              <button
-                key={r}
-                onClick={() => setRegion(r as any)}
-                className={cn(
-                  "px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-500",
-                  region === r ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/25" : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                {r}
-              </button>
-            ))}
+          {/* Region Indicator */}
+          <div className="flex items-center gap-3 p-2 pr-4 bg-secondary/30 backdrop-blur-md rounded-full border border-white/10 animate-fade-in-up [animation-delay:300ms]">
+            <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+              <Globe className="w-4 h-4" />
+            </div>
+            <div className="text-sm">
+              <span className="block text-xs text-muted-foreground uppercase font-bold tracking-wider">Region Detected</span>
+              <span className="font-bold text-foreground">
+                {isLoading ? 'Locating...' : (pricingData[currentRegion]?.name || 'Global')}
+              </span>
+            </div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {services.map((service, idx) => (
-            <div key={idx} className={cn("group relative", service.colSpan)}>
+            <div key={idx} className={cn("group relative animate-fade-in-up", service.colSpan)} style={{ animationDelay: `${idx * 100}ms` }}>
               <div className={cn(
                 "absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-500 blur-xl rounded-3xl",
                 service.gradient
               )} />
-              <Card className="h-full bg-card/40 backdrop-blur-xl border-white/10 overflow-hidden relative transition-all duration-500 group-hover:translate-y-[-5px] group-hover:border-white/20">
+              <Card className="h-full bg-card/40 backdrop-blur-xl border-white/10 overflow-hidden relative transition-all duration-500 group-hover:translate-y-[-5px] group-hover:border-white/20 shadow-lg hover:shadow-2xl">
                 {/* Card Inner Glow */}
-                <div className={cn("absolute top-0 right-0 w-64 h-64 bg-gradient-to-br opacity-10 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none", service.gradient)} />
+                <div className={cn("absolute top-0 right-0 w-64 h-64 bg-gradient-to-br opacity-5 group-hover:opacity-20 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity duration-500", service.gradient)} />
 
-                <CardHeader className="relative z-10">
-                  <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center mb-6 text-white bg-gradient-to-br shadow-inner", service.gradient)}>
-                    {service.icon}
+                <CardHeader className="relative z-10 pb-2">
+                  <div className="flex justify-between items-start">
+                    <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center mb-6 text-white bg-gradient-to-br shadow-lg group-hover:scale-110 transition-transform duration-500", service.gradient)}>
+                      {service.icon}
+                    </div>
+                    <Badge variant="secondary" className="bg-white/5 hover:bg-white/10 text-muted-foreground font-normal backdrop-blur-md border-white/5">
+                      Service
+                    </Badge>
                   </div>
-                  <CardTitle className="text-2xl font-bold mb-2">{service.title}</CardTitle>
+                  <CardTitle className="text-2xl font-bold mb-2 group-hover:text-emerald-400 transition-colors">{service.title}</CardTitle>
                   <CardDescription className="text-base text-muted-foreground/80">{service.description}</CardDescription>
                 </CardHeader>
-                <CardContent className="relative z-10 space-y-8">
+                <CardContent className="relative z-10 space-y-8 pt-4">
                   <div className="space-y-3">
                     {service.features.map((feature, i) => (
-                      <div key={i} className="flex items-center gap-3 text-sm font-medium text-muted-foreground">
+                      <div key={i} className="flex items-center gap-3 text-sm font-medium text-muted-foreground group-hover:text-foreground/80 transition-colors">
                         <div className="w-5 h-5 rounded-full bg-white/5 flex items-center justify-center text-emerald-500">
                           <Check className="w-3 h-3" />
                         </div>
@@ -148,9 +182,11 @@ const ServicesSection = () => {
                   <div className="flex items-center justify-between pt-6 border-t border-white/5">
                     <div>
                       <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">Starting from</p>
-                      <p className="text-2xl font-black text-foreground">{formatPrice(service.price)}</p>
+                      <p className="text-2xl font-black text-foreground group-hover:text-emerald-400 transition-colors duration-300">
+                        {formatPrice(service.price)}
+                      </p>
                     </div>
-                    <Button size="icon" className="rounded-full w-12 h-12 bg-white/5 hover:bg-white/10 text-foreground border border-white/10">
+                    <Button size="icon" className="rounded-full w-12 h-12 bg-white/5 hover:bg-emerald-500 text-foreground hover:text-white border border-white/10 transition-all duration-300 group-hover:scale-110">
                       <ArrowRight className="w-5 h-5 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
                     </Button>
                   </div>
