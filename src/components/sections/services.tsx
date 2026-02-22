@@ -131,15 +131,22 @@ const ServicesSection = () => {
           </div>
 
           {/* Region Indicator */}
-          <div className="flex items-center gap-3 p-2 pr-4 bg-secondary/30 backdrop-blur-md rounded-full border border-white/10 animate-fade-in-up [animation-delay:300ms]">
-            <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400">
-              <Globe className="w-4 h-4" />
-            </div>
-            <div className="text-sm">
-              <span className="block text-xs text-muted-foreground uppercase font-bold tracking-wider">Region Detected</span>
-              <span className="font-bold text-foreground">
-                {isLoading ? 'Locating...' : (pricingData[currentRegion]?.name || 'Global')}
-              </span>
+          <div className="flex flex-col items-end gap-2 animate-fade-in-up [animation-delay:300ms]">
+            {currentRegion === 'IN' && (
+              <Badge className="bg-emerald-500 text-white border-none animate-pulse">
+                Special Offer: India Launch
+              </Badge>
+            )}
+            <div className="flex items-center gap-3 p-2 pr-4 bg-secondary/30 backdrop-blur-md rounded-full border border-foreground/10 dark:border-white/10">
+              <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                <Globe className="w-4 h-4" />
+              </div>
+              <div className="text-sm">
+                <span className="block text-xs text-muted-foreground uppercase font-bold tracking-wider">Region Detected</span>
+                <span className="font-bold text-foreground">
+                  {isLoading ? 'Locating...' : (pricingData[currentRegion]?.name || 'Global')}
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -151,7 +158,7 @@ const ServicesSection = () => {
                 "absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-500 blur-xl rounded-3xl",
                 service.gradient
               )} />
-              <Card className="h-full bg-card/40 backdrop-blur-xl border-white/10 overflow-hidden relative transition-all duration-500 group-hover:translate-y-[-5px] group-hover:border-white/20 shadow-lg hover:shadow-2xl">
+              <Card className="h-full bg-card/40 backdrop-blur-xl border-foreground/10 dark:border-white/10 overflow-hidden relative transition-all duration-500 group-hover:translate-y-[-5px] group-hover:border-foreground/20 dark:group-hover:border-white/20 shadow-lg hover:shadow-2xl">
                 {/* Card Inner Glow */}
                 <div className={cn("absolute top-0 right-0 w-64 h-64 bg-gradient-to-br opacity-5 group-hover:opacity-20 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity duration-500", service.gradient)} />
 
@@ -160,7 +167,7 @@ const ServicesSection = () => {
                     <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center mb-6 text-white bg-gradient-to-br shadow-lg group-hover:scale-110 transition-transform duration-500", service.gradient)}>
                       {service.icon}
                     </div>
-                    <Badge variant="secondary" className="bg-white/5 hover:bg-white/10 text-muted-foreground font-normal backdrop-blur-md border-white/5">
+                    <Badge variant="secondary" className="bg-foreground/5 dark:bg-white/5 hover:bg-foreground/10 dark:hover:bg-white/10 text-muted-foreground font-normal backdrop-blur-md border-foreground/5 dark:border-white/5">
                       Service
                     </Badge>
                   </div>
@@ -170,8 +177,8 @@ const ServicesSection = () => {
                 <CardContent className="relative z-10 space-y-8 pt-4">
                   <div className="space-y-3">
                     {service.features.map((feature, i) => (
-                      <div key={i} className="flex items-center gap-3 text-sm font-medium text-muted-foreground group-hover:text-foreground/80 transition-colors">
-                        <div className="w-5 h-5 rounded-full bg-white/5 flex items-center justify-center text-emerald-500">
+                      <div key={i} className="flex items-center gap-3 text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+                        <div className="w-5 h-5 rounded-full bg-foreground/5 dark:bg-white/5 flex items-center justify-center text-emerald-500">
                           <Check className="w-3 h-3" />
                         </div>
                         {feature}
@@ -179,14 +186,29 @@ const ServicesSection = () => {
                     ))}
                   </div>
 
-                  <div className="flex items-center justify-between pt-6 border-t border-white/5">
-                    <div>
+                  <div className="flex items-center justify-between pt-6 border-t border-foreground/5 dark:border-white/5">
+                    <div className="flex flex-col">
                       <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">Starting from</p>
-                      <p className="text-2xl font-black text-foreground group-hover:text-emerald-400 transition-colors duration-300">
-                        {formatPrice(service.price)}
-                      </p>
+                      <div className="flex items-baseline gap-2">
+                        <p className="text-2xl font-black text-foreground group-hover:text-emerald-400 transition-colors duration-300">
+                          {currentRegion === 'IN' ? '₹10,000' : formatPrice(service.price)}
+                        </p>
+                        {currentRegion === 'IN' && (
+                          <span className="text-sm text-muted-foreground line-through opacity-70">
+                            {formatPrice(service.price)}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    <Button size="icon" className="rounded-full w-12 h-12 bg-white/5 hover:bg-emerald-500 text-foreground hover:text-white border border-white/10 transition-all duration-300 group-hover:scale-110">
+                    <Button
+                      size="icon"
+                      onClick={() => {
+                        window.dispatchEvent(new CustomEvent('delvare:autofill', {
+                          detail: { message: `I am interested in your ${service.title} service. Please provide more details about the pricing and timeline.` }
+                        }));
+                      }}
+                      className="rounded-full w-12 h-12 bg-foreground/5 dark:bg-white/5 hover:bg-emerald-500 text-foreground dark:text-white dark:hover:text-white hover:text-white border border-foreground/10 dark:border-white/10 transition-all duration-300 group-hover:scale-110"
+                    >
                       <ArrowRight className="w-5 h-5 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
                     </Button>
                   </div>

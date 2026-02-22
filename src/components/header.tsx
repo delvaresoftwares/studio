@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
+import { saveContactInfoAction, type ContactFormData } from '@/app/actions';
 
 const navLinks = [
   { name: 'Services', href: '#services' },
@@ -20,6 +21,13 @@ const Header = () => {
   const [formOpen, setFormOpen] = useState(false);
   const [formType, setFormType] = useState<'contact' | 'career'>('contact');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,6 +36,21 @@ const Header = () => {
     window.addEventListener('scroll', handleScroll);
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleOpenForm = (e: any) => {
+      const type = e.detail?.type || 'contact';
+      setFormType(type);
+      setFormOpen(true);
+      setMenuOpen(false);
+      setIsSubmitted(false);
+      setFormData({ name: '', email: '', phone: '', message: '' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.addEventListener('open-contact-form', handleOpenForm);
+    return () => window.removeEventListener('open-contact-form', handleOpenForm);
   }, []);
 
   const toggleForm = (type: 'contact' | 'career') => {
@@ -39,30 +62,56 @@ const Header = () => {
       setFormOpen(true);
       setMenuOpen(false);
       setIsSubmitted(false);
+      setFormData({ name: '', email: '', phone: '', message: '' });
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    // Auto close after 3 seconds
-    setTimeout(() => {
-      setFormOpen(false);
-      setIsSubmitted(false);
-    }, 4000);
+    setIsLoading(true);
+
+    try {
+      const submissionData: ContactFormData = {
+        ...formData,
+        type: formType
+      };
+
+      const result = await saveContactInfoAction(submissionData);
+
+      if (result.success) {
+        setIsSubmitted(true);
+        // Auto close after 4 seconds
+        setTimeout(() => {
+          setFormOpen(false);
+          setIsSubmitted(false);
+        }, 4000);
+      } else {
+        alert(result.error || "Failed to send enquiry. Please try again.");
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("An error occurred. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <>
       <header className={cn(
         "fixed top-0 left-0 right-0 z-[60] transition-all duration-500",
-        scrolled ? "bg-background/80 backdrop-blur-md border-b border-white/10" : "bg-transparent border-b-transparent",
+        scrolled ? "bg-background/80 backdrop-blur-md border-b border-foreground/10 dark:border-white/10" : "bg-transparent border-b-transparent",
         formOpen && "bg-emerald-600 border-none backdrop-blur-none"
       )}>
         <div className="container mx-auto">
           <div className="flex items-center justify-between h-20 px-4">
             <a href="#hero" className="flex items-center gap-3 group">
-              <Logo />
+              <Logo simple color="white" />
             </a>
             <nav className="hidden md:flex items-center gap-1">
               {navLinks.map((link) => (
@@ -71,7 +120,7 @@ const Header = () => {
                   href={link.href}
                   className={cn(
                     "text-sm font-semibold transition-all duration-300 px-4 py-2 rounded-full",
-                    formOpen ? "text-white hover:bg-white/20" : "hover:text-primary transition-colors"
+                    formOpen ? "text-white hover:bg-white/20" : "text-foreground/80 dark:text-muted-foreground hover:text-primary transition-colors"
                   )}
                   onClick={(e) => {
                     if (link.name === 'Careers') {
@@ -110,7 +159,7 @@ const Header = () => {
 
           <div className={cn(
             "overflow-hidden transition-all duration-700 ease-in-out bg-emerald-600 px-4",
-            formOpen ? (isSubmitted ? "max-h-[400px] pb-12 opacity-100" : "max-h-[700px] pb-12 opacity-100") : "max-h-0 opacity-0"
+            formOpen ? (isSubmitted ? "max-h-[400px] pb-12 opacity-100" : "max-h-[800px] pb-12 opacity-100") : "max-h-0 opacity-0"
           )}>
             <div className="max-w-4xl mx-auto pt-8 border-t border-white/20">
               {!isSubmitted ? (
@@ -126,23 +175,76 @@ const Header = () => {
                   <form className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4" onSubmit={handleSubmit}>
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-white/70 uppercase tracking-wider ml-1">Full Name</label>
-                      <input required type="text" placeholder="John Doe" className="w-full bg-emerald-700/50 border border-emerald-400/30 rounded-xl px-4 py-3 text-white placeholder:text-emerald-300/50 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all shadow-inner" />
+                      <input
+                        required
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        type="text"
+                        placeholder="John Doe"
+                        className="w-full bg-emerald-700/50 border border-emerald-400/30 rounded-xl px-4 py-3 text-white placeholder:text-emerald-300/50 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all shadow-inner"
+                      />
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-white/70 uppercase tracking-wider ml-1">Email address</label>
-                      <input required type="email" placeholder="john@company.com" className="w-full bg-emerald-700/50 border border-emerald-400/30 rounded-xl px-4 py-3 text-white placeholder:text-emerald-300/50 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all shadow-inner" />
+                      <input
+                        required
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        type="email"
+                        placeholder="john@company.com"
+                        className="w-full bg-emerald-700/50 border border-emerald-400/30 rounded-xl px-4 py-3 text-white placeholder:text-emerald-300/50 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all shadow-inner"
+                      />
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-white/70 uppercase tracking-wider ml-1">Phone Number</label>
-                      <input required type="tel" placeholder="+1 (555) 000-0000" className="w-full bg-emerald-700/50 border border-emerald-400/30 rounded-xl px-4 py-3 text-white placeholder:text-emerald-300/50 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all shadow-inner" />
+                      <input
+                        required
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        type="tel"
+                        placeholder="+1 (555) 000-0000"
+                        className="w-full bg-emerald-700/50 border border-emerald-400/30 rounded-xl px-4 py-3 text-white placeholder:text-emerald-300/50 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all shadow-inner"
+                      />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-bold text-white/70 uppercase tracking-wider ml-1">Address</label>
-                      <input required type="text" placeholder="123 Tech Lane, Silicon Valley" className="w-full bg-emerald-700/50 border border-emerald-400/30 rounded-xl px-4 py-3 text-white placeholder:text-emerald-300/50 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all shadow-inner" />
+                      <label className="text-xs font-bold text-white/70 uppercase tracking-wider ml-1">
+                        {formType === 'contact' ? 'Message' : 'Tell us about yourself'}
+                      </label>
+                      <input
+                        required
+                        name="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        type="text"
+                        placeholder={formType === 'contact' ? 'How can we help you?' : 'Your background and experience...'}
+                        className="w-full bg-emerald-700/50 border border-emerald-400/30 rounded-xl px-4 py-3 text-white placeholder:text-emerald-300/50 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all shadow-inner"
+                      />
                     </div>
-                    <div className="md:col-span-2 mt-4">
-                      <Button type="submit" className="w-full py-6 text-lg font-bold bg-white text-emerald-600 hover:bg-emerald-50 rounded-xl shadow-xl transition-all hover:scale-[1.01] active:scale-[0.99]">
-                        Send {formType === 'contact' ? 'Enquiry' : 'Application'}
+                    <div className="md:col-span-2 mt-4 flex flex-col gap-3">
+                      <Button
+                        type="submit"
+                        disabled={isLoading}
+                        className="w-full py-6 text-lg font-bold bg-white text-emerald-600 hover:bg-emerald-50 rounded-xl shadow-xl transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-70"
+                      >
+                        {isLoading ? (
+                          <span className="flex items-center gap-2">
+                            <span className="w-4 h-4 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></span>
+                            Sending...
+                          </span>
+                        ) : (
+                          `Send ${formType === 'contact' ? 'Enquiry' : 'Application'}`
+                        )}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        className="w-full text-white/70 hover:text-white hover:bg-white/10 font-bold"
+                        onClick={() => setFormOpen(false)}
+                      >
+                        Cancel & Close
                       </Button>
                     </div>
                   </form>
@@ -176,7 +278,7 @@ const Header = () => {
         <div className="container mx-auto flex flex-col h-full bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.1),transparent)]">
           <div className="flex justify-between items-center h-20 px-4">
             <Logo />
-            <Button variant="ghost" size="icon" onClick={() => setMenuOpen(false)} className="rounded-full bg-white/5">
+            <Button variant="ghost" size="icon" onClick={() => setMenuOpen(false)} className="rounded-full bg-foreground/5 dark:bg-white/5">
               <X />
             </Button>
           </div>

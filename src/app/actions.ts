@@ -62,7 +62,7 @@ function calculateProjectCost(input: ProjectCostEstimatorInput): ProjectCostEsti
   const prices = pricingData[currency];
   const projectPricing = prices[projectType];
   let estimatedCost = projectPricing[complexity];
-  
+
   let justification = `The estimate is based on the following selections:\n`;
   justification += `- Project Type: ${projectType.charAt(0).toUpperCase() + projectType.slice(1)}\n`;
   justification += `- Complexity: ${complexity.charAt(0).toUpperCase() + complexity.slice(1)}\n`;
@@ -92,9 +92,9 @@ function calculateProjectCost(input: ProjectCostEstimatorInput): ProjectCostEsti
   if (detectedFeatures.length > 0) {
     justification += `\nDetected Features:\n- ${detectedFeatures.join('\n- ')}\n`;
   }
-  
+
   estimatedCost += featureCost;
-  
+
   justification += `\nTotal Estimated Cost: ${estimatedCost.toLocaleString()} ${currency}. This is an initial estimate; a final quote will be provided after a detailed consultation.`
 
   return { estimatedCost, currency, costJustification: justification };
@@ -104,7 +104,7 @@ function calculateProjectCost(input: ProjectCostEstimatorInput): ProjectCostEsti
 export async function getProjectCostEstimateAction(input: ProjectCostEstimatorInput): Promise<ProjectCostEstimatorOutput | { error: string }> {
   try {
     const result = calculateProjectCost(input);
-    
+
     // Save the estimation to Firestore as well
     if (app.options.projectId) {
       try {
@@ -137,6 +137,7 @@ export type ContactFormData = {
   email: string;
   phone: string;
   message: string;
+  type?: 'contact' | 'career';
 };
 
 export type Contact = {
@@ -145,6 +146,7 @@ export type Contact = {
   email: string;
   phone: string;
   message: string;
+  type: string;
   createdAt: string;
   read: boolean;
 }
@@ -154,17 +156,18 @@ export async function saveContactInfoAction(formData: ContactFormData): Promise<
   // 1. Validate that Firebase was initialized correctly
   if (!app.options.projectId) {
     console.error("Firebase config is not set up. Please create and populate a .env.local file for local development, and ensure production secrets are set.");
-    return { 
-      success: false, 
-      error: "The contact form is not yet configured. Please follow the instructions in the README." 
+    return {
+      success: false,
+      error: "The contact form is not yet configured. Please follow the instructions in the README."
     };
   }
-  
+
   // 2. Save data to Firestore
   try {
     const contactsCollection = collection(db, 'contacts');
     await addDoc(contactsCollection, {
       ...formData,
+      type: formData.type || 'contact',
       createdAt: serverTimestamp(),
       read: false, // Default to unread
     });
@@ -173,14 +176,14 @@ export async function saveContactInfoAction(formData: ContactFormData): Promise<
     console.error("Error saving to Firestore:", error);
     // Provide a more specific error message if it's a permission issue
     if (error.code === 'permission-denied') {
-        return { 
-            success: false, 
-            error: "Failed to submit: Permission denied. Please check your Firestore security rules as per the README." 
-        };
+      return {
+        success: false,
+        error: "Failed to submit: Permission denied. Please check your Firestore security rules as per the README."
+      };
     }
-    return { 
-        success: false, 
-        error: "An error occurred while saving your message. Please try again." 
+    return {
+      success: false,
+      error: "An error occurred while saving your message. Please try again."
     };
   }
 }
@@ -189,7 +192,7 @@ export async function saveContactInfoAction(formData: ContactFormData): Promise<
 export async function getContactsAction(): Promise<{ contacts?: Contact[]; error?: string }> {
   console.log("getContactsAction started");
   console.log("Firebase Config Project ID:", app.options.projectId);
-  
+
   if (!app.options.projectId) {
     return { error: "Firebase is not configured on the server." };
   }
@@ -198,26 +201,27 @@ export async function getContactsAction(): Promise<{ contacts?: Contact[]; error
     const contactsCollection = collection(db, 'contacts');
     const q = query(contactsCollection, orderBy('createdAt', 'desc'));
     const querySnapshot = await getDocs(q);
-    
+
     const contacts = querySnapshot.docs.map(doc => {
-        const data = doc.data();
-        const createdAt = data.createdAt as Timestamp;
-        return {
-            id: doc.id,
-            name: data.name,
-            email: data.email,
-            phone: data.phone,
-            message: data.message,
-            createdAt: createdAt ? new Date(createdAt.seconds * 1000).toLocaleString() : 'N/A',
-            read: data.read || false,
-        }
+      const data = doc.data();
+      const createdAt = data.createdAt as Timestamp;
+      return {
+        id: doc.id,
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        message: data.message,
+        type: data.type || 'contact',
+        createdAt: createdAt ? new Date(createdAt.seconds * 1000).toLocaleString() : 'N/A',
+        read: data.read || false,
+      }
     });
-    
+
     return { contacts };
   } catch (error: any) {
     console.error("Error fetching contacts:", error);
-     if (error.code === 'permission-denied') {
-        return { error: "Could not fetch contacts: Permission denied. Ensure your Firestore security rules are deployed correctly." };
+    if (error.code === 'permission-denied') {
+      return { error: "Could not fetch contacts: Permission denied. Ensure your Firestore security rules are deployed correctly." };
     }
     return { error: `Failed to fetch contacts: ${error.message}` };
   }
@@ -273,25 +277,25 @@ export async function getEstimationsAction(): Promise<{ estimations?: Estimation
     const estimationsCollection = collection(db, 'estimations');
     const q = query(estimationsCollection, orderBy('createdAt', 'desc'));
     const querySnapshot = await getDocs(q);
-    
+
     const estimations = querySnapshot.docs.map(doc => {
-        const data = doc.data();
-        const createdAt = data.createdAt as Timestamp;
-        return {
-            id: doc.id,
-            projectType: data.projectType,
-            projectDescription: data.projectDescription,
-            location: data.location,
-            urgency: data.urgency,
-            complexity: data.complexity,
-            estimatedCost: data.estimatedCost,
-            currency: data.currency,
-            costJustification: data.costJustification,
-            createdAt: createdAt ? new Date(createdAt.seconds * 1000).toLocaleString() : 'N/A',
-            read: data.read || false,
-        }
+      const data = doc.data();
+      const createdAt = data.createdAt as Timestamp;
+      return {
+        id: doc.id,
+        projectType: data.projectType,
+        projectDescription: data.projectDescription,
+        location: data.location,
+        urgency: data.urgency,
+        complexity: data.complexity,
+        estimatedCost: data.estimatedCost,
+        currency: data.currency,
+        costJustification: data.costJustification,
+        createdAt: createdAt ? new Date(createdAt.seconds * 1000).toLocaleString() : 'N/A',
+        read: data.read || false,
+      }
     });
-    
+
     return { estimations };
   } catch (error: any) {
     console.error("Error fetching estimations:", error);

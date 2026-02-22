@@ -16,7 +16,7 @@ const keywordItems = [
 
 const KeywordMarquee = () => {
     return (
-        <section className="w-full py-20 overflow-hidden bg-background relative border-y border-white/5">
+        <section className="w-full py-20 overflow-hidden bg-background relative border-y border-foreground/5 dark:border-white/5">
             {/* Decorative background glow */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none" />
 
@@ -27,7 +27,7 @@ const KeywordMarquee = () => {
                         {[...Array(4)].map((_, i) => (
                             <div key={i} className="flex gap-16 items-center px-8">
                                 {keywordItems.map((item, idx) => (
-                                    <div key={idx} className="flex items-center gap-4 text-white/10 dark:text-white/20 hover:text-emerald-500/40 transition-colors duration-500 cursor-default">
+                                    <div key={idx} className="flex items-center gap-4 text-foreground/10 dark:text-white/20 hover:text-emerald-500/40 transition-colors duration-500 cursor-default">
                                         <span className="text-4xl md:text-6xl font-black uppercase tracking-tighter">
                                             {item.text}
                                         </span>
@@ -47,7 +47,7 @@ const KeywordMarquee = () => {
                         {[...Array(4)].map((_, i) => (
                             <div key={i} className="flex gap-16 items-center px-8">
                                 {keywordItems.map((item, idx) => (
-                                    <div key={idx} className="flex items-center gap-4 text-white/10 dark:text-white/20 hover:text-emerald-500/40 transition-colors duration-500 cursor-default">
+                                    <div key={idx+2} className="flex items-center gap-4 text-foreground/10 dark:text-white/20 hover:text-emerald-500/40 transition-colors duration-500 cursor-default">
                                         <span className="text-4xl md:text-6xl font-black uppercase tracking-tighter">
                                             {item.text}
                                         </span>

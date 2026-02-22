@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo, type FormEvent } from 'react';
 import { getContactsAction, deleteContactAction, markAsReadAction, getEstimationsAction, deleteEstimationAction, markEstimationAsReadAction, type Contact, type Estimation } from '@/app/actions';
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -21,18 +22,18 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
-  
+
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [estimations, setEstimations] = useState<Estimation[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  
+
   const [mainTab, setMainTab] = useState('contacts');
   const [activeTab, setActiveTab] = useState('unread');
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [selectedEstimation, setSelectedEstimation] = useState<Estimation | null>(null);
-  const [itemToDelete, setItemToDelete] = useState<{id: string, type: 'contacts' | 'estimations', name: string} | null>(null);
+  const [itemToDelete, setItemToDelete] = useState<{ id: string, type: 'contacts' | 'estimations', name: string } | null>(null);
 
   const { toast } = useToast();
 
@@ -57,7 +58,7 @@ export default function AdminPage() {
 
       if (contactsResult.contacts) setContacts(contactsResult.contacts);
       if (estimationsResult.estimations) setEstimations(estimationsResult.estimations);
-      
+
       if (contactsResult.error || estimationsResult.error) {
         setError(contactsResult.error || estimationsResult.error || 'Failed to fetch some data.');
       }
@@ -97,11 +98,11 @@ export default function AdminPage() {
       }
     }
   };
-  
+
   const handleDeleteConfirm = async () => {
     if (!itemToDelete) return;
-    
-    const result = itemToDelete.type === 'contacts' 
+
+    const result = itemToDelete.type === 'contacts'
       ? await deleteContactAction(itemToDelete.id)
       : await deleteEstimationAction(itemToDelete.id);
 
@@ -117,7 +118,7 @@ export default function AdminPage() {
     }
     setItemToDelete(null);
   };
-  
+
   const handleCopyLead = (item: Contact | Estimation) => {
     let leadInfo = '';
     if ('email' in item) {
@@ -128,26 +129,26 @@ export default function AdminPage() {
     navigator.clipboard.writeText(leadInfo);
     toast({ title: "Copied!", description: "Lead info copied to clipboard." });
   };
-  
+
   const unreadContacts = useMemo(() => contacts.filter(c => !c.read), [contacts]);
   const unreadEstimations = useMemo(() => estimations.filter(e => !e.read), [estimations]);
 
   const exportToCSV = () => {
     const data = mainTab === 'contacts' ? (activeTab === 'unread' ? unreadContacts : contacts) : (activeTab === 'unread' ? unreadEstimations : estimations);
-    if(data.length === 0) {
+    if (data.length === 0) {
       toast({ variant: "destructive", title: "Nothing to Export", description: "There are no items in the current view." });
       return;
     }
-    
+
     let csvContent = '';
     if (mainTab === 'contacts') {
       const headers = 'Name,Email,Phone,Message,Received At\n';
-      csvContent = headers + (data as Contact[]).map(c => 
+      csvContent = headers + (data as Contact[]).map(c =>
         `"${c.name}","${c.email}","${c.phone}","${c.message.split('"').join('""')}","${c.createdAt}"`
       ).join('\n');
     } else {
       const headers = 'Type,Location,Urgency,Complexity,Cost,Currency,Received At\n';
-      csvContent = headers + (data as Estimation[]).map(e => 
+      csvContent = headers + (data as Estimation[]).map(e =>
         `"${e.projectType}","${e.location}","${e.urgency}","${e.complexity}","${e.estimatedCost}","${e.currency}","${e.createdAt}"`
       ).join('\n');
     }
@@ -161,9 +162,8 @@ export default function AdminPage() {
       <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
         <Card className="w-full max-w-sm">
           <CardHeader className="text-center">
-            <div className="mx-auto mb-4 flex items-center gap-3 justify-center">
+            <div className="mx-auto mb-4 flex items-center justify-center scale-125">
               <Logo />
-              <span className="font-bold text-xl">Delvare</span>
             </div>
             <CardTitle>Admin Panel</CardTitle>
             <CardDescription>Enter password to access dashboard</CardDescription>
@@ -193,22 +193,22 @@ export default function AdminPage() {
       <div className="min-h-screen bg-background text-foreground p-4 sm:p-6 md:p-8">
         <div className="container mx-auto">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-              <div className="flex items-center gap-4">
-                <Logo />
-                <div>
-                  <h1 className="text-3xl sm:text-4xl font-bold font-headline">Admin Panel</h1>
-                  <p className="text-muted-foreground">Manage your studio leads and inquiries.</p>
-                </div>
+            <div className="flex items-center gap-4">
+              <Logo />
+              <div>
+                <h1 className="text-3xl sm:text-4xl font-bold font-headline">Admin Panel</h1>
+                <p className="text-muted-foreground">Manage your studio leads and inquiries.</p>
               </div>
-              <Button variant="outline" onClick={() => setIsAuthenticated(false)}>
-                <ShieldOff className="mr-2 h-4 w-4"/> Logout
-              </Button>
+            </div>
+            <Button variant="outline" onClick={() => setIsAuthenticated(false)}>
+              <ShieldOff className="mr-2 h-4 w-4" /> Logout
+            </Button>
           </div>
 
           <Tabs value={mainTab} onValueChange={setMainTab} className="mb-8">
             <TabsList className="grid w-full grid-cols-2 max-w-[400px]">
-              <TabsTrigger value="contacts"><User className="mr-2 h-4 w-4"/> Contacts</TabsTrigger>
-              <TabsTrigger value="estimations"><Calculator className="mr-2 h-4 w-4"/> Estimations</TabsTrigger>
+              <TabsTrigger value="contacts"><User className="mr-2 h-4 w-4" /> Contacts</TabsTrigger>
+              <TabsTrigger value="estimations"><Calculator className="mr-2 h-4 w-4" /> Estimations</TabsTrigger>
             </TabsList>
           </Tabs>
 
@@ -227,30 +227,30 @@ export default function AdminPage() {
                 </TabsTrigger>
               </TabsList>
               <Button variant="outline" onClick={exportToCSV}>
-                <Download className="mr-2 h-4 w-4"/> Export CSV
+                <Download className="mr-2 h-4 w-4" /> Export CSV
               </Button>
             </div>
-            
+
             <TabsContent value="unread">
-              <DataTable 
+              <DataTable
                 type={mainTab as 'contacts' | 'estimations'}
-                data={mainTab === 'contacts' ? unreadContacts : unreadEstimations} 
-                isLoading={isLoading} 
-                error={error} 
-                onView={mainTab === 'contacts' ? handleViewContact : handleViewEstimation} 
-                onCopy={handleCopyLead} 
-                onDelete={(id, name) => setItemToDelete({id, name, type: mainTab as 'contacts' | 'estimations'})} 
+                data={mainTab === 'contacts' ? unreadContacts : unreadEstimations}
+                isLoading={isLoading}
+                error={error}
+                onView={mainTab === 'contacts' ? handleViewContact : handleViewEstimation}
+                onCopy={handleCopyLead}
+                onDelete={(id, name) => setItemToDelete({ id, name, type: mainTab as 'contacts' | 'estimations' })}
               />
             </TabsContent>
             <TabsContent value="all">
-              <DataTable 
+              <DataTable
                 type={mainTab as 'contacts' | 'estimations'}
-                data={mainTab === 'contacts' ? contacts : estimations} 
-                isLoading={isLoading} 
-                error={error} 
-                onView={mainTab === 'contacts' ? handleViewContact : handleViewEstimation} 
-                onCopy={handleCopyLead} 
-                onDelete={(id, name) => setItemToDelete({id, name, type: mainTab as 'contacts' | 'estimations'})} 
+                data={mainTab === 'contacts' ? contacts : estimations}
+                isLoading={isLoading}
+                error={error}
+                onView={mainTab === 'contacts' ? handleViewContact : handleViewEstimation}
+                onCopy={handleCopyLead}
+                onDelete={(id, name) => setItemToDelete({ id, name, type: mainTab as 'contacts' | 'estimations' })}
               />
             </TabsContent>
           </Tabs>
@@ -264,22 +264,26 @@ export default function AdminPage() {
           <DialogHeader>
             <DialogTitle>{selectedContact ? 'Contact Details' : 'Estimation Details'}</DialogTitle>
             <DialogDescription>
-                Full inquiry from {selectedContact ? selectedContact.name : 'the cost estimator'}.
+              Full inquiry from {selectedContact ? selectedContact.name : 'the cost estimator'}.
             </DialogDescription>
           </DialogHeader>
-          
+
           {selectedContact && (
             <div className="grid gap-4 py-4 text-sm">
               <div className="grid grid-cols-[100px_1fr] items-center gap-4">
-                <div className="font-medium text-muted-foreground flex items-center gap-2"><User className="h-4 w-4"/> Name</div>
+                <div className="font-medium text-muted-foreground flex items-center gap-2"><User className="h-4 w-4" /> Name</div>
                 <div>{selectedContact.name}</div>
               </div>
               <div className="grid grid-cols-[100px_1fr] items-center gap-4">
-                <div className="font-medium text-muted-foreground flex items-center gap-2"><Mail className="h-4 w-4"/> Email</div>
+                <div className="font-medium text-muted-foreground flex items-center gap-2"><FileText className="h-4 w-4" /> Type</div>
+                <div><Badge variant="outline" className="capitalize">{selectedContact.type}</Badge></div>
+              </div>
+              <div className="grid grid-cols-[100px_1fr] items-center gap-4">
+                <div className="font-medium text-muted-foreground flex items-center gap-2"><Mail className="h-4 w-4" /> Email</div>
                 <a href={`mailto:${selectedContact.email}`} className="text-primary hover:underline">{selectedContact.email}</a>
               </div>
               <div className="grid grid-cols-[100px_1fr] items-center gap-4">
-                <div className="font-medium text-muted-foreground flex items-center gap-2"><Phone className="h-4 w-4"/> Phone</div>
+                <div className="font-medium text-muted-foreground flex items-center gap-2"><Phone className="h-4 w-4" /> Phone</div>
                 <a href={`tel:${selectedContact.phone}`} className="text-primary hover:underline">{selectedContact.phone}</a>
               </div>
               <Separator />
@@ -294,11 +298,11 @@ export default function AdminPage() {
             <div className="grid gap-4 py-4 text-sm">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <div className="font-medium text-muted-foreground flex items-center gap-2"><FileText className="h-4 w-4"/> Type</div>
+                  <div className="font-medium text-muted-foreground flex items-center gap-2"><FileText className="h-4 w-4" /> Type</div>
                   <div className="capitalize">{selectedEstimation.projectType}</div>
                 </div>
                 <div className="space-y-1">
-                  <div className="font-medium text-muted-foreground flex items-center gap-2"><Mail className="h-4 w-4"/> Location</div>
+                  <div className="font-medium text-muted-foreground flex items-center gap-2"><Mail className="h-4 w-4" /> Location</div>
                   <div>{selectedEstimation.location}</div>
                 </div>
               </div>
@@ -314,10 +318,10 @@ export default function AdminPage() {
               </div>
               <Separator />
               <div className="space-y-2">
-                 <div className="font-medium text-muted-foreground">Estimated Cost</div>
-                 <div className="text-3xl font-bold text-primary">
-                    {new Intl.NumberFormat('en-US', { style: 'currency', currency: selectedEstimation.currency, minimumFractionDigits: 0 }).format(selectedEstimation.estimatedCost)}
-                 </div>
+                <div className="font-medium text-muted-foreground">Estimated Cost</div>
+                <div className="text-3xl font-bold text-primary">
+                  {new Intl.NumberFormat('en-US', { style: 'currency', currency: selectedEstimation.currency, minimumFractionDigits: 0 }).format(selectedEstimation.estimatedCost)}
+                </div>
               </div>
               <Separator />
               <div className="grid gap-2">
@@ -332,21 +336,21 @@ export default function AdminPage() {
           )}
         </DialogContent>
       </Dialog>
-      
+
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={!!itemToDelete} onOpenChange={(open) => !open && setItemToDelete(null)}>
-          <AlertDialogContent>
-              <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete this {itemToDelete?.type} from {itemToDelete?.name}.
-                  </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                  <AlertDialogCancel onClick={() => setItemToDelete(null)}>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive hover:bg-destructive/90">Delete</AlertDialogAction>
-              </AlertDialogFooter>
-          </AlertDialogContent>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete this {itemToDelete?.type} from {itemToDelete?.name}.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setItemToDelete(null)}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive hover:bg-destructive/90">Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
       </AlertDialog>
     </>
   );
@@ -382,84 +386,93 @@ function DataTable({ type, data, isLoading, error, onView, onCopy, onDelete }: D
   }
 
   return (
-     <Card>
+    <Card>
       <CardContent className="p-0">
         <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[50px]">Status</TableHead>
-                  <TableHead>Received</TableHead>
-                  {type === 'contacts' ? (
-                    <>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Contact Info</TableHead>
-                      <TableHead>Message</TableHead>
-                    </>
-                  ) : (
-                    <>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Location</TableHead>
-                      <TableHead>Estimated Cost</TableHead>
-                    </>
-                  )}
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {data.length > 0 ? (
-                  data.map((item) => (
-                    <TableRow key={item.id} className={!item.read ? 'font-bold' : 'font-normal'}>
-                      <TableCell>
-                        {!item.read && <Badge>New</Badge>}
-                      </TableCell>
-                      <TableCell className="whitespace-nowrap text-xs">{item.createdAt}</TableCell>
-                      
-                      {type === 'contacts' ? (
-                        <>
-                          <TableCell>{item.name}</TableCell>
-                          <TableCell>
-                            <div className="flex flex-col text-xs">
-                              <span>{item.email}</span>
-                              <span className="text-muted-foreground">{item.phone}</span>
-                            </div>
-                          </TableCell>
-                          <TableCell className="max-w-[200px] truncate text-xs">{item.message}</TableCell>
-                        </>
-                      ) : (
-                        <>
-                          <TableCell className="capitalize">{item.projectType}</TableCell>
-                          <TableCell>{item.location}</TableCell>
-                          <TableCell className="text-primary font-bold">
-                            {new Intl.NumberFormat('en-US', { style: 'currency', currency: item.currency, minimumFractionDigits: 0 }).format(item.estimatedCost)}
-                          </TableCell>
-                        </>
-                      )}
-
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon"><MoreHorizontal className="h-4 w-4" /></Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => onView(item)}><Eye className="mr-2 h-4 w-4"/> View Details</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => onCopy(item)}><Copy className="mr-2 h-4 w-4"/> Copy Info</DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => onDelete(item.id, type === 'contacts' ? item.name : item.projectType)} className="text-destructive focus:text-destructive focus:bg-destructive/10"><Trash2 className="mr-2 h-4 w-4"/> Delete</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  )) 
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[50px]">Status</TableHead>
+                <TableHead>Received</TableHead>
+                {type === 'contacts' ? (
+                  <>
+                    <TableHead>Type</TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Contact Info</TableHead>
+                    <TableHead>Message</TableHead>
+                  </>
                 ) : (
-                  <TableRow>
-                    <TableCell colSpan={6} className="text-center h-24">
-                      No inquiries in this view.
+                  <>
+                    <TableHead>Type</TableHead>
+                    <TableHead>Location</TableHead>
+                    <TableHead>Estimated Cost</TableHead>
+                  </>
+                )}
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data.length > 0 ? (
+                data.map((item) => (
+                  <TableRow key={item.id} className={!item.read ? 'font-bold' : 'font-normal'}>
+                    <TableCell>
+                      {!item.read && <Badge>New</Badge>}
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap text-xs">{item.createdAt}</TableCell>
+
+                    {type === 'contacts' ? (
+                      <>
+                        <TableCell>
+                          <Badge variant="outline" className={cn(
+                            "capitalize",
+                            item.type === 'career' ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : "bg-blue-500/10 text-blue-500 border-blue-500/20"
+                          )}>
+                            {item.type}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{item.name}</TableCell>
+                        <TableCell>
+                          <div className="flex flex-col text-xs">
+                            <span>{item.email}</span>
+                            <span className="text-muted-foreground">{item.phone}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="max-w-[200px] truncate text-xs">{item.message}</TableCell>
+                      </>
+                    ) : (
+                      <>
+                        <TableCell className="capitalize">{item.projectType}</TableCell>
+                        <TableCell>{item.location}</TableCell>
+                        <TableCell className="text-primary font-bold">
+                          {new Intl.NumberFormat('en-US', { style: 'currency', currency: item.currency, minimumFractionDigits: 0 }).format(item.estimatedCost)}
+                        </TableCell>
+                      </>
+                    )}
+
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon"><MoreHorizontal className="h-4 w-4" /></Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => onView(item)}><Eye className="mr-2 h-4 w-4" /> View Details</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => onCopy(item)}><Copy className="mr-2 h-4 w-4" /> Copy Info</DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem onClick={() => onDelete(item.id, type === 'contacts' ? item.name : item.projectType)} className="text-destructive focus:text-destructive focus:bg-destructive/10"><Trash2 className="mr-2 h-4 w-4" /> Delete</DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
-                )}
-              </TableBody>
-            </Table>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center h-24">
+                    No inquiries in this view.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
         </div>
       </CardContent>
     </Card>

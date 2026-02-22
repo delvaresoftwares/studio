@@ -64,14 +64,16 @@ const CostEstimatorSection = () => {
   const [selections, setSelections] = useState<any>({});
   const [isTyping, setIsTyping] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const scrollChatToBottom = () => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
   };
 
   useEffect(() => {
-    scrollToBottom();
+    scrollChatToBottom();
   }, [messages, isTyping]);
 
   const handleOptionClick = (value: string, label: string) => {
@@ -243,7 +245,14 @@ const CostEstimatorSection = () => {
               <span className="text-3xl font-black text-foreground">{finalAmount}</span>
             </div>
           </div>
-          <Button className="w-full font-bold mt-4" size="lg" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
+          <Button
+            className="w-full font-bold mt-4"
+            size="lg"
+            onClick={() => {
+              const message = `I just used the AI Estimator for a ${pricingBase[type].label}. \n\nDetails:\n- Project: ${pricingBase[type].label}\n- Complexity: ${complexity.charAt(0).toUpperCase() + complexity.slice(1)}\n- Estimate: ${finalAmount}\n\nI would like to discuss this project further.`;
+              window.dispatchEvent(new CustomEvent('delvare:autofill', { detail: { message } }));
+            }}
+          >
             Book Consultation
           </Button>
         </div>
@@ -264,9 +273,9 @@ const CostEstimatorSection = () => {
           </p>
         </div>
 
-        <Card className="min-h-[600px] flex flex-col glass-card border-white/10 shadow-2xl relative overflow-hidden">
+        <Card className="min-h-[600px] flex flex-col glass-card border-foreground/10 dark:border-white/10 shadow-2xl relative overflow-hidden">
           {/* Chat Area */}
-          <div className="flex-grow p-6 space-y-4 overflow-y-auto max-h-[600px] scrollbar-hide">
+          <div ref={chatContainerRef} className="flex-grow p-6 space-y-4 overflow-y-auto h-[500px] scrollbar-hide scroll-smooth">
             {messages.map((msg) => (
               <div key={msg.id} className={cn("flex gap-3", msg.sender === 'user' ? "justify-end" : "justify-start")}>
                 {msg.sender === 'ai' && (
@@ -300,7 +309,6 @@ const CostEstimatorSection = () => {
                 </div>
               </div>
             )}
-            <div ref={messagesEndRef} />
           </div>
 
           {/* Input Area */}
@@ -325,7 +333,6 @@ const CostEstimatorSection = () => {
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder="Type here..."
                   className="bg-background border-primary/20 focus-visible:ring-primary"
-                  autoFocus
                 />
                 <Button type="submit" size="icon" className="shrink-0">
                   <Send className="w-4 h-4" />

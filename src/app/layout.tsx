@@ -20,11 +20,11 @@ const spaceGrotesk = Space_Grotesk({
 const siteConfig = {
   name: 'XAAS by Delvare',
   title: 'XAAS by Delvare | Anything as a Service',
-  description: 'Elite software engineering, cloud infrastructure, and security solutions. Scale your business with Delvare\'s futuristic Anything-as-a-Service model.',
-  url: 'https://delvare.vercel.app',
+  description: 'Scalable & Secure Business Solutions at affordability',
+  url: 'https://delvare.in',
   ogImage: 'https://res.cloudinary.com/dt4mweku7/image/upload/v1751266409/buissware_amykyt.gif',
   icon: 'https://res.cloudinary.com/dt4mweku7/image/upload/v1751266408/buissware_h6bmig.png',
-  keywords: ['XAAS', 'Delvare', 'software engineering', 'cloud infrastructure', 'security engineering', 'business analysis', 'MNC'],
+  keywords: ['XAAS', 'Delvare', 'software', 'company', 'MNC', 'business solutions', 'cloud infrastructure', 'security engineering', 'business analysis', 'MNC'],
 };
 
 export const metadata: Metadata = {

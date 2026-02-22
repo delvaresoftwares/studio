@@ -15,10 +15,10 @@ const CareerSection = () => {
             </div>
 
             <div className="container mx-auto px-4 relative z-10">
-                <div className="grid lg:grid-cols-2 gap-16 items-center">
+                <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
                     <div className="space-y-8">
                         <Badge className="bg-emerald-500 hover:bg-emerald-400 text-white border-none px-4 py-1 font-bold">LIFELONG LEARNING</Badge>
-                        <h2 className="font-headline text-5xl md:text-7xl font-black tracking-tight leading-tight">
+                        <h2 className="font-headline text-4xl sm:text-5xl md:text-7xl font-black tracking-tight leading-tight">
                             Learn from the <span className="text-emerald-400 font-serif italic">Elite.</span>
                         </h2>
                         <p className="text-xl text-emerald-100/70 font-medium leading-relaxed max-w-xl">
@@ -45,22 +45,15 @@ const CareerSection = () => {
                         </div>
 
                         <Button size="xl" className="bg-white text-emerald-950 hover:bg-emerald-50 font-black shadow-2xl" onClick={() => {
-                            const header = document.querySelector('header');
-                            if (header) {
-                                // This is a bit hacky but works since we know how the header state works now
-                                // Alternatively we can use a global state or event bus
-                                const contactBtn = header.querySelector('button');
-                                if (contactBtn) contactBtn.click();
-                            }
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                            window.dispatchEvent(new CustomEvent('open-contact-form', { detail: { type: 'career' } }));
                         }}>
                             Join the Academy
                         </Button>
                     </div>
 
                     <div className="relative">
-                        <div className="absolute -inset-4 bg-emerald-500/20 rounded-[2rem] blur-2xl rotate-3" />
-                        <Card className="relative bg-emerald-900/40 backdrop-blur-3xl border-emerald-500/30 rounded-[2rem] overflow-hidden shadow-2xl">
+                        <div className="absolute -inset-4 bg-emerald-500/20 rounded-2xl sm:rounded-[2rem] blur-2xl rotate-3" />
+                        <Card className="relative bg-emerald-900/40 backdrop-blur-3xl border-emerald-500/30 rounded-2xl sm:rounded-[2rem] overflow-hidden shadow-2xl">
                             <CardContent className="p-0">
                                 <div className="p-8 border-b border-emerald-500/20 bg-emerald-800/30">
                                     <div className="flex gap-2 mb-4">
@@ -68,7 +61,7 @@ const CareerSection = () => {
                                         <div className="h-3 w-3 rounded-full bg-amber-500/50" />
                                         <div className="h-3 w-3 rounded-full bg-emerald-500/50" />
                                     </div>
-                                    <div className="space-y-4 font-mono text-sm">
+                                    <div className="space-y-4 font-mono text-[10px] sm:text-sm overflow-x-auto whitespace-nowrap scrollbar-hide">
                                         <div className="flex gap-4">
                                             <span className="text-emerald-500/50">01</span>
                                             <span className="text-emerald-400">class</span>
@@ -102,8 +95,8 @@ const CareerSection = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="p-12 text-center space-y-6">
-                                    <h3 className="text-2xl font-black">Not a job. A Transformation.</h3>
+                                <div className="p-6 sm:p-12 text-center space-y-6">
+                                    <h3 className="text-xl sm:text-2xl font-black">Not a job. A Transformation.</h3>
                                     <div className="flex justify-center gap-1">
                                         {[1, 2, 3, 4, 5].map(i => (
                                             <div key={i} className="h-1 w-8 bg-emerald-500 rounded-full" />
