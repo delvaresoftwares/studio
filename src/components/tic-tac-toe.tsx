@@ -11,11 +11,14 @@ type Player = 'X' | 'O';
 type SquareValue = Player | null;
 type Difficulty = 'easy' | 'hard';
 
-const Square = ({ value, onSquareClick }: { value: SquareValue; onSquareClick: () => void }) => {
+const Square = ({ value, onSquareClick, index }: { value: SquareValue; onSquareClick: () => void; index: number }) => {
+  const row = Math.floor(index / 3) + 1;
+  const col = (index % 3) + 1;
   return (
     <button
       className="w-24 h-24 bg-background/50 rounded-lg flex items-center justify-center shadow-md transition-all duration-200 ease-in-out hover:bg-primary/20"
       onClick={onSquareClick}
+      aria-label={value ? `Square ${row},${col}: ${value}` : `Square ${row},${col}: empty`}
     >
       {value === 'X' && <X className="w-12 h-12 text-foreground transition-all duration-300 [text-shadow:0_0_8px_hsl(var(--foreground))]" />}
       {value === 'O' && <Circle className="w-12 h-12 text-primary transition-all duration-300 [text-shadow:0_0_8px_hsl(var(--primary))]" />}
@@ -161,7 +164,7 @@ const TicTacToe = () => {
         </Tabs>
         <div className={cn("grid grid-cols-3 gap-3", (gameOver || !isPlayerNext) && "pointer-events-none opacity-70")}>
             {squares.map((square, i) => (
-                <Square key={i} value={square} onSquareClick={() => handlePlayerClick(i)} />
+                <Square key={i} value={square} onSquareClick={() => handlePlayerClick(i)} index={i} />
             ))}
         </div>
     </Card>

@@ -39,7 +39,8 @@ export default function AdminPage() {
 
   const handleLogin = (e: FormEvent) => {
     e.preventDefault();
-    if (password === 'delvareadmin1212') {
+    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+    if (adminPassword && password === adminPassword) {
       setIsAuthenticated(true);
       setAuthError('');
     } else {

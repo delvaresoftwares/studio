@@ -126,29 +126,28 @@ const SnakeGame = () => {
         if (gameOver || path.length === 0) return;
 
         const gameInterval = setInterval(() => {
-            setSnake(prevSnake => {
+            const newHead = { ...path[0] };
+            const foodIndex = food.findIndex((f) => f.position.x === newHead.x && f.position.y === newHead.y);
+            const eatenFood = foodIndex !== -1 ? food[foodIndex] : null;
+
+            setSnake((prevSnake) => {
                 const newSnake = [...prevSnake];
-                const newHead = { ...path[0] };
-                
                 newSnake.unshift(newHead);
-
-                const foodIndex = food.findIndex(f => f.position.x === newHead.x && f.position.y === newHead.y);
-
-                if (foodIndex !== -1) {
-                    const eatenFood = food[foodIndex];
-                    setScore(s => s + eatenFood.points);
-                    setFood(prevFood => prevFood.filter((_, index) => index !== foodIndex));
-                     for (let i = 0; i < eatenFood.points; i++) {
+                if (eatenFood) {
+                    for (let i = 0; i < eatenFood.points; i++) {
                         newSnake.push({ ...newSnake[newSnake.length - 1] });
                     }
                 } else {
                     newSnake.pop();
                 }
-                
-                setPath(prevPath => prevPath.slice(1));
-                
                 return newSnake;
             });
+
+            if (eatenFood) {
+                setScore((s) => s + eatenFood.points);
+                setFood((prev) => prev.filter((_, i) => i !== foodIndex));
+            }
+            setPath((prev) => prev.slice(1));
         }, GAME_SPEED);
 
         return () => clearInterval(gameInterval);
@@ -234,10 +233,12 @@ const SnakeGame = () => {
                     const fruitIcon = foodItem ? fruitTypes.find(ft => ft.type === foodItem.type)?.icon : null;
 
                     return (
-                        <div
+                        <button
                             key={i}
-                            className="aspect-square"
+                            type="button"
+                            className="aspect-square w-full h-full block cursor-default focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-sm"
                             onClick={() => handleGridClick(x, y)}
+                            aria-label={isSnake ? (isSnakeHead ? 'Snake head' : 'Snake body') : foodItem ? `Food at ${x},${y}` : `Empty cell ${x},${y}`}
                         >
                             {isSnake ? (
                                 <div className={cn(
@@ -251,7 +252,7 @@ const SnakeGame = () => {
                             ) : (
                                  <div className={cn('w-full h-full', !gameOver && 'cursor-pointer', !gameOver && 'hover:bg-green-500/20')} />
                             )}
-                        </div>
+                        </button>
                     );
                 })}
             </div>

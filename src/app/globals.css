@@ -5,53 +5,30 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 222 84% 4.9%;
+    --foreground: 222 47% 11%;
     --card: 0 0% 100%;
-    --card-foreground: 222 84% 4.9%;
+    --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222 84% 4.9%;
-    --primary: 94 100% 39%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 161 72% 43%;
+    /* Brand Green (Emerald 500 equivalent) */
     --primary-foreground: 210 40% 98%;
-    --secondary: 262 80% 58%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 262 80% 58%;
-    --accent-foreground: 210 40% 98%;
+    --secondary: 161 72% 98%;
+    /* Very light tint of brand green */
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 161 72% 95%;
+    --accent-foreground: 222 47% 11%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 94 100% 39%;
-    --radius: 0.75rem;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 161 72% 43%;
+    --radius: 1rem;
+    --brand-dark: 161 72% 10%;
   }
 
-  .dark {
-    --background: 222 84% 5%;
-    --foreground: 210 40% 98%;
-    --card: 222 84% 8%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 94 100% 42%;
-    --primary-foreground: 142 80% 96%;
-    --secondary: 262 80% 58%;
-    --secondary-foreground: 262 80% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 262 80% 58%;
-    --accent-foreground: 262 80% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217 33% 25%;
-    --input: 217 33% 22%;
-    --ring: 142 76% 40%;
-  }
 }
 
 @layer base {
@@ -69,9 +46,6 @@
     text-shadow: 0 0 80px hsl(var(--primary)/0.3);
   }
 
-  .dark .hero-headline-shadow {
-    text-shadow: 0 0 80px hsl(var(--primary)/0.6);
-  }
 }
 
 @layer components {
@@ -80,7 +54,7 @@
   }
 
   .premium-gradient {
-    background: linear-gradient(135deg, hsl(var(--primary)) 0%, #10b981 100%);
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--brand-dark)) 100%);
   }
 
   .text-gradient {
@@ -96,13 +70,45 @@
   @keyframes fade-in-up {
     from {
       opacity: 0;
-      transform: translateY(30px);
+      transform: translateY(30px) scale(0.98);
     }
 
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
     }
+  }
+
+  @keyframes slide-in-left {
+    from {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .animate-slide-in-left {
+    animation: slide-in-left 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-slide-in-right {
+    animation: slide-in-right 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   /* Custom Glows */
@@ -202,5 +208,55 @@
 
   .animate-float {
     animation: float 6s ease-in-out infinite;
+  }
+
+  /* Marquee - ensure smooth infinite scroll */
+  @keyframes marquee-scroll {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-marquee-scroll {
+    animation: marquee-scroll 30s linear infinite;
+  }
+
+  .animate-marquee-scroll-reverse {
+    animation: marquee-scroll 30s linear infinite reverse;
+  }
+
+  /* Preloader Animations */
+  @keyframes loading-bar {
+    0% {
+      transform: translateX(-100%);
+    }
+
+    100% {
+      transform: translateX(300%);
+    }
+  }
+
+  .animate-loading-bar {
+    animation: loading-bar 2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 1s ease-out forwards;
   }
 }

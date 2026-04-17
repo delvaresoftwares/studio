@@ -2,76 +2,65 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { Cpu, Cloud, Code2, Globe, HardDrive, ShieldCheck, LifeBuoy } from 'lucide-react';
+import { Cpu, Cloud, Code2, Globe, HardDrive, ShieldCheck, LifeBuoy, Bot, Zap, Database, GitBranch, MessageSquare } from 'lucide-react';
 
 const keywordItems = [
-    { text: "AI", icon: <Cpu className="w-8 h-8 md:w-12 md:h-12" /> },
-    { text: "Cloud", icon: <Cloud className="w-8 h-8 md:w-12 md:h-12" /> },
-    { text: "Softwares", icon: <Code2 className="w-8 h-8 md:w-12 md:h-12" /> },
-    { text: "Websites", icon: <Globe className="w-8 h-8 md:w-12 md:h-12" /> },
-    { text: "Hardware", icon: <HardDrive className="w-8 h-8 md:w-12 md:h-12" /> },
-    { text: "Engineering", icon: <ShieldCheck className="w-8 h-8 md:w-12 md:h-12" /> },
-    { text: "Support", icon: <LifeBuoy className="w-8 h-8 md:w-12 md:h-12" /> },
+  { text: "Intelligence", icon: <Bot className="w-8 h-8 md:w-10 md:h-10" /> },
+  { text: "Infrastructure", icon: <Cloud className="w-8 h-8 md:w-10 md:h-10" /> },
+  { text: "Automation", icon: <Zap className="w-8 h-8 md:w-10 md:h-10" /> },
+  { text: "Engineering", icon: <Code2 className="w-8 h-8 md:w-10 md:h-10" /> },
+  { text: "Platform", icon: <Globe className="w-8 h-8 md:w-10 md:h-10" /> },
+  { text: "Security", icon: <ShieldCheck className="w-8 h-8 md:w-10 md:h-10" /> },
+  { text: "Consultancy", icon: <LifeBuoy className="w-8 h-8 md:w-10 md:h-10" /> },
+  { text: "Speciality", icon: <Cpu className="w-8 h-8 md:w-10 md:h-10" /> },
 ];
 
+const MarqueeRow = ({ reverse = false }: { reverse?: boolean }) => {
+  const content = (
+    <div className="flex shrink-0 gap-16 md:gap-24 items-center px-12">
+      {keywordItems.map((item, idx) => (
+        <div key={idx} className="flex items-center gap-6 text-white/60 hover:text-white transition-all duration-700 cursor-default group">
+          <span className="text-4xl md:text-6xl font-black uppercase tracking-tighter whitespace-nowrap italic">
+            {item.text}
+          </span>
+          <div className="text-white/40 group-hover:text-white shrink-0 transition-all duration-700">{item.icon}</div>
+        </div>
+      ))}
+    </div>
+  );
+
+  return (
+    <div className={cn(
+      "flex w-max py-4",
+      reverse ? "animate-marquee-scroll-reverse" : "animate-marquee-scroll"
+    )}>
+      {content}
+      {content}
+    </div>
+  );
+};
+
 const KeywordMarquee = () => {
-    return (
-        <section className="w-full py-20 overflow-hidden bg-background relative border-y border-foreground/5 dark:border-white/5">
-            {/* Decorative background glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none" />
+  return (
+    <section className="w-full py-24 md:py-32 overflow-hidden bg-primary relative border-y border-white/10">
+      {/* Background Decor */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[400px] bg-white/[0.05] blur-[150px] rounded-full pointer-events-none" />
 
-            <div className="flex flex-col gap-12 relative z-10">
-                {/* Row 1: Smooth Forward */}
-                <div className="relative rotate-[-2deg] scale-110">
-                    <div className="flex whitespace-nowrap animate-marquee">
-                        {[...Array(4)].map((_, i) => (
-                            <div key={i} className="flex gap-16 items-center px-8">
-                                {keywordItems.map((item, idx) => (
-                                    <div key={idx} className="flex items-center gap-4 text-foreground/10 dark:text-white/20 hover:text-emerald-500/40 transition-colors duration-500 cursor-default">
-                                        <span className="text-4xl md:text-6xl font-black uppercase tracking-tighter">
-                                            {item.text}
-                                        </span>
-                                        <div className="text-emerald-500/30">
-                                            {item.icon}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
-                    </div>
-                </div>
+      <div className="flex flex-col gap-10 md:gap-14 relative z-10">
+        <div className="relative rotate-[-1deg] scale-110 overflow-hidden">
+          <MarqueeRow />
+        </div>
 
-                {/* Row 2: Smooth Reverse */}
-                <div className="relative rotate-[2deg] scale-110 -mt-4">
-                    <div className="flex whitespace-nowrap animate-marquee-reverse">
-                        {[...Array(4)].map((_, i) => (
-                            <div key={i} className="flex gap-16 items-center px-8">
-                                {keywordItems.map((item, idx) => (
-                                    <div key={idx+2} className="flex items-center gap-4 text-foreground/10 dark:text-white/20 hover:text-emerald-500/40 transition-colors duration-500 cursor-default">
-                                        <span className="text-4xl md:text-6xl font-black uppercase tracking-tighter">
-                                            {item.text}
-                                        </span>
-                                        <div className="text-emerald-500/30">
-                                            {item.icon}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
-                    </div>
-                </div>
+        <div className="relative rotate-[1deg] scale-110 -mt-6 overflow-hidden">
+          <MarqueeRow reverse />
+        </div>
+      </div>
 
-                {/* Floating Center Overlay (Optional but nice for depth) */}
-                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 pointer-events-none flex justify-center">
-                    <div className="flex gap-4 opacity-50">
-                        <div className="w-1 h-1 bg-emerald-500 rounded-full animate-ping" />
-                        <div className="w-1 h-1 bg-emerald-500 rounded-full animate-ping delay-300" />
-                        <div className="w-1 h-1 bg-emerald-500 rounded-full animate-ping delay-700" />
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
+      {/* Editorial side fades */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-48 bg-gradient-to-r from-primary to-transparent z-10" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-48 bg-gradient-to-l from-primary to-transparent z-10" />
+    </section>
+  );
 };
 
 export default KeywordMarquee;

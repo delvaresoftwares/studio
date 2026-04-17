@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from "@/components/theme-provider"
+import { siteConfig } from '@/lib/site-config';
 import './globals.css';
 
 const inter = Inter({
@@ -17,16 +18,6 @@ const spaceGrotesk = Space_Grotesk({
   display: 'swap',
 });
 
-const siteConfig = {
-  name: 'XAAS by Delvare',
-  title: 'XAAS by Delvare | Anything as a Service',
-  description: 'Scalable & Secure Business Solutions at affordability',
-  url: 'https://delvare.in',
-  ogImage: 'https://res.cloudinary.com/dt4mweku7/image/upload/v1751266409/buissware_amykyt.gif',
-  icon: 'https://res.cloudinary.com/dt4mweku7/image/upload/v1751266408/buissware_h6bmig.png',
-  keywords: ['XAAS', 'Delvare', 'software', 'company', 'MNC', 'business solutions', 'cloud infrastructure', 'security engineering', 'business analysis', 'MNC'],
-};
-
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
@@ -34,7 +25,7 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  keywords: siteConfig.keywords,
+  keywords: siteConfig.keywords as unknown as string[],
   authors: [{ name: "Delvare MNC" }],
   creator: "Delvare MNC",
 
@@ -82,21 +73,26 @@ export const metadata: Metadata = {
   },
 };
 
+import SmoothScroll from '@/components/smooth-scroll';
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`} suppressHydrationWarning>
-      <body className="font-body antialiased">
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} font-body antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="light"
+          forcedTheme="light"
+          enableSystem={false}
           disableTransitionOnChange
         >
-          {children}
+          <SmoothScroll>
+            {children}
+          </SmoothScroll>
           <Toaster />
         </ThemeProvider>
       </body>

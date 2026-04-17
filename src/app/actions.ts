@@ -1,5 +1,6 @@
 'use server'
 
+import { z } from 'zod';
 import { db, app } from '@/lib/firebase';
 import { collection, addDoc, getDocs, query, orderBy, serverTimestamp, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import type { Timestamp } from 'firebase/firestore';
@@ -151,9 +152,21 @@ export type Contact = {
   read: boolean;
 }
 
+const contactFormSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Invalid email address'),
+  phone: z.string().min(10, 'Invalid phone number'),
+  message: z.string().min(10, 'Message must be at least 10 characters'),
+  type: z.enum(['contact', 'career']).optional(),
+});
+
 // Action to save contact info to Firestore
 export async function saveContactInfoAction(formData: ContactFormData): Promise<{ success: boolean; error?: string }> {
-  // 1. Validate that Firebase was initialized correctly
+  const parsed = contactFormSchema.safeParse(formData);
+  if (!parsed.success) {
+    return { success: false, error: parsed.error.errors[0]?.message ?? 'Invalid form data.' };
+  }
+
   if (!app.options.projectId) {
     console.error("Firebase config is not set up. Please create and populate a .env.local file for local development, and ensure production secrets are set.");
     return {
@@ -172,10 +185,10 @@ export async function saveContactInfoAction(formData: ContactFormData): Promise<
       read: false, // Default to unread
     });
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error saving to Firestore:", error);
-    // Provide a more specific error message if it's a permission issue
-    if (error.code === 'permission-denied') {
+    const err = error as { code?: string };
+    if (err?.code === 'permission-denied') {
       return {
         success: false,
         error: "Failed to submit: Permission denied. Please check your Firestore security rules as per the README."
@@ -190,8 +203,7 @@ export async function saveContactInfoAction(formData: ContactFormData): Promise<
 
 // Action to get all contacts from Firestore
 export async function getContactsAction(): Promise<{ contacts?: Contact[]; error?: string }> {
-  console.log("getContactsAction started");
-  console.log("Firebase Config Project ID:", app.options.projectId);
+
 
   if (!app.options.projectId) {
     return { error: "Firebase is not configured on the server." };
@@ -218,12 +230,13 @@ export async function getContactsAction(): Promise<{ contacts?: Contact[]; error
     });
 
     return { contacts };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error fetching contacts:", error);
-    if (error.code === 'permission-denied') {
+    const err = error as { code?: string; message?: string };
+    if (err?.code === 'permission-denied') {
       return { error: "Could not fetch contacts: Permission denied. Ensure your Firestore security rules are deployed correctly." };
     }
-    return { error: `Failed to fetch contacts: ${error.message}` };
+    return { error: `Failed to fetch contacts: ${err?.message ?? 'Unknown error'}` };
   }
 }
 
@@ -234,7 +247,7 @@ export async function markAsReadAction(id: string): Promise<{ success: boolean; 
     await updateDoc(contactRef, { read: true });
     revalidatePath('/admin');
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error marking as read:", error);
     return { success: false, error: "Failed to update contact status." };
   }
@@ -247,7 +260,7 @@ export async function deleteContactAction(id: string): Promise<{ success: boolea
     await deleteDoc(contactRef);
     revalidatePath('/admin');
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error deleting contact:", error);
     return { success: false, error: "Failed to delete contact." };
   }
@@ -297,7 +310,7 @@ export async function getEstimationsAction(): Promise<{ estimations?: Estimation
     });
 
     return { estimations };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error fetching estimations:", error);
     return { error: "Failed to fetch estimations from the database." };
   }
@@ -310,7 +323,7 @@ export async function markEstimationAsReadAction(id: string): Promise<{ success:
     await updateDoc(estimationRef, { read: true });
     revalidatePath('/admin');
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error marking estimation as read:", error);
     return { success: false, error: "Failed to update estimation status." };
   }
@@ -323,7 +336,7 @@ export async function deleteEstimationAction(id: string): Promise<{ success: boo
     await deleteDoc(estimationRef);
     revalidatePath('/admin');
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error deleting estimation:", error);
     return { success: false, error: "Failed to delete estimation." };
   }
