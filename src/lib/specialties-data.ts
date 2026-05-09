@@ -3,25 +3,25 @@ import { Cloud, Brain, Layout, ShieldCheck, LifeBuoy, GitBranch, Zap, MessageSqu
 export const specialties = [
     {
         slug: "seo-optimization",
-        title: "Marketing & SEO Agency",
-        description: "We introduce tools to automate digital marketing, SEO, and outreach.",
-        detailedDescription: "We have experience with automating services, integrating AI systems, and function handling techniques to automate marketing. We also use elite tools and services and provide extensive support regarding all digital outreach and SEO campaigns. We pivot your brand to market leadership.",
+        title: "Delvare Fixing SEO",
+        description: "We breathe life into your brand, building deep trust and emotional connections that drive real growth.",
+        detailedDescription: "Beyond keywords and algorithms, we focus on the human heart of your business. Delvare fixing SEO means transforming your digital presence into a compelling narrative that captures emotion, builds unwavering trust, and shares your genuine value with the world. We craft creative, soul-stirring campaigns that don't just rank, but resonate deeply with your audience to build lifelong loyalty.",
         features: [
-            "Automated Marketing Tools",
-            "AI System Integration",
-            "SEO & Outreach Automation",
-            "Function Handling Techniques",
-            "Market Dominance Strategy",
-            "Elite Campaign Support"
+            "Emotional Brand Storytelling",
+            "Trust-Building Content",
+            "Creative SEO Strategies",
+            "Audience Empathy Mapping",
+            "Authentic Outreach",
+            "Organic Growth Architecture"
         ],
         icon: "TrendingUp",
         accent: "bg-orange-500",
         image: "/assets/services/seo.png",
         portfolioImages: ["/assets/services/seo.png", "/assets/projects/p2.png", "/assets/projects/p3.png"],
         stats: [
-            { label: "Outreach", value: "Automated" },
-            { label: "Growth", value: "Exponential" },
-            { label: "SEO Setup", value: "AI-Driven" }
+            { label: "Trust", value: "Absolute" },
+            { label: "Growth", value: "Organic" },
+            { label: "Connection", value: "Deep" }
         ]
     },
     {

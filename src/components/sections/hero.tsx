@@ -66,7 +66,7 @@ const HeroSection = () => {
     <section ref={heroRef} id="hero" className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white">
 
       {/* --- Minimalist Background --- */}
-      <div className="absolute inset-0 z-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] bg-[size:40px_40px] opacity-[0.1]" />
+      <div className="absolute inset-0 z-0 " />
 
       <div className="container relative z-10 px-4 py-20">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -78,22 +78,22 @@ const HeroSection = () => {
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 animate-fade-in-up [animation-delay:100ms] opacity-0">
               <Sparkles className="w-4 h-4 text-primary animate-pulse" />
               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">
-                Smart Tech. Real Results.
+                XaaS by Delvare.in.
               </span>
             </div>
 
             {/* Main Headline */}
             <h1 className="font-headline font-black text-5xl md:text-7xl lg:text-8xl tracking-tight leading-[0.95] text-foreground animate-fade-in-up [animation-delay:200ms] opacity-0">
-              Make Your
+              IT Solutions for
               <br />
-              <span className="text-primary italic">Business Better</span>
+              <span className="text-primary italic">Efficient Business</span>
               <br />
-              with Simple Tech<span className="text-primary">.</span>
+              and Operations<span className="text-primary">.</span>
             </h1>
 
             {/* Subheadline */}
             <p className="max-w-xl mx-auto lg:mx-0 text-lg md:text-xl text-muted-foreground font-medium leading-relaxed animate-fade-in-up [animation-delay:300ms] opacity-0">
-              We build the apps, websites, and smart tools you need to grow—<span className="text-primary font-bold">without the headache</span>.
+              Our motto revolves around inspiring innovations, designs and Business psychology as <span className="text-primary font-bold">our service</span>.
             </p>
 
             {/* CTAs */}
@@ -103,13 +103,13 @@ const HeroSection = () => {
                 className="h-16 px-12 text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group"
                 onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
               >
-                Our Services
+                Book IT Consultation
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
 
             {/* Metrics / Trust */}
-            <div className="pt-10 flex items-center justify-center lg:justify-start gap-8 opacity-0 grayscale hover:grayscale-0 transition-all duration-500 animate-fade-in-up [animation-delay:500ms]">
+            <div className="pt-10 flex items-center justify-center lg:justify-start gap-8 opacity-0 transition-all duration-500 animate-fade-in-up [animation-delay:500ms]">
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full bg-primary animate-ping" />
                 <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Always Online</span>
@@ -130,7 +130,7 @@ const HeroSection = () => {
               {/* Center: Our Speciality */}
               <div
                 ref={arrowRef}
-                className="absolute z-20 w-64 h-64 bg-card/80 backdrop-blur-3xl border-4 border-primary/20 rounded-[3rem] shadow-[0_20px_60px_-15px_rgba(16,185,129,0.2)] flex flex-col items-center justify-center transition-transform duration-200 ease-out animate-fade-in"
+                className="absolute z-20 w-64 h-64 bg-card border-4 border-primary/20 rounded-[3rem] shadow-[0_20px_60px_-15px_rgba(16,185,129,0.2)] flex flex-col items-center justify-center transition-transform duration-200 ease-out animate-fade-in"
               >
                 <img
                   src="/assets/arrow.png"

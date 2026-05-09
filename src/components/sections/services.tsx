@@ -12,12 +12,12 @@ import { useRouter } from 'next/navigation';
 
 const services = [
   {
-    title: "Marketing & SEO Agency",
+    title: "Delvare Fixing SEO",
     slug: "seo-optimization",
-    description: "We introduce tools to automate digital marketing, SEO, and outreach.",
+    description: "We breathe life into your brand, building deep trust and emotional connections that drive real growth.",
     price: 4000,
     icon: <TrendingUp className="w-8 h-8" />,
-    features: ["Automated Tools", "AI Systems", "Market Dominance"],
+    features: ["Emotional Storytelling", "Trust Content", "Creative Strategies", "Audience Empathy", "Organic Growth", "Technical SEO"],
     accent: "bg-orange-500 shadow-orange-500/20",
     image: "/assets/services/seo.png"
   },
@@ -290,11 +290,11 @@ const ServicesSection = () => {
 
                       {/* Dynamic Specs or Concepts View */}
                       <div className="pt-4 h-24 overflow-hidden relative">
-                        <div className={cn("grid grid-cols-1 gap-2 transition-all duration-500", showSpecs ? "opacity-0 -translate-y-4 scale-95 pointer-events-none" : "opacity-100 transform-none")}>
+                        <div className={cn("grid grid-cols-2 gap-x-4 gap-y-2 transition-all duration-500", showSpecs ? "opacity-0 -translate-y-4 scale-95 pointer-events-none" : "opacity-100 transform-none")}>
                           {service.features.map((feature, i) => (
-                            <div key={i} className="flex items-center gap-3 text-xs font-bold text-muted-foreground">
-                              <Check className="w-3 h-3 text-primary" />
-                              {feature}
+                            <div key={i} className="flex items-center gap-2 text-[10px] sm:text-xs font-bold text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis">
+                              <Check className="w-3 h-3 text-primary shrink-0" />
+                              <span className="truncate">{feature}</span>
                             </div>
                           ))}
                         </div>
