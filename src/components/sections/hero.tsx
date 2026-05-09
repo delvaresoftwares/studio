@@ -103,20 +103,20 @@ const HeroSection = () => {
                 className="h-16 px-12 text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group"
                 onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
               >
-                Book IT Consultation
+                Book Free Consultation
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
 
             {/* Metrics / Trust */}
-            <div className="pt-10 flex items-center justify-center lg:justify-start gap-8 opacity-0 transition-all duration-500 animate-fade-in-up [animation-delay:500ms]">
+            <div className="pt-10 flex items-center justify-center lg:justify-start gap-8 opacity-0 grayscale hover:grayscale-0 transition-all duration-500 animate-fade-in-up [animation-delay:500ms]">
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full bg-primary animate-ping" />
-                <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Always Online</span>
+                <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">International</span>
               </div>
               <div className="h-4 w-px bg-border" />
               <div className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-                Trusted by 50+ Businesses
+                Efficient & AI Integrated Solutions
               </div>
             </div>
           </div>
