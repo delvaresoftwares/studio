@@ -5,11 +5,11 @@
 export const siteConfig = {
   name: 'XAAS by Delvare',
   title: 'XAAS by Delvare | Anything as a Service',
-  description: 'Scalable & Secure Business Solutions at affordability',
+  description: 'Delvare provides high-performance XAAS (Anything as a Service) business solutions. From AI-driven software engineering and cloud infrastructure to specialized cybersecurity and marketing automation for high-growth startups.',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://delvare.in',
   ogImage: 'https://res.cloudinary.com/dt4mweku7/image/upload/v1751266409/buissware_amykyt.gif',
   icon: 'https://res.cloudinary.com/dt4mweku7/image/upload/v1751266408/buissware_h6bmig.png',
-  keywords: ['XAAS', 'Delvare', 'software', 'company', 'MNC', 'business solutions', 'cloud infrastructure', 'security engineering', 'business analysis'],
+  keywords: ['XAAS', 'Delvare', 'software engineering', 'AI automation', 'cloud infrastructure', 'business automation', 'cybersecurity services', 'marketing for startups', 'digital transformation', 'enterprise solutions', 'managed IT services'],
   contact: {
     email: 'admin@delvare.in',
     emailHref: 'mailto:admin@delvare.in',

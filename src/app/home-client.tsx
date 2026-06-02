@@ -11,23 +11,7 @@ import Footer from '@/components/footer';
 import BackgroundDecor from '@/components/background-decor';
 import WhatsAppButton from '@/components/whatsapp-button';
 
-const CareerSection = dynamic(() => import('@/components/sections/careers'), {
-  ssr: false,
-  loading: () => null,
-});
-
-const TechFeaturesSection = dynamic(() => import('@/components/sections/tech-features'), {
-  ssr: false,
-  loading: () => null,
-});
-
-
 const EcosystemSection = dynamic(() => import('@/components/sections/ecosystem'), {
-  ssr: false,
-  loading: () => null,
-});
-
-const TechStackSection = dynamic(() => import('@/components/sections/tech-stack'), {
   ssr: false,
   loading: () => null,
 });
@@ -43,7 +27,7 @@ export default function HomeClient() {
   const [quotationData, setQuotationData] = useState<any>(null);
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground">
+    <div className="flex flex-col min-h-screen bg-white text-foreground">
       <BackgroundDecor />
       <Header />
       <main className="flex-grow">
@@ -53,13 +37,10 @@ export default function HomeClient() {
         <ProductsSection />
         <EcosystemSection />
         <ClientsSection />
-        <TechStackSection />
-        <CareerSection />
-        <TechFeaturesSection />
 
         <Footer />
         <WhatsAppButton />
       </main>
     </div>
   );
-}
+  }

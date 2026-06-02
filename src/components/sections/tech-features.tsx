@@ -16,58 +16,58 @@ import { Badge } from '@/components/ui/badge';
 
 const stackItems = [
   {
-    name: "Cloud Hosting",
+    name: "Cloud Infrastructure",
     icon: <Zap className="w-8 h-8" />,
-    description: "High-tier server clusters with 99.99% uptime and global CDN distribution.",
+    description: "Reliable, secure cloud management services with high availability and global performance.",
     price: "From ₹5,000/mo",
     gradient: "from-blue-500/10 to-cyan-500/10"
   },
   {
-    name: "AI Ecosystems",
+    name: "AI & Automation",
     icon: <Zap className="w-8 h-8" />,
-    description: "Proprietary model training and neural network automation for enterprise.",
+    description: "Intelligent automation solutions to streamline business processes and improve productivity.",
     price: "From ₹25,000/mo",
     gradient: "from-purple-500/10 to-pink-500/10"
   },
   {
-    name: "Product Design",
+    name: "UI/UX Design",
     icon: <Zap className="w-8 h-8" />,
-    description: "Next-generation software architecture built with high-performance frameworks.",
+    description: "User-focused design strategies to enhance engagement and improve digital product usability.",
     price: "From ₹50,000",
     gradient: "from-emerald-500/10 to-teal-500/10"
   },
   {
-    name: "Cyber Security",
+    name: "Cybersecurity",
     icon: <Zap className="w-8 h-8" />,
-    description: "Military-grade encryption and perpetual perimeter defense systems.",
+    description: "Comprehensive security measures to protect your business data and digital infrastructure.",
     price: "From ₹15,000/mo",
     gradient: "from-red-500/10 to-orange-500/10"
   },
   {
-    name: "Technical SLA",
+    name: "Technical Support",
     icon: <Zap className="w-8 h-8" />,
-    description: "Full-lifecycle maintenance and 24/7 technical oversight for platforms.",
+    description: "Dedicated maintenance and technical support to keep your platforms running efficiently.",
     price: "From ₹8,000/mo",
     gradient: "from-amber-500/10 to-yellow-500/10"
   },
   {
-    name: "Legacy Migration",
+    name: "System Migration",
     icon: <Zap className="w-8 h-8" />,
-    description: "Seamless architectural transformation of mature software assets.",
+    description: "Seamless transition and upgrade services for your existing software and data assets.",
     price: "From ₹1,00,000",
     gradient: "from-indigo-500/10 to-blue-500/10"
   },
   {
-    name: "System Update",
+    name: "Platform Optimization",
     icon: <Zap className="w-8 h-8" />,
-    description: "Continuous delivery of performance patches and feature expansion units.",
+    description: "Continuous performance improvements and feature updates to keep your business competitive.",
     price: "From ₹10,000/mo",
     gradient: "from-yellow-400/10 to-orange-400/10"
   },
   {
-    name: "High-End Consulting",
+    name: "IT Consulting",
     icon: <Zap className="w-8 h-8" />,
-    description: "Executive technical strategy and architectural roadmap planning.",
+    description: "Strategic technology consulting to guide your business growth and digital transformation.",
     price: "From ₹15,000/hr",
     gradient: "from-teal-400/10 to-cyan-400/10"
   }

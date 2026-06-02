@@ -12,92 +12,92 @@ import { useRouter } from 'next/navigation';
 
 const services = [
   {
-    title: "Delvare Fixing SEO",
+    title: "SEO & Digital Presence",
     slug: "seo-optimization",
-    description: "We breathe life into your brand, building deep trust and emotional connections that drive real growth.",
+    description: "Improve your search engine rankings and increase your online visibility to reach more potential customers.",
     price: 4000,
     icon: <TrendingUp className="w-8 h-8" />,
-    features: ["Emotional Storytelling", "Trust Content", "Creative Strategies", "Audience Empathy", "Organic Growth", "Technical SEO"],
+    features: ["Keyword Strategy", "Content Marketing", "Technical SEO", "Performance Analysis", "Organic Search Growth", "Local SEO"],
     accent: "bg-orange-500 shadow-orange-500/20",
     image: "/assets/services/seo.png"
   },
   {
-    title: "Business Analyst",
+    title: "Strategic Business Analysis",
     slug: "business-analyst",
-    description: "Analyzing financial and economic factors to ideate further.",
+    description: "In-depth analysis of your business performance to guide strategic decision-making and operational improvements.",
     price: 12000,
     icon: <BarChart3 className="w-8 h-8" />,
-    features: ["Financial Analysis", "Growth Modeling", "Risk Assessment"],
+    features: ["Operational Efficiency", "Market Analysis", "Strategic Planning"],
     accent: "bg-yellow-500 shadow-yellow-500/20",
     image: "/assets/services/support.png"
   },
   {
-    title: "Software Engineering",
+    title: "Custom Software Solutions",
     slug: "software-engineering",
-    description: "Your idea, our engineering, together we share flight.",
+    description: "Bespoke software applications tailored to meet your unique business requirements and goals.",
     price: 20000,
     icon: <Database className="w-8 h-8" />,
-    features: ["Emerging Frameworks", "PaaS Architecture", "High-Availability"],
+    features: ["Enterprise Software", "Web Applications", "Scalable Systems"],
     accent: "bg-blue-600 shadow-blue-600/20",
     image: "/assets/services/software.png"
   },
   {
-    title: "AI Integrated Dashboards",
+    title: "Business Intelligence Dashboards",
     slug: "ai-dashboard",
-    description: "We interconnect your systems and let AI handle simple tasks.",
+    description: "Centralized dashboards providing real-time data insights to manage your operations effectively.",
     price: 15000,
     icon: <Globe className="w-8 h-8" />,
-    features: ["System Interconnection", "Automated Tasks", "Enterprise Oversight"],
+    features: ["Real-time Reporting", "Data Visualization", "Operational Oversight"],
     accent: "bg-indigo-600 shadow-indigo-600/20",
     image: "/assets/projects/p2.png"
   },
   {
-    title: "AI & Automation",
+    title: "Process Automation & AI",
     slug: "ai-ecosystems",
-    description: "Focuses on training, tuning and automating functions.",
+    description: "Streamline repetitive tasks and integrate AI to increase productivity and reduce costs.",
     price: 10000,
     icon: <Brain className="w-8 h-8" />,
-    features: ["LLM Fine-Tuning", "RAG Implementation", "Neural Networks"],
+    features: ["Workflow Automation", "AI Integration", "Process Optimization"],
     accent: "bg-purple-600 shadow-purple-600/20",
     image: "/assets/services/ai.png"
   },
   {
-    title: "UI/UX Design",
+    title: "UI/UX Design & Strategy",
     slug: "software-design",
-    description: "Share your brand's value with Delvare UI/UX psychology.",
+    description: "User-focused design that enhances engagement and improves the usability of your digital products.",
     price: 4999,
     icon: <Layout className="w-8 h-8" />,
-    features: ["UI/UX Psychology", "Cognitive Load", "Micro-Interactions"],
+    features: ["User Research", "Interface Design", "Usability Testing"],
     accent: "bg-emerald-500 shadow-emerald-500/20",
     image: "/assets/services/design.png"
   },
   {
-    title: "Cloud Solutions",
+    title: "Cloud Infrastructure",
     slug: "cloud-hosting",
-    description: "Manage, migrate, and start cloud systems for business efficiency.",
+    description: "Secure and reliable cloud management services to ensure your business stays online and efficient.",
     price: 2999,
     icon: <Cloud className="w-8 h-8" />,
-    features: ["Cloud Migration", "System Management", "Architecture Setup"],
+    features: ["Cloud Migration", "Hosting Solutions", "Architecture Design"],
     accent: "bg-cyan-500 shadow-cyan-500/20",
     image: "/assets/services/cloud.png"
   },
   {
-    title: "Cyber Security",
+    title: "Professional Cybersecurity",
     slug: "cyber-security",
-    description: "Analyse testing, training and tuning AI models securely.",
+    description: "Protect your digital assets and customer data with proactive security monitoring and defense strategies.",
     price: 3499,
     icon: <ShieldCheck className="w-8 h-8" />,
-    features: ["AI Model Security", "Vulnerability Scans", "Zero-Trust Auth"],
+    features: ["Security Audits", "Data Protection", "Threat Mitigation"],
     accent: "bg-red-600 shadow-red-600/20",
     image: "/assets/services/security.png"
   },
   {
-    title: "Managed Support",
+    title: "Business Support & Consulting",
     slug: "technical-sla",
-    description: "Handle, business consultancy, analysis and our stake.",
+    description: "On-demand technical support and consulting to keep your systems running smoothly.",
     price: 499,
     icon: <LifeBuoy className="w-8 h-8" />,
-    features: ["Business Consultancy", "Technical Handling", "Mutual Growth Stake"],
+    features: ["Technical Consulting", "Maintenance Support", "Process Guidance"],
     accent: "bg-amber-500 shadow-amber-500/20",
     image: "/assets/services/support.png"
   },
@@ -158,55 +158,21 @@ const ServicesSection = () => {
           <div className="max-w-xl">
             <div className="text-center max-w-4xl mx-auto mb-20 animate-fade-in-up">
               <Badge variant="outline" className="mb-6 border-primary/20 py-1.5 px-6 text-[10px] font-black tracking-[0.3em] uppercase text-primary/60 bg-primary/5">
-                Market Situation Analysis
+                IT Support Services
               </Badge>
               <h2 className="font-headline text-5xl md:text-7xl font-black tracking-tight mb-8">
-                Delivering{' '}
-                <span className="text-primary italic font-light">Astonishing</span> Results.
+                Reliable{' '}
+                <span className="text-primary italic font-light">IT Support</span>
+                {' '}For Your Growth.
               </h2>
               <p className="max-w-2xl mx-auto text-lg md:text-xl text-muted-foreground leading-relaxed font-medium">
-                We analyze your business criteria and market situations to deploy major marketing automations and AI integrations that <span className="text-foreground font-bold">pivot your brand</span> to market leadership.
+                We provide proactive IT support, system management, and technical consulting to keep your business running smoothly, securely, and efficiently.
               </p>
             </div>
 
-            {/* Pivot Hook: Budget Input */}
-            <div className="relative group w-full max-w-md animate-fade-in-up mt-8">
-              <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-orange-500/20 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-              <div className="relative flex items-center bg-white border-2 border-border/60 rounded-2xl p-1 shadow-xl focus-within:border-primary/40 transition-all duration-500">
-                <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary/5 text-primary ml-1">
-                  <Search className="w-5 h-5" />
-                </div>
-                <input
-                  type="number"
-                  placeholder="Enter your budget (e.g. 4000)..."
-                  className="flex-grow bg-transparent border-none focus:ring-0 px-4 py-3 text-lg font-black text-foreground placeholder:text-muted-foreground/40"
-                  value={budget}
-                  onChange={(e) => setBudget(e.target.value)}
-                />
-                {budget && (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="w-10 h-10 rounded-lg mr-1 hover:bg-red-50 text-red-400"
-                    onClick={() => setBudget('')}
-                  >
-                    <X className="w-4 h-4" />
-                  </Button>
-                )}
-              </div>
-            </div>
+            {/* Empty space for structural consistency */}
+            <div className="h-0"></div>
 
-            <div className="flex flex-wrap gap-2 mt-6 animate-fade-in-up [animation-delay:100ms]">
-              <Badge variant="outline" className="bg-white/50 border-border py-1 px-3 text-[8px] font-black uppercase tracking-widest text-muted-foreground/60">
-                ₹4k: Marketing
-              </Badge>
-              <Badge variant="outline" className="bg-white/50 border-border py-1 px-3 text-[8px] font-black uppercase tracking-widest text-muted-foreground/60">
-                ₹15k: AI Dashboard
-              </Badge>
-              <Badge variant="outline" className="bg-white/50 border-border py-1 px-3 text-[8px] font-black uppercase tracking-widest text-muted-foreground/60">
-                ₹20k: Software
-              </Badge>
-            </div>
           </div>
         </div>
 
@@ -298,24 +264,6 @@ const ServicesSection = () => {
                             </div>
                           ))}
                         </div>
-                        <div className={cn("absolute inset-0 grid grid-cols-2 gap-2 transition-all duration-500", !showSpecs ? "opacity-0 translate-y-4 scale-95 pointer-events-none" : "opacity-100 transform-none")}>
-                          <div className="bg-secondary/30 p-2 rounded-lg border border-primary/5">
-                            <p className="text-[8px] font-black uppercase text-primary mb-1">Availability</p>
-                            <p className="text-xs font-bold">99.98%</p>
-                          </div>
-                          <div className="bg-secondary/30 p-2 rounded-lg border border-primary/5">
-                            <p className="text-[8px] font-black uppercase text-primary mb-1">Latency</p>
-                            <p className="text-xs font-bold">&lt; 40ms</p>
-                          </div>
-                          <div className="bg-secondary/30 p-2 rounded-lg border border-primary/5">
-                            <p className="text-[8px] font-black uppercase text-primary mb-1">Architecture</p>
-                            <p className="text-xs font-bold">Modern</p>
-                          </div>
-                          <div className="bg-secondary/30 p-2 rounded-lg border border-primary/5">
-                            <p className="text-[8px] font-black uppercase text-primary mb-1">Security</p>
-                            <p className="text-xs font-bold">Safe</p>
-                          </div>
-                        </div>
                       </div>
                     </div>
 
@@ -388,39 +336,6 @@ const ServicesSection = () => {
             </div>
           )}
 
-        </div>
-
-        {/* Dynamic Tool Overlay Info */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-12 border-t border-border/40 animate-fade-in-up [animation-delay:800ms]">
-          <div className="flex items-center gap-6">
-            <div className="flex -space-x-3">
-              {[1, 2, 3, 4].map(i => (
-                <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-slate-200 overflow-hidden">
-                  <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i + 10}`} alt="User" />
-                </div>
-              ))}
-              <div className="w-10 h-10 rounded-full border-2 border-white bg-primary flex items-center justify-center text-white text-[10px] font-black">+42</div>
-            </div>
-            <p className="text-xs font-bold text-muted-foreground">
-              <span className="text-foreground">Active Projects</span> in 12+ Countries
-            </p>
-          </div>
-
-          <div className="flex items-center gap-8">
-            <div className="text-right">
-              <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground leading-none">Speed</p>
-              <p className="text-xl font-black text-foreground">18ms <span className="text-[10px] align-top text-primary">avg</span></p>
-            </div>
-            <Button
-              size="lg"
-              className="bg-primary hover:bg-primary/90 text-white rounded-xl shadow-lg shadow-primary/20 transition-all font-black uppercase tracking-widest text-[9px] px-8"
-              onClick={() => {
-                window.dispatchEvent(new CustomEvent('open-contact-form'));
-              }}
-            >
-              Start Project <ArrowRight className="ml-2 w-4 h-4" />
-            </Button>
-          </div>
         </div>
       </div>
     </section>

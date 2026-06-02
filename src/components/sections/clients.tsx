@@ -33,7 +33,7 @@ const ClientsSection = () => {
           <span className="text-muted-foreground font-light italic tracking-tight">Leaders.</span>
         </h2>
 
-        <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10 mt-16 max-w-5xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-16 max-w-5xl mx-auto">
           {clients.map((client) => {
             const faviconUrl = getFaviconUrl(client.url);
             return (
@@ -42,7 +42,7 @@ const ClientsSection = () => {
                 href={client.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative flex items-center gap-5 p-5 px-7 rounded-[2rem] bg-white border border-border hover:border-primary/20 hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-500 min-w-[220px]"
+                className="group relative flex items-center gap-5 p-5 px-7 rounded-[2rem] bg-white border border-border hover:border-primary/20 hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-500"
               >
                 <div className="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center overflow-hidden border border-border group-hover:scale-105 transition-transform duration-500">
                   <img
