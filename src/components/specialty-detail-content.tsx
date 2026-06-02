@@ -3,14 +3,16 @@
 import { useRouter } from 'next/navigation';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ArrowRight, ArrowLeft, CheckCircle2, Zap, Cloud, Code2, ShieldCheck, LifeBuoy, GitBranch, Cpu, Brain, MessageSquare, Layout, Database } from 'lucide-react';
+import { ArrowRight, ArrowLeft, CheckCircle2, Zap, Cloud, Code2, ShieldCheck, LifeBuoy, GitBranch, Cpu, Brain, MessageSquare, Layout, Database, Search, TrendingUp, Calendar } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { BookingModal } from './booking-modal';
 
 const iconMap: Record<string, any> = {
-    Cloud, Brain, Code2, ShieldCheck, LifeBuoy, GitBranch, Zap, MessageSquare, Cpu, Layout, Database
+    Cloud, Brain, Code2, ShieldCheck, LifeBuoy, GitBranch, Zap, MessageSquare, Cpu, Layout, Database, Search, TrendingUp, Calendar
 };
 
 interface SpecialtyDetailContentProps {
@@ -19,6 +21,7 @@ interface SpecialtyDetailContentProps {
 
 export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentProps) {
     const router = useRouter();
+    const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
     const Icon = iconMap[data.icon] || Zap;
 
     useEffect(() => {
@@ -31,11 +34,13 @@ export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentP
         <div className="flex flex-col min-h-screen bg-white text-foreground">
             <Header />
 
+            <BookingModal isOpen={isBookingModalOpen} onOpenChange={setIsBookingModalOpen} serviceTitle={data.title} />
+
             <main className="flex-grow">
                 {/* Immersion Section */}
                 <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-32 pb-20">
                     {/* Background Visuals */}
-                    <div className="absolute inset-0 z-0">
+                    <div className="absolute inset-0 z-0 pointer-events-none">
                         <div className={cn("absolute top-0 right-0 w-[80%] h-[80%] blur-[150px] opacity-10 rounded-full -translate-y-1/2 translate-x-1/2", data.accent)} />
                         <div className={cn("absolute bottom-0 left-0 w-[60%] h-[60%] blur-[150px] opacity-10 rounded-full translate-y-1/2 -translate-x-1/2", data.accent)} />
 
@@ -76,47 +81,55 @@ export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentP
                                             <span className="text-primary italic font-light tracking-tight">{data.title.split(' ').slice(1).join(' ')}</span>
                                         </h1>
                                         <p className="text-xl md:text-3xl text-muted-foreground font-medium leading-tight max-w-2xl italic tracking-tight animate-fade-in-up [animation-delay:100ms]">
-                                            "{data.description}"
+                                            "{data.detailedDescription || data.description}"
                                         </p>
                                     </div>
 
                                     <div className="grid sm:grid-cols-2 gap-8 pt-6 animate-fade-in-up [animation-delay:200ms]">
-                                        {data.features.slice(0, 4).map((feat: string, i: number) => (
+                                        {(data.featureDefinitions || data.features.map((f: string) => ({ title: f, definition: "Elite Protocol" }))).map((feat: { title: string, definition: string }, i: number) => (
                                             <div key={i} className="flex gap-4 items-start group">
                                                 <div className="h-10 w-10 shrink-0 flex items-center justify-center rounded-xl bg-secondary border border-border group-hover:border-primary/30 transition-all">
                                                     <CheckCircle2 className="w-5 h-5 text-primary" />
                                                 </div>
                                                 <div className="space-y-1">
-                                                    <p className="font-black text-[11px] uppercase tracking-widest text-foreground">{feat}</p>
-                                                    <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest opacity-40">Ready to Use</p>
+                                                    <p className="font-black text-[11px] uppercase tracking-widest text-foreground">{feat.title}</p>
+                                                    <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest opacity-40">{feat.definition}</p>
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
 
-                                    <div className="flex flex-wrap gap-5 pt-10 animate-fade-in-up [animation-delay:300ms]">
+                                    <div className="relative z-20 flex flex-wrap gap-5 pt-10 animate-fade-in-up [animation-delay:300ms]">
                                         <Button
-                                            size="xl"
-                                            className="h-18 px-12 bg-primary hover:bg-primary/90 text-white rounded-2xl shadow-2xl hover:-translate-y-1 transition-all font-black uppercase tracking-[0.2em] text-[11px]"
-                                            onClick={() => window.open(`https://wa.me/918606821125?text=I am interested in ${data.title}`)}
+                                            size="sm"
+                                            className="px-8 bg-primary hover:bg-primary/90 text-white rounded-xl shadow-lg hover:-translate-y-1 transition-all font-black uppercase tracking-[0.2em] text-[10px]"
+                                            onClick={() => setIsBookingModalOpen(true)}
                                         >
-                                            Get Started <Zap className="ml-3 w-5 h-5 fill-current" />
+                                            Priority Contact <Calendar className="ml-2 w-4 h-4" />
                                         </Button>
                                         <Button
                                             variant="outline"
-                                            size="xl"
-                                            className="h-18 px-10 border-border border-2 hover:bg-secondary rounded-2xl transition-all font-black uppercase tracking-[0.2em] text-[11px]"
+                                            size="sm"
+                                            className="px-8 border-border border-2 hover:bg-secondary rounded-xl transition-all font-black uppercase tracking-[0.2em] text-[10px]"
                                             onClick={() => router.push('/#services')}
                                         >
-                                            See All Services <ArrowRight className="ml-3 w-5 h-5" />
+                                            See All Services <ArrowRight className="ml-2 w-4 h-4" />
                                         </Button>
                                     </div>
-                                </div>
+
+                                    </div>
 
                                 {/* Right Visualization */}
-                                <div className="lg:col-span-12 xl:col-span-5 relative animate-fade-in-up [animation-delay:400ms]">
+                                <div className="lg:col-span-12 xl:col-span-5 relative animate-fade-in-up [animation-delay:500ms] print:hidden">
                                     <div className="relative z-10 bg-white p-4 rounded-[4rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] border border-border overflow-hidden">
                                         <div className={cn("w-full aspect-square rounded-[3.5rem] flex flex-col items-center justify-center text-white relative overflow-hidden", data.accent)}>
+                                            {/* Service Image */}
+                                            <img
+                                                src={data.portfolioImages ? data.portfolioImages[0] : data.image}
+                                                alt={data.title}
+                                                className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay"
+                                            />
+
                                             <Icon className="w-32 h-32 md:w-48 md:h-48 drop-shadow-2xl z-10" />
 
                                             {/* Data Lines Overlay */}
@@ -130,34 +143,27 @@ export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentP
                                             {/* Rotating Ring */}
                                             <div className="absolute inset-[-10%] border-[20px] border-white/10 rounded-full animate-[spin_10s_linear_infinite]" />
                                         </div>
-
-                                        <div className="p-8 pt-10 space-y-6">
-                                            <div className="flex justify-between items-end">
-                                                <div className="space-y-1">
-                                                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">Node Integrity</p>
-                                                    <p className="text-3xl font-black tracking-tighter text-foreground">Optimal</p>
-                                                </div>
-                                                <div className="text-right space-y-1">
-                                                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">Deployment</p>
-                                                    <p className="text-3xl font-black tracking-tighter text-primary">Active</p>
-                                                </div>
-                                            </div>
-
-                                            <div className="space-y-4">
-                                                {data.stats.map((stat: any, i: number) => (
-                                                    <div key={i} className="flex items-center justify-between group">
-                                                        <span className="text-[11px] font-black uppercase tracking-widest text-muted-foreground group-hover:text-primary transition-colors">{stat.label}</span>
-                                                        <span className="text-lg font-black tracking-tight text-foreground">{stat.value}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
                                     </div>
 
                                     {/* Stats Glow */}
-                                    <div className={cn("absolute -inset-10 blur-[100px] opacity-10 rounded-full", data.accent)} />
+                                    <div className={cn("absolute -inset-10 blur-[100px] opacity-10 rounded-full pointer-events-none", data.accent)} />
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Article Section: Why Better */}
+                <section className="py-20 bg-[#fafafa]">
+                    <div className="container mx-auto px-4 max-w-4xl">
+                        <h2 className="text-5xl font-black mb-12 tracking-tighter">Why Delvare?</h2>
+                        <div className="space-y-10">
+                            {data.whyBetter && Object.entries(data.whyBetter).map(([key, value]) => (
+                                <div key={key}>
+                                    <h3 className="text-2xl font-black capitalize mb-3 text-primary">{key}</h3>
+                                    <p className="text-lg text-muted-foreground leading-relaxed">{value as string}</p>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </section>
@@ -172,7 +178,7 @@ export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentP
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-[10px] font-black uppercase tracking-[0.4em] text-foreground">Made by Delvare</p>
-                                    <p className="text-sm font-medium text-muted-foreground italic">"Simple tech for better business."</p>
+                                    <p className="text-sm font-medium text-muted-foreground italic">"Elite solutions for elite businesses."</p>
                                 </div>
                             </div>
 

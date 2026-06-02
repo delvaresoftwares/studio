@@ -122,20 +122,25 @@ const Header = () => {
   return (
     <>
       <header className={cn(
-        "fixed z-[60] transition-all duration-700 border-b-2 border-white/10",
+        "fixed z-[60] transition-all duration-500 ease-in-out",
         formOpen
-          ? "top-0 left-1/2 -translate-x-1/2 w-full max-w-none rounded-none bg-white border-none py-6 h-screen overflow-y-auto"
-          : cn(
-            "top-4 left-1/2 -translate-x-1/2 w-[95%] lg:max-w-7xl rounded-2xl border border-white/20 shadow-2xl",
-            scrolled
-              ? "bg-primary/95 backdrop-blur-xl shadow-2xl py-2"
-              : "bg-primary py-3"
-          )
+          ? "top-0 left-0 w-full rounded-none bg-white py-6 h-screen overflow-y-auto"
+          : scrolled
+            ? "top-0 left-0 w-full rounded-none bg-white py-3"
+            : "top-4 left-1/2 -translate-x-1/2 w-[95%] lg:max-w-7xl rounded-2xl bg-primary py-4",
+        "[box-shadow:none!important]"
       )}>
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between transition-all duration-500">
             <a href="#hero" className="flex items-center gap-3 group" onClick={() => { if (formOpen) setFormOpen(false); }}>
-              <Logo light={!formOpen} simple variant="header" className={cn("transition-all duration-500", formOpen && "scale-110")} />
+              <Logo 
+                compact={scrolled}
+                glow={!scrolled && !formOpen}
+                light={!scrolled && !formOpen} 
+                simple 
+                variant="header" 
+                className={cn("transition-all duration-500", formOpen && "scale-110")} 
+              />
             </a>
 
             <nav className="hidden lg:flex items-center gap-1">
@@ -144,15 +149,25 @@ const Header = () => {
                   key={link.name}
                   href={link.href}
                   className={cn(
-                    "text-[9px] font-black uppercase tracking-[0.3em] transition-all duration-300 px-5 py-2 rounded-full",
+                    "text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 px-5 py-2 rounded-full",
                     formOpen
-                      ? "opacity-0 pointer-events-none"
-                      : "text-white/80 hover:text-white hover:bg-white/10 transition-all text-[11px] font-black"
+                      ? "text-primary hover:bg-secondary/50"
+                      : scrolled
+                        ? "text-primary hover:bg-secondary/50"
+                        : "text-white/80 hover:text-white hover:bg-white/10"
                   )}
                   onClick={(e) => {
                     if (link.name === 'Careers') {
                       e.preventDefault();
                       toggleForm('career');
+                    } else if (link.href.startsWith('#')) {
+                      e.preventDefault();
+                      const element = document.getElementById(link.href.substring(1));
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'smooth' });
+                      } else {
+                        window.location.href = '/' + link.href;
+                      }
                     }
                   }}
                 >
@@ -166,10 +181,8 @@ const Header = () => {
                 onClick={() => toggleForm('contact')}
                 variant={formOpen ? "ghost" : "default"}
                 className={cn(
-                  "h-10 px-6 rounded-lg font-black text-[9px] uppercase tracking-[0.2em] transition-all duration-500",
-                  formOpen
-                    ? "bg-secondary text-foreground hover:bg-secondary/80"
-                    : "bg-white text-primary hover:bg-white/90 hover:scale-105 shadow-xl"
+                  "h-10 px-6 rounded-lg font-black text-[10px] uppercase tracking-[0.1em] transition-all duration-500",
+                  "bg-primary text-white hover:bg-primary/90"
                 )}
               >
                 {formOpen ? "Close" : "Start Now"}
@@ -179,13 +192,18 @@ const Header = () => {
                 variant="ghost"
                 size="icon"
                 onClick={() => setMenuOpen(true)}
-                className={cn("lg:hidden text-white", formOpen && "hidden")}
+                className={cn(
+                  "lg:hidden transition-colors", 
+                  formOpen ? "text-foreground" : scrolled ? "text-primary" : "text-white"
+                )}
                 aria-label="Open menu"
               >
                 <Menu className="w-6 h-6" />
               </Button>
             </div>
           </div>
+
+
 
           {/* Expanded Drawer Form */}
           <div className={cn(
@@ -199,12 +217,12 @@ const Header = () => {
                     <div className="space-y-4">
                       <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Priority Contact</span>
                       <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-foreground leading-none">
-                        {formType === 'contact' ? "Direct Executive Access." : "Join the Collective."}
+                        {formType === 'contact' ? "Direct Access to Experts." : "Join Our Team."}
                       </h2>
                       <p className="text-muted-foreground font-semibold italic text-lg leading-relaxed pt-4">
                         {formType === 'contact'
-                          ? "Connect with our engineering lead to discuss your specific infrastructure or software requirements."
-                          : "We are seeking elite talent to join our distributed engineering networks. Submit your credentials."}
+                          ? "Talk directly to our tech leads about your custom software or security needs."
+                          : "We're looking for elite talent to help us build the next generation of business tools."}
                       </p>
                     </div>
                     <div className="p-8 rounded-[2rem] bg-secondary/50 border border-border">
@@ -297,41 +315,62 @@ const Header = () => {
         </div>
       </header>
 
-      {/* Mobile Navigation Drawer */}
+      {/* Classy Mobile Navigation Drawer */}
+      {/* Backdrop */}
+      <div 
+        className={cn(
+          "fixed inset-0 z-[90] bg-black/40 backdrop-blur-sm transition-opacity duration-500 lg:hidden",
+          menuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        )}
+        onClick={() => setMenuOpen(false)}
+      />
+
       <div className={cn(
-        "fixed inset-0 z-[100] bg-brand-dark transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] lg:hidden",
+        "fixed top-0 right-0 bottom-0 z-[100] w-[90vw] max-w-xs bg-white backdrop-blur-2xl border-l border-border shadow-2xl transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] lg:hidden overflow-y-auto",
         menuOpen ? "translate-x-0" : "translate-x-full"
       )}>
-        <div className="container mx-auto px-6 flex flex-col h-full uppercase">
-          <div className="flex justify-between items-center h-24">
-            <Logo simple light variant="header" />
-            <Button variant="ghost" size="icon" onClick={() => setMenuOpen(false)} className="rounded-full bg-white/5 text-white">
-              <X className="w-8 h-8" />
+        <div className="flex flex-col h-full uppercase px-8 py-10">
+          <div className="flex justify-center items-center mb-16 relative">
+            <Logo simple variant="logo" className="scale-125" />
+            <Button variant="ghost" size="icon" onClick={() => setMenuOpen(false)} className="rounded-full bg-black/5 text-foreground hover:bg-black/10 absolute right-0">
+              <X className="w-5 h-5" />
             </Button>
           </div>
-          <nav className="flex flex-col items-start justify-center flex-grow gap-8 py-10">
+          <nav className="flex flex-col items-center justify-center gap-8 mb-16">
             {navLinks.map((link, idx) => (
               <a
                 key={link.name}
                 href={link.href}
-                className="text-5xl font-black tracking-tighter text-white hover:text-primary transition-all duration-300"
+                className="text-2xl font-black tracking-tighter text-foreground hover:text-primary transition-all duration-300 relative group"
                 onClick={(e) => {
                   if (link.name === 'Careers') {
                     e.preventDefault();
                     toggleForm('career');
                     setMenuOpen(false);
+                  } else if (link.href.startsWith('#')) {
+                    e.preventDefault();
+                    setMenuOpen(false);
+                    setTimeout(() => {
+                      const element = document.getElementById(link.href.substring(1));
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'smooth' });
+                      } else {
+                        window.location.href = '/' + link.href;
+                      }
+                    }, 500);
                   } else {
                     setMenuOpen(false);
                   }
                 }}
               >
                 {link.name}
+                <span className="absolute -bottom-2 left-1/2 w-0 h-1 bg-primary transition-all duration-500 group-hover:w-16 group-hover:-translate-x-1/2"></span>
               </a>
             ))}
           </nav>
-          <div className="pb-12">
-            <Button size="xl" className="w-full h-16 text-xs font-black bg-primary text-white rounded-xl uppercase tracking-widest shadow-2xl" onClick={() => { toggleForm('contact'); setMenuOpen(false); }}>
-              Start Now
+          <div className="mt-auto pb-8">
+            <Button size="xl" className="w-full h-16 text-[11px] font-black bg-primary text-white rounded-2xl uppercase tracking-[0.2em] shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all" onClick={() => { toggleForm('contact'); setMenuOpen(false); }}>
+              Start Project
             </Button>
           </div>
         </div>

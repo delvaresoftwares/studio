@@ -14,15 +14,12 @@ const CareerSection = () => {
             <div className="container mx-auto px-4 relative z-10">
                 <div className="grid lg:grid-cols-2 gap-24 items-center">
                     <div className="space-y-10">
-                        <Badge variant="outline" className="border-white/20 py-1.5 px-5 text-[10px] font-black tracking-[0.3em] uppercase text-white/60">
-                            Legacy & Growth
-                        </Badge>
                         <h2 className="font-headline text-5xl md:text-7xl font-black tracking-tighter leading-none text-white">
-                            Learn from the <br />
-                            <span className="text-white/40 font-light italic tracking-tight italic">Elite.</span>
+                            Build Your <br />
+                            <span className="text-white/40 font-light italic tracking-tight italic">Legacy.</span>
                         </h2>
                         <p className="text-xl text-white/60 leading-relaxed max-w-xl font-medium italic">
-                            "We are not merely an organization; we are an incubator for the next generation of architectural visionaries."
+                            "We don't just hire developers; we mentor the next generation of tech leaders."
                         </p>
 
                         <div className="grid sm:grid-cols-2 gap-8">

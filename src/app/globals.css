@@ -36,8 +36,15 @@
     @apply border-border;
   }
 
+  html, body {
+    background-color: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden;
+  }
+
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
     scroll-behavior: smooth;
   }
@@ -258,5 +265,100 @@
 
   .animate-fade-in {
     animation: fade-in 1s ease-out forwards;
+  }
+}
+
+/* Professional Print Styles (LaTeX-like) */
+@media print {
+  @page {
+    size: A4;
+    margin: 20mm;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    font-family: 'Georgia', 'Times New Roman', serif !important; /* LaTeX/academic feel */
+    font-size: 11pt !important;
+    line-height: 1.5 !important;
+  }
+
+  /* Hide UI elements */
+  header, footer, nav, .print-hidden, button, [role="button"], iframe, video {
+    display: none !important;
+  }
+
+  /* Typography adjustments for print */
+  h1, h2, h3, h4, h5, h6 {
+    color: #000 !important;
+    page-break-after: avoid;
+    font-family: 'Georgia', 'Times New Roman', serif !important;
+    letter-spacing: 0 !important;
+  }
+
+  p, li {
+    color: #333 !important;
+  }
+
+  /* Cards and Sections */
+  .glass-card, .bg-card, section {
+    background: transparent !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    color: #000 !important;
+    page-break-inside: avoid;
+    margin-bottom: 20px !important;
+    padding: 15px !important;
+    border-radius: 4px !important; /* Remove heavy rounded corners for print */
+  }
+
+  /* Images */
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+    border-radius: 4px !important;
+  }
+
+  /* Links */
+  a {
+    color: #000 !important;
+    text-decoration: underline !important;
+  }
+  
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #555 !important;
+  }
+  
+  /* Reset layout constraints to let it flow like a document */
+  main, .container, section {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Grid fallbacks for print (some browsers don't print grids well) */
+  .grid {
+    display: block !important;
+  }
+  .grid > * {
+    margin-bottom: 15px !important;
+  }
+  
+  /* Badges and tags */
+  .badge, [class*="bg-"] {
+    border: 1px solid #666 !important;
+    background: transparent !important;
+    color: #000 !important;
+    padding: 2px 6px !important;
   }
 }

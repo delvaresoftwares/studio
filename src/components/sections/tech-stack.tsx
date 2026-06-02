@@ -11,14 +11,14 @@ const technologies = [
     { name: 'Flutter', icon: 'https://cdn.simpleicons.org/flutter/02569B' },
     { name: 'Tailwind CSS', icon: 'https://cdn.simpleicons.org/tailwindcss/06B6D4' },
     { name: 'HTML5', icon: 'https://cdn.simpleicons.org/html5/E34F26' },
-    { name: 'CSS3', icon: 'https://cdn.simpleicons.org/css3/1572B6' },
-    { name: 'JavaScript', icon: 'https://cdn.simpleicons.org/javascript/F7DF1E' },
-    { name: 'Java', icon: 'https://cdn.simpleicons.org/openjdk/007396' },
-    { name: 'Python', icon: 'https://cdn.simpleicons.org/python/3776AB' },
-    { name: 'C++', icon: 'https://cdn.simpleicons.org/cplusplus/00599C' },
-    { name: 'AWS', icon: 'https://cdn.simpleicons.org/amazonwebservices/232F3E' },
-    { name: 'Azure', icon: 'https://cdn.simpleicons.org/microsoftazure/0078D4' },
-    { name: 'OpenAI', icon: 'https://cdn.simpleicons.org/openai/000000' },
+    { name: 'CSS3', icon: 'https://cdn.simpleicons.org/css3' },
+    { name: 'JavaScript', icon: 'https://cdn.simpleicons.org/javascript' },
+    { name: 'Java', icon: 'https://cdn.simpleicons.org/openjdk' },
+    { name: 'Python', icon: 'https://cdn.simpleicons.org/python' },
+    { name: 'C++', icon: 'https://cdn.simpleicons.org/cplusplus' },
+    { name: 'AWS', icon: 'https://cdn.simpleicons.org/amazonaws' },
+    { name: 'Azure', icon: 'https://cdn.simpleicons.org/microsoftazure' },
+    { name: 'OpenAI', icon: 'https://cdn.simpleicons.org/openai' },
     { name: 'Docker', icon: 'https://cdn.simpleicons.org/docker/2496ED' },
     { name: 'Kubernetes', icon: 'https://cdn.simpleicons.org/kubernetes/326CE5' },
     { name: 'PostgreSQL', icon: 'https://cdn.simpleicons.org/postgresql/4169E1' },
@@ -43,30 +43,19 @@ const TechStackSection = () => {
             </div>
 
             {/* Marquee 1 */}
-            <div className="relative flex overflow-x-hidden group py-4">
-                <div className="animate-marquee whitespace-nowrap flex items-center">
+            <div className="relative flex overflow-x-hidden group">
+                <div className="flex animate-marquee flex-nowrap whitespace-nowrap py-10">
                     {[...technologies, ...technologies].map((tech, idx) => (
-                        <TechIconCard key={`${tech.name}-${idx}`} tech={tech} />
-                    ))}
-                </div>
-                {/* Mirror for smooth loop */}
-                <div className="absolute top-0 animate-marquee whitespace-nowrap flex items-center" style={{ left: '100%' }}>
-                    {[...technologies, ...technologies].map((tech, idx) => (
-                        <TechIconCard key={`mirror-${tech.name}-${idx}`} tech={tech} />
+                        <TechIconCard key={`m1-${idx}`} tech={tech} />
                     ))}
                 </div>
             </div>
 
             {/* Marquee 2 - Reverse */}
-            <div className="relative flex overflow-x-hidden mt-10 group py-4">
-                <div className="animate-marquee-reverse whitespace-nowrap flex items-center">
-                    {[...[...technologies].reverse(), ...[...technologies].reverse()].map((tech, idx) => (
-                        <TechIconCard key={`rev-${tech.name}-${idx}`} tech={tech} />
-                    ))}
-                </div>
-                <div className="absolute top-0 animate-marquee-reverse whitespace-nowrap flex items-center" style={{ left: '100%' }}>
-                    {[...[...technologies].reverse(), ...[...technologies].reverse()].map((tech, idx) => (
-                        <TechIconCard key={`rev-mirror-${tech.name}-${idx}`} tech={tech} />
+            <div className="relative flex overflow-x-hidden group">
+                <div className="flex animate-marquee-reverse flex-nowrap whitespace-nowrap py-10">
+                    {[...technologies, ...technologies].map((tech, idx) => (
+                        <TechIconCard key={`m2-${idx}`} tech={tech} />
                     ))}
                 </div>
             </div>
@@ -79,13 +68,13 @@ const TechStackSection = () => {
 };
 
 const TechIconCard = ({ tech }: { tech: typeof technologies[0] }) => (
-    <div className="flex flex-col items-center gap-6 px-14 transition-all duration-500 group/item">
+    <div className="flex flex-col items-center gap-6 px-10 flex-shrink-0 transition-all duration-500 group/item">
         <div className="w-24 h-24 flex items-center justify-center rounded-[2rem] bg-[#fdfdfd] border border-border/80 shadow-sm group-hover/item:border-primary/20 group-hover/item:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] group-hover/item:-translate-y-2 transition-all duration-500 relative overflow-hidden">
             <div className="absolute inset-0 bg-primary/[0.02] opacity-0 group-hover/item:opacity-100 transition-opacity" />
             <img
                 src={tech.icon}
                 alt={tech.name}
-                className="w-10 h-10 object-contain grayscale opacity-60 group-hover/item:grayscale-0 group-hover/item:opacity-100 transition-all duration-500"
+                className="w-10 h-10 object-contain grayscale-0 opacity-100 group-hover/item:scale-110 transition-all duration-500"
             />
         </div>
         <span className="text-[9px] font-black tracking-[0.2em] uppercase text-muted-foreground/60 group-hover/item:text-primary transition-colors">

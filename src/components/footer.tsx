@@ -24,7 +24,7 @@ const Footer = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-20">
           <div className="space-y-8">
-            <Logo simple className="!items-start opacity-90" />
+            <Logo glow simple className="!items-start opacity-90" />
             <p className="text-muted-foreground text-sm leading-relaxed max-w-xs font-semibold italic">
               "We build simple, fast, and secure technology to help your business grow and succeed every day."
             </p>
@@ -70,7 +70,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-3 opacity-40 grayscale pl-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-border" />
-                <span className="text-xs font-bold uppercase tracking-widest">Expansion in Progress</span>
+                <span className="text-xs font-bold uppercase tracking-widest">Delvare</span>
               </li>
             </ul>
           </div>

@@ -11,9 +11,9 @@ const technologies = [
     { name: 'React', icon: 'https://cdn.simpleicons.org/react/61DAFB' },
     { name: 'Node.js', icon: 'https://cdn.simpleicons.org/nodedotjs/339933' },
     { name: 'Flutter', icon: 'https://cdn.simpleicons.org/flutter/02569B' },
-    { name: 'AWS', icon: 'https://cdn.simpleicons.org/amazonwebservices/232F3E' },
-    { name: 'Python', icon: 'https://cdn.simpleicons.org/python/3776AB' },
-    { name: 'OpenAI', icon: 'https://cdn.simpleicons.org/openai/000000' },
+    { name: 'AWS', icon: 'https://cdn.simpleicons.org/amazonaws' },
+    { name: 'Python', icon: 'https://cdn.simpleicons.org/python' },
+    { name: 'OpenAI', icon: 'https://cdn.simpleicons.org/openai' },
 ];
 
 const clients = [
@@ -27,20 +27,20 @@ const EcosystemSection = () => {
     return (
         <section className="w-full py-32 bg-white border-y border-border overflow-hidden">
             <div className="container mx-auto px-4 relative z-10">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 md:gap-24">
+                <div className="max-w-2xl mx-auto space-y-16">
 
-                    {/* Left Column: Asset & Leaders */}
-                    <div className="lg:col-span-12 xl:col-span-5 space-y-16">
-                        <div className="space-y-8">
+                    {/* Asset & Leaders */}
+                    <div className="space-y-16">
+                        <div className="space-y-8 text-center">
                             <Badge variant="outline" className="border-border py-1.5 px-5 text-[10px] font-black tracking-[0.3em] uppercase text-muted-foreground">
                                 Asset & Partnerships
                             </Badge>
                             <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-foreground leading-[0.9]">
-                                The Elite <br />
+                                Our Global <br />
                                 <span className="text-primary italic font-light">Ecosystem.</span>
                             </h2>
                             <p className="text-muted-foreground text-lg font-medium italic">
-                                "Our past clients and core assets are the foundation of our engineering excellence."
+                                "The partnerships and tools that form the backbone of our success."
                             </p>
                         </div>
 
@@ -67,7 +67,7 @@ const EcosystemSection = () => {
 
                         {/* Leaders / Clients */}
                         <div className="space-y-6">
-                            <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 pl-2">Market Leaders We Support</h4>
+                            <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 pl-2 text-center">Market Leaders We Support</h4>
                             <div className="grid grid-cols-2 gap-4">
                                 {clients.map((client) => (
                                     <div key={client.name} className="flex flex-col p-6 rounded-2xl border border-border bg-white hover:bg-primary/[0.02] hover:border-primary/20 transition-all">
@@ -78,54 +78,6 @@ const EcosystemSection = () => {
                             </div>
                         </div>
                     </div>
-
-                    {/* Right Column: Tech Stack */}
-                    <div className="lg:col-span-12 xl:col-span-7">
-                        <div className="h-full rounded-[4rem] bg-[#fafafa] border border-border/40 p-10 md:p-16 flex flex-col justify-center relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/[0.03] blur-[100px] rounded-full" />
-
-                            <div className="relative z-10 space-y-12">
-                                <div className="space-y-6">
-                                    <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Technical Stack</h4>
-                                    <p className="text-2xl md:text-3xl font-black tracking-tight text-foreground leading-tight">
-                                        High-availability stacks <br />
-                                        <span className="text-muted-foreground italic font-light">built for global performance.</span>
-                                    </p>
-                                </div>
-
-                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
-                                    {technologies.map((tech) => (
-                                        <div key={tech.name} className="flex flex-col items-center gap-4 group/tech">
-                                            <div className="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center rounded-3xl bg-white shadow-sm border border-border/80 group-hover/tech:border-primary/20 group-hover/tech:-translate-y-1 transition-all duration-300">
-                                                <img
-                                                    src={tech.icon}
-                                                    alt={tech.name}
-                                                    className="w-8 h-8 md:w-9 md:h-9 object-contain grayscale opacity-60 group-hover/tech:grayscale-0 group-hover/tech:opacity-100 transition-all"
-                                                />
-                                            </div>
-                                            <span className="text-[9px] font-black tracking-widest uppercase text-muted-foreground/40 group-hover/tech:text-primary transition-colors">
-                                                {tech.name}
-                                            </span>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <div className="pt-8 border-t border-border flex flex-wrap gap-8">
-                                    {[
-                                        { label: 'Security', icon: <ShieldCheck className="w-4 h-4" /> },
-                                        { label: 'Agile Ops', icon: <Zap className="w-4 h-4" /> },
-                                        { label: 'Cloud Native', icon: <Globe className="w-4 h-4" /> }
-                                    ].map(item => (
-                                        <div key={item.label} className="flex items-center gap-3">
-                                            <div className="text-primary">{item.icon}</div>
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-foreground">{item.label}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </section>

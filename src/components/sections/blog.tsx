@@ -16,10 +16,10 @@ const BlogSection = () => {
                         Our Blog
                     </Badge>
                     <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-8 text-foreground leading-none">
-                        Latest <span className="text-primary italic font-light">Articles.</span>
+                        Industry <span className="text-primary italic font-light">Insights.</span>
                     </h2>
                     <p className="max-w-xl mx-auto text-lg text-muted-foreground font-medium italic">
-                        "Simple tips and tricks to help your business win with modern technology."
+                        "Fresh perspectives on tech, growth, and the future of business."
                     </p>
                 </div>
 
