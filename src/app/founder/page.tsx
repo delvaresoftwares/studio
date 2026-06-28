@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Zap, ShieldCheck, Code2, Globe, Cpu, Award, TrendingUp, Mail, Github, Linkedin, ArrowRight, Activity, Terminal, Layout } from 'lucide-react';
+import { Zap, ShieldCheck, Code2, Globe, Cpu, Award, TrendingUp, Github, Linkedin, ArrowRight, Activity, Terminal, Layout, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
+import { FOUNDER_DATA } from './constants';
 
 export default function FounderPortfolioPage() {
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -56,21 +56,32 @@ export default function FounderPortfolioPage() {
                                 <div className="space-y-6 animate-fade-in-up">
                                     <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-primary/30 bg-primary/10 backdrop-blur-md">
                                         <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Startup Runway Active</span>
+                                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Business Solutions</span>
                                     </div>
                                     <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.85]">
-                                        Alfas <br />
-                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-300 italic font-light">B.</span>
+                                        {FOUNDER_DATA.name}<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-300 italic font-light">.</span>
                                     </h1>
                                 </div>
 
                                 <div className="space-y-6 animate-fade-in-up [animation-delay:200ms] max-w-xl">
                                     <h2 className="text-2xl md:text-3xl font-bold text-white/90 leading-tight">
-                                        Founder & Lead Architect at <span className="text-primary font-black">Delvare Studio</span>
+                                        {FOUNDER_DATA.role} at <span className="text-primary font-black">{FOUNDER_DATA.company}</span>
                                     </h2>
                                     <p className="text-lg text-white/50 leading-relaxed font-medium">
-                                        I build high-availability software engines and security protocols for elite businesses. We are currently scaling Delvare in its <span className="text-white">runway phase</span>, turning complex problems into elegant, scalable market solutions.
+                                        {FOUNDER_DATA.bio}
                                     </p>
+                                    
+                                    <div className="flex items-center gap-4 pt-2 border-t border-white/10 mt-4">
+                                        <div className="flex flex-col">
+                                            <span className="text-[10px] text-white/40 uppercase font-black tracking-widest">Age</span>
+                                            <span className="text-white font-bold">{FOUNDER_DATA.age} Years Old</span>
+                                        </div>
+                                        <div className="w-px h-8 bg-white/10 mx-2"></div>
+                                        <div className="flex flex-col">
+                                            <span className="text-[10px] text-white/40 uppercase font-black tracking-widest">DOB</span>
+                                            <span className="text-white font-bold">25.12.2001</span>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div className="flex flex-wrap gap-5 animate-fade-in-up [animation-delay:400ms]">
@@ -78,67 +89,37 @@ export default function FounderPortfolioPage() {
                                         Contact Me <ArrowRight className="ml-3 w-4 h-4" />
                                     </Button>
                                     <div className="flex gap-3">
-                                        <Button variant="outline" size="icon" className="h-16 w-16 rounded-2xl border-white/10 bg-white/5 hover:bg-primary hover:border-primary text-white transition-all">
-                                            <Github className="w-6 h-6" />
-                                        </Button>
-                                        <Button variant="outline" size="icon" className="h-16 w-16 rounded-2xl border-white/10 bg-white/5 hover:bg-blue-600 hover:border-blue-600 text-white transition-all">
-                                            <Linkedin className="w-6 h-6" />
-                                        </Button>
+                                        <a href={FOUNDER_DATA.socials.github} target="_blank" rel="noreferrer">
+                                            <Button variant="outline" size="icon" className="h-16 w-16 rounded-2xl border-white/10 bg-white/5 hover:bg-primary hover:border-primary text-white transition-all">
+                                                <Github className="w-6 h-6" />
+                                            </Button>
+                                        </a>
+                                        <a href={FOUNDER_DATA.socials.linkedin} target="_blank" rel="noreferrer">
+                                            <Button variant="outline" size="icon" className="h-16 w-16 rounded-2xl border-white/10 bg-white/5 hover:bg-blue-600 hover:border-blue-600 text-white transition-all">
+                                                <Linkedin className="w-6 h-6" />
+                                            </Button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Right Visualizer */}
-                            <div className="flex-1 w-full max-w-md relative animate-fade-in-up [animation-delay:300ms]">
-                                <div className="aspect-[4/5] rounded-[3rem] p-1 bg-gradient-to-br from-white/10 to-white/0 overflow-hidden relative">
-                                    <div className="absolute inset-0 bg-[#0a0a0a] rounded-[2.9rem] z-0" />
+                            {/* Right Visualizer - Profile Logo */}
+                            <div className="flex-1 w-full max-w-md relative animate-fade-in-up [animation-delay:300ms] flex justify-center md:justify-end">
+                                <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full p-2 bg-gradient-to-br from-primary/40 via-primary/10 to-transparent shadow-[0_0_100px_-20px_rgba(16,185,129,0.3)] group">
+                                    <div className="absolute inset-0 bg-[#050505] rounded-full z-0 group-hover:scale-[0.98] transition-transform duration-500" />
                                     
-                                    {/* Abstract Visual */}
-                                    <div className="absolute inset-2 rounded-[2.5rem] overflow-hidden bg-zinc-900 border border-white/5 z-10 flex flex-col justify-end p-8">
-                                        <div className="absolute top-0 right-0 p-8 opacity-20">
-                                            <Terminal className="w-32 h-32 text-primary" />
-                                        </div>
-                                        
-                                        <div className="space-y-4 relative z-20">
-                                            <div className="flex justify-between items-center pb-4 border-b border-white/10">
-                                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Status</p>
-                                                <div className="flex items-center gap-2 text-emerald-400">
-                                                    <Activity className="w-4 h-4" />
-                                                    <span className="text-[10px] font-black uppercase tracking-widest">Building</span>
-                                                </div>
-                                            </div>
-                                            <div className="flex justify-between items-center pb-4 border-b border-white/10">
-                                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Role</p>
-                                                <p className="text-[12px] font-bold text-white uppercase tracking-widest">Founder / CEO</p>
-                                            </div>
-                                            <div className="flex justify-between items-center pb-4 border-b border-white/10">
-                                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Focus</p>
-                                                <p className="text-[12px] font-bold text-white uppercase tracking-widest">Architecture</p>
-                                            </div>
-                                            
-                                            <div className="pt-6">
-                                                <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-                                                    <div className="h-full bg-primary w-[85%] rounded-full relative">
-                                                        <div className="absolute inset-0 bg-white/20 animate-[shimmer_2s_infinite]" />
-                                                    </div>
-                                                </div>
-                                                <div className="flex justify-between mt-2">
-                                                    <p className="text-[8px] font-black uppercase tracking-[0.2em] text-white/30">Runway Burn</p>
-                                                    <p className="text-[8px] font-black uppercase tracking-[0.2em] text-primary">Optimal</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div className="absolute inset-2 rounded-full overflow-hidden bg-zinc-900 border border-white/10 z-10">
+                                        <div className="absolute inset-0 bg-primary/20 mix-blend-overlay z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                        <img 
+                                            src="/assets/avatar.png" 
+                                            alt={FOUNDER_DATA.name} 
+                                            className="w-full h-full object-cover object-center grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
+                                        />
                                     </div>
-                                </div>
-                                
-                                {/* Floating Elements */}
-                                <div className="absolute -top-10 -right-10 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl animate-[bounce_8s_infinite]">
-                                    <Zap className="w-8 h-8 text-yellow-400 mb-2" />
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-white/60">Fast Shipping</p>
-                                </div>
-                                <div className="absolute -bottom-10 -left-10 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl animate-[bounce_10s_infinite_reverse]">
-                                    <ShieldCheck className="w-8 h-8 text-emerald-400 mb-2" />
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-white/60">Zero-Trust Auth</p>
+                                    
+                                    {/* Orbiting Elements */}
+                                    <div className="absolute inset-0 rounded-full border border-primary/20 animate-[spin_10s_linear_infinite]" />
+                                    <div className="absolute inset-[-1rem] rounded-full border border-dashed border-white/10 animate-[spin_20s_linear_infinite_reverse]" />
                                 </div>
                             </div>
                         </div>
@@ -151,7 +132,7 @@ export default function FounderPortfolioPage() {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {[
                                 { icon: Code2, title: "Engineering First", desc: "Writing code that scales implicitly. From raw logic to enterprise APIs." },
-                                { icon: TrendingUp, title: "Runway Strategy", desc: "Directing Delvare Studio's market presence and product rollouts." },
+                                { icon: TrendingUp, title: "Strategic Networking", desc: "Turning high-value commitments and freelance outbursts into structured enterprise solutions." },
                                 { icon: Award, title: "Uncompromising Quality", desc: "If it doesn't wow the client, it doesn't leave the staging environment." }
                             ].map((item, i) => (
                                 <div key={i} className="group p-10 rounded-[2.5rem] bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-500 hover:-translate-y-2">
@@ -171,13 +152,13 @@ export default function FounderPortfolioPage() {
                     <div className="container max-w-6xl mx-auto px-4">
                         <div className="mb-20 text-center animate-fade-in-up">
                             <Badge variant="outline" className="mb-6 border-primary/30 py-1.5 px-6 text-[10px] font-black tracking-[0.3em] uppercase text-primary bg-primary/10">
-                                Total Architecture
+                                Comprehensive Strategy
                             </Badge>
                             <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-white leading-tight">
-                                Complete <span className="text-primary italic font-light">Startup Operations.</span>
+                                Complete <span className="text-primary italic font-light">Business Solutions.</span>
                             </h2>
                             <p className="max-w-2xl mx-auto text-lg text-white/50 mt-6 leading-relaxed font-medium">
-                                As a hands-on Founder, I architect, deploy, and manage the full spectrum of our digital services and AI ecosystems.
+                                As Founder and CEO, I architect, deploy, and manage tailored solutions born out of a commitment to networking and freelance excellence.
                             </p>
                         </div>
 
@@ -231,25 +212,24 @@ export default function FounderPortfolioPage() {
 
                             <div className="relative aspect-square md:aspect-[4/3] rounded-[3rem] border border-white/10 bg-white/5 overflow-hidden group">
                                 <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/20 to-transparent mix-blend-screen opacity-50 group-hover:opacity-100 transition-all duration-700" />
-                                <div className="absolute inset-4 rounded-[2rem] border border-white/10 bg-[#050505] overflow-hidden flex flex-col justify-between p-8">
-                                    <div className="flex justify-between items-start">
+                                <div className="absolute inset-4 rounded-[2rem] border border-white/10 bg-[#050505] overflow-hidden flex flex-col p-8">
+                                    <div className="flex justify-between items-start mb-6">
                                         <div className="flex gap-2">
                                             <div className="w-3 h-3 rounded-full bg-red-500/50" />
                                             <div className="w-3 h-3 rounded-full bg-amber-500/50" />
                                             <div className="w-3 h-3 rounded-full bg-emerald-500/50" />
                                         </div>
-                                        <div className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-[9px] font-black uppercase tracking-widest">
-                                            Status: Online
+                                        <div className="px-3 py-1 rounded-full bg-white/10 text-white/60 text-[9px] font-black uppercase tracking-widest">
+                                            Tech Stack
                                         </div>
                                     </div>
-                                    <div className="space-y-4">
-                                        <h3 className="text-3xl font-black text-white tracking-tighter">1M+ Transactions</h3>
-                                        <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                                            <div className="h-full bg-emerald-400 w-[95%] rounded-full relative">
-                                                <div className="absolute inset-0 bg-white/30 animate-[shimmer_2s_infinite]" />
-                                            </div>
-                                        </div>
-                                        <p className="text-[10px] text-white/40 font-black uppercase tracking-[0.2em]">Network Reliability Metrics</p>
+                                    
+                                    <div className="flex-1 flex flex-wrap gap-2 content-start overflow-y-auto pr-2 custom-scrollbar">
+                                        {['C', 'C++', 'Java', 'Python', 'JavaScript', 'TypeScript', 'React', 'Next.js', 'Vite', 'Node.js', 'Express', 'MongoDB', 'Supabase', 'Firebase', 'Atlas', 'Redis', 'Tailwind', 'Flutter', 'Windows', 'Linux', 'Vercel', 'Git', 'GitHub'].map(tech => (
+                                            <Badge key={tech} variant="outline" className="border-white/10 bg-white/5 hover:bg-primary/20 hover:border-primary/50 text-white/70 hover:text-white transition-colors py-1.5 px-3">
+                                                {tech}
+                                            </Badge>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
@@ -263,14 +243,14 @@ export default function FounderPortfolioPage() {
                         <div className="p-16 rounded-[4rem] bg-gradient-to-b from-primary/10 to-transparent border border-primary/20 relative overflow-hidden">
                             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05] mix-blend-overlay pointer-events-none"></div>
                             
-                            <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 relative z-10">Return to <br/><span className="text-primary italic">Delvare Base.</span></h2>
+                            <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 relative z-10">Return to <br/><span className="text-primary italic">Delvare.in</span></h2>
                             <p className="text-xl text-white/60 font-medium mb-12 max-w-2xl mx-auto relative z-10">
                                 Explore the systems and products we are building for the modern business ecosystem.
                             </p>
                             
                             <Link href="/">
-                                <Button size="xl" className="relative z-10 h-16 px-12 rounded-2xl bg-primary text-white hover:bg-primary/90 font-black uppercase tracking-[0.2em] shadow-[0_0_40px_-10px_rgba(16,185,129,0.5)] transition-all hover:scale-[1.02]">
-                                    Enter the Studio
+                                <Button size="xl" className="relative z-10 h-16 px-12 rounded-2xl bg-primary text-black hover:bg-primary/90 font-black uppercase tracking-[0.2em] shadow-[0_0_40px_-10px_rgba(16,185,129,0.5)] transition-all hover:scale-[1.02]">
+                                    <Home className="w-5 h-5 mr-3" /> Home
                                 </Button>
                             </Link>
                         </div>

@@ -22,6 +22,7 @@ import {
     Clock,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { FadeIn, TypingText } from '@/components/ui/motion';
 
 const highlights = [
     {
@@ -102,7 +103,7 @@ const ProductsSection = () => {
 
             <div className="container mx-auto px-4 relative z-10">
                 {/* Header */}
-                <div className="text-center mb-20 animate-fade-in-up">
+                <FadeIn delay={0.2} className="text-center mb-20">
                     <Badge
                         variant="outline"
                         className="mb-5 border-white/20 py-1.5 px-5 text-[10px] font-black tracking-[0.3em] uppercase text-white/60"
@@ -111,18 +112,19 @@ const ProductsSection = () => {
                         Our IT Support Tools
                     </Badge>
                     <h2 className="font-headline text-5xl md:text-7xl font-black tracking-tight mb-8">
-                        IT Support Tools{' '}
+                        <TypingText text="Automate your E-solutions" delay={0.4} />{' '}
                         <span className="text-white/40 font-light italic">
-                            That Just Work.
+                            with Delvare.
                         </span>
                     </h2>
                     <p className="max-w-2xl mx-auto text-lg md:text-xl text-white/60 leading-relaxed font-medium">
-                        We deploy professional-grade tools to manage, maintain, and protect your business infrastructure, ensuring maximum uptime and security.
+                        Based on our core services, we have structured this section to eliminate your headaches. We manage all your technical needs and handle the complexity, so you don't have to.
                     </p>
-                </div>
+                </FadeIn>
 
                 {/* Main Product Showcase */}
-                <div
+                <FadeIn
+                    delay={0.6}
                     className={cn(
                         'relative max-w-6xl mx-auto rounded-[3rem] overflow-hidden border border-border transition-all duration-700 animate-fade-in-up bg-white',
                         hovered
@@ -232,7 +234,7 @@ const ProductsSection = () => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </FadeIn>
             </div>
         </section>
     );

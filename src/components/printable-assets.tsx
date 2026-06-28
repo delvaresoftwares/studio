@@ -11,7 +11,7 @@ export const QuotationPDFTemplate = ({ data }: { data: any }) => {
             {/* Header - Academic / Enterprise Style */}
             <div className="border-b-[4px] border-black pb-10 mb-16 flex justify-between items-end">
                 <div>
-                    <h1 className="text-5xl font-black tracking-tighter uppercase mb-2">DELVARE MNC</h1>
+                    <h1 className="text-5xl font-black tracking-tighter uppercase mb-2">DELVARE.IN</h1>
                     <p className="text-[10px] font-black tracking-[0.6em] text-gray-400 uppercase">Engineering & Infrastructure Protocol</p>
                 </div>
                 <div className="text-right">
@@ -70,7 +70,7 @@ export const QuotationPDFTemplate = ({ data }: { data: any }) => {
 
                 <section className="pt-20 border-t border-gray-100">
                     <div className="flex justify-between items-center opacity-40 italic font-serif text-[9px] uppercase tracking-widest">
-                        <p>Delvare MNC // High Security Document</p>
+                        <p>Delvare.in // High Security Document</p>
                         <p>&copy; 2026 Architectural Division</p>
                     </div>
                 </section>
@@ -116,7 +116,7 @@ export const CatalogPDFTemplate = () => {
                 </h1>
                 <div className="h-px w-32 bg-primary/30 mb-12" />
                 <p className="text-xl text-gray-500 font-medium max-w-lg leading-relaxed italic">
-                    "Architectural exposition of the primary technology nodes and deployment strategies of Delvare MNC."
+                    "Architectural exposition of the primary technology nodes and deployment strategies of Delvare.in."
                 </p>
 
                 <div className="absolute bottom-24 left-0 right-0 flex justify-center gap-20">

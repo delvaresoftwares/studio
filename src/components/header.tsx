@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import Logo from '@/components/logo';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -10,13 +11,15 @@ import { useToast } from '@/hooks/use-toast';
 
 const navLinks = [
   { name: 'Services', href: '#services' },
-  { name: 'Our Work', href: '#products' },
+  { name: 'Founder', href: '/founder' },
   { name: 'Clients', href: '#clients' },
   { name: 'Speciality', href: '#blog' },
   { name: 'Careers', href: '#careers' },
 ];
 
 const Header = () => {
+  const pathname = usePathname();
+  const isDark = pathname === '/founder';
   const { toast } = useToast();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -124,10 +127,10 @@ const Header = () => {
       <header className={cn(
         "fixed z-[60] transition-all duration-500 ease-in-out",
         formOpen
-          ? "top-0 left-0 w-full rounded-none bg-white py-6 h-screen overflow-y-auto"
+          ? `top-0 left-0 w-full rounded-none py-6 h-screen overflow-y-auto ${isDark ? 'bg-black text-white' : 'bg-white text-foreground'}`
           : scrolled
-            ? "top-0 left-0 w-full rounded-none bg-white py-3"
-            : "top-4 left-1/2 -translate-x-1/2 w-[95%] lg:max-w-7xl rounded-2xl bg-primary py-4",
+            ? `top-0 left-0 w-full rounded-none py-3 ${isDark ? 'bg-black/95 text-white backdrop-blur-md' : 'bg-white text-foreground'}`
+            : `top-4 left-1/2 -translate-x-1/2 w-[95%] lg:max-w-7xl rounded-2xl py-4 ${isDark ? 'bg-black text-white shadow-2xl' : 'bg-primary text-white'}`,
         "[box-shadow:none!important]"
       )}>
         <div className="container mx-auto px-4">
@@ -136,7 +139,7 @@ const Header = () => {
               <Logo 
                 compact={scrolled}
                 glow={!scrolled && !formOpen}
-                light={!scrolled && !formOpen} 
+                light={isDark ? true : (!scrolled && !formOpen)} 
                 simple 
                 variant="header" 
                 className={cn("transition-all duration-500", formOpen && "scale-110")} 
@@ -151,9 +154,9 @@ const Header = () => {
                   className={cn(
                     "text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 px-5 py-2 rounded-full",
                     formOpen
-                      ? "text-primary hover:bg-secondary/50"
+                      ? (isDark ? "text-primary hover:bg-white/10" : "text-primary hover:bg-secondary/50")
                       : scrolled
-                        ? "text-primary hover:bg-secondary/50"
+                        ? (isDark ? "text-white/80 hover:text-white" : "text-primary hover:bg-secondary/50")
                         : "text-white/80 hover:text-white hover:bg-white/10"
                   )}
                   onClick={(e) => {
@@ -182,7 +185,10 @@ const Header = () => {
                 variant={formOpen ? "ghost" : "default"}
                 className={cn(
                   "h-10 px-6 rounded-lg font-black text-[10px] uppercase tracking-[0.1em] transition-all duration-500",
-                  "bg-primary text-white hover:bg-primary/90"
+                  (!scrolled && !formOpen) 
+                    ? (isDark ? "bg-primary text-black hover:bg-primary/90" : "bg-white text-primary hover:bg-white/90") 
+                    : "bg-primary text-white hover:bg-primary/90",
+                  formOpen && (isDark ? "bg-transparent text-white hover:bg-white/10 shadow-none border border-white/20" : "bg-transparent text-foreground hover:bg-secondary/50 shadow-none")
                 )}
               >
                 {formOpen ? "Close" : "Start Now"}
@@ -194,7 +200,7 @@ const Header = () => {
                 onClick={() => setMenuOpen(true)}
                 className={cn(
                   "lg:hidden transition-colors", 
-                  formOpen ? "text-foreground" : scrolled ? "text-primary" : "text-white"
+                  formOpen ? (isDark ? "text-white" : "text-foreground") : scrolled ? (isDark ? "text-white" : "text-primary") : "text-white"
                 )}
                 aria-label="Open menu"
               >
@@ -210,23 +216,23 @@ const Header = () => {
             "overflow-hidden transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)]",
             formOpen ? "max-h-[2000px] opacity-100 mt-16" : "max-h-0 opacity-0"
           )}>
-            <div className="max-w-4xl mx-auto py-12 px-4 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.05)] rounded-[3rem] border border-border/40 bg-white">
+            <div className={cn("max-w-4xl mx-auto py-12 px-4 rounded-[3rem] border", isDark ? "shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] border-white/10 bg-[#0a0a0a] text-white" : "shadow-[0_40px_100px_-20px_rgba(0,0,0,0.05)] border-border/40 bg-white")}>
               {!isSubmitted ? (
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
                   <div className="lg:col-span-5 space-y-8">
                     <div className="space-y-4">
                       <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Priority Contact</span>
-                      <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-foreground leading-none">
+                      <h2 className={cn("text-4xl md:text-5xl font-black tracking-tighter leading-none", isDark ? "text-white" : "text-foreground")}>
                         {formType === 'contact' ? "Direct Access to Experts." : "Join Our Team."}
                       </h2>
-                      <p className="text-muted-foreground font-semibold italic text-lg leading-relaxed pt-4">
+                      <p className={cn("font-semibold italic text-lg leading-relaxed pt-4", isDark ? "text-white/60" : "text-muted-foreground")}>
                         {formType === 'contact'
                           ? "Talk directly to our tech leads about your custom software or security needs."
                           : "We're looking for elite talent to help us build the next generation of business tools."}
                       </p>
                     </div>
-                    <div className="p-8 rounded-[2rem] bg-secondary/50 border border-border">
-                      <div className="flex items-center gap-4 text-foreground font-black text-sm uppercase tracking-widest">
+                    <div className={cn("p-8 rounded-[2rem] border", isDark ? "bg-white/5 border-white/10" : "bg-secondary/50 border-border")}>
+                      <div className={cn("flex items-center gap-4 font-black text-sm uppercase tracking-widest", isDark ? "text-white" : "text-foreground")}>
                         <ArrowRight className="w-4 h-4 text-primary" />
                         Response in &lt; 24h
                       </div>
@@ -237,7 +243,7 @@ const Header = () => {
                     <form className="space-y-6" onSubmit={handleSubmit}>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <label className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.3em] ml-2">Identity</label>
+                          <label className={cn("text-[9px] font-black uppercase tracking-[0.3em] ml-2", isDark ? "text-white/40" : "text-muted-foreground")}>Identity</label>
                           <input
                             required
                             name="name"
@@ -245,11 +251,11 @@ const Header = () => {
                             onChange={handleInputChange}
                             type="text"
                             placeholder="Full Name"
-                            className="w-full h-16 bg-secondary/40 border-none rounded-2xl px-6 text-foreground font-bold focus:ring-2 focus:ring-primary/20 transition-all"
+                            className={cn("w-full h-16 border-none rounded-2xl px-6 font-bold focus:ring-2 transition-all", isDark ? "bg-white/5 text-white focus:ring-primary/50 placeholder:text-white/20" : "bg-secondary/40 text-foreground focus:ring-primary/20")}
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.3em] ml-2">Email</label>
+                          <label className={cn("text-[9px] font-black uppercase tracking-[0.3em] ml-2", isDark ? "text-white/40" : "text-muted-foreground")}>Email</label>
                           <input
                             required
                             name="email"
@@ -257,12 +263,12 @@ const Header = () => {
                             onChange={handleInputChange}
                             type="email"
                             placeholder="work@domain.com"
-                            className="w-full h-16 bg-secondary/40 border-none rounded-2xl px-6 text-foreground font-bold focus:ring-2 focus:ring-primary/20 transition-all"
+                            className={cn("w-full h-16 border-none rounded-2xl px-6 font-bold focus:ring-2 transition-all", isDark ? "bg-white/5 text-white focus:ring-primary/50 placeholder:text-white/20" : "bg-secondary/40 text-foreground focus:ring-primary/20")}
                           />
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.3em] ml-2">Contact</label>
+                        <label className={cn("text-[9px] font-black uppercase tracking-[0.3em] ml-2", isDark ? "text-white/40" : "text-muted-foreground")}>Contact</label>
                         <input
                           required
                           name="phone"
@@ -270,11 +276,11 @@ const Header = () => {
                           onChange={handleInputChange}
                           type="tel"
                           placeholder="+1 (000) 000-0000"
-                          className="w-full h-16 bg-secondary/40 border-none rounded-2xl px-6 text-foreground font-bold focus:ring-2 focus:ring-primary/20 transition-all"
+                          className={cn("w-full h-16 border-none rounded-2xl px-6 font-bold focus:ring-2 transition-all", isDark ? "bg-white/5 text-white focus:ring-primary/50 placeholder:text-white/20" : "bg-secondary/40 text-foreground focus:ring-primary/20")}
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.3em] ml-2">Requirements</label>
+                        <label className={cn("text-[9px] font-black uppercase tracking-[0.3em] ml-2", isDark ? "text-white/40" : "text-muted-foreground")}>Requirements</label>
                         <textarea
                           required
                           name="message"
@@ -282,13 +288,13 @@ const Header = () => {
                           onChange={handleInputChange}
                           rows={4}
                           placeholder={formType === 'contact' ? "Outline your project scope..." : "Describe your engineering background..."}
-                          className="w-full bg-secondary/40 border-none rounded-2xl px-6 py-5 text-foreground font-bold focus:ring-2 focus:ring-primary/20 transition-all resize-none"
+                          className={cn("w-full border-none rounded-2xl px-6 py-5 font-bold focus:ring-2 transition-all resize-none", isDark ? "bg-white/5 text-white focus:ring-primary/50 placeholder:text-white/20" : "bg-secondary/40 text-foreground focus:ring-primary/20")}
                         />
                       </div>
                       <Button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full h-16 text-lg font-black bg-primary text-white rounded-2xl shadow-xl hover:shadow-2xl transition-all hover:scale-[1.01] active:scale-[0.98] disabled:opacity-50"
+                        className={cn("w-full h-16 text-lg font-black bg-primary rounded-2xl transition-all hover:scale-[1.01] active:scale-[0.98] disabled:opacity-50", isDark ? "text-black shadow-[0_0_40px_-10px_rgba(16,185,129,0.5)] hover:shadow-2xl" : "text-white shadow-xl hover:shadow-2xl")}
                       >
                         {isLoading ? (
                           <Loader2 className="w-6 h-6 animate-spin" />
@@ -301,12 +307,12 @@ const Header = () => {
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center py-20 text-center space-y-8">
-                  <div className="h-24 w-24 rounded-full bg-secondary flex items-center justify-center shadow-inner">
+                  <div className={cn("h-24 w-24 rounded-full flex items-center justify-center shadow-inner", isDark ? "bg-primary/10" : "bg-secondary")}>
                     <CheckCircle className="w-12 h-12 text-primary" />
                   </div>
                   <div className="space-y-3">
-                    <h2 className="text-4xl font-black text-foreground tracking-tighter leading-none">Submission Complete.</h2>
-                    <p className="text-muted-foreground text-lg font-medium italic">"Our team will reach out to facilitate the next phase."</p>
+                    <h2 className={cn("text-4xl font-black tracking-tighter leading-none", isDark ? "text-white" : "text-foreground")}>Submission Complete.</h2>
+                    <p className={cn("text-lg font-medium italic", isDark ? "text-white/60" : "text-muted-foreground")}>"Our team will reach out to facilitate the next phase."</p>
                   </div>
                 </div>
               )}
@@ -326,13 +332,14 @@ const Header = () => {
       />
 
       <div className={cn(
-        "fixed top-0 right-0 bottom-0 z-[100] w-[90vw] max-w-xs bg-white backdrop-blur-2xl border-l border-border shadow-2xl transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] lg:hidden overflow-y-auto",
+        "fixed top-0 right-0 bottom-0 z-[100] w-[90vw] max-w-xs shadow-2xl transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] lg:hidden overflow-y-auto",
+        isDark ? "bg-black border-l border-white/10 text-white" : "bg-white backdrop-blur-2xl border-l border-border",
         menuOpen ? "translate-x-0" : "translate-x-full"
       )}>
         <div className="flex flex-col h-full uppercase px-8 py-10">
           <div className="flex justify-center items-center mb-16 relative">
-            <Logo simple variant="logo" className="scale-125" />
-            <Button variant="ghost" size="icon" onClick={() => setMenuOpen(false)} className="rounded-full bg-black/5 text-foreground hover:bg-black/10 absolute right-0">
+            <Logo simple variant="logo" light={isDark} className="scale-125" />
+            <Button variant="ghost" size="icon" onClick={() => setMenuOpen(false)} className={cn("rounded-full absolute right-0", isDark ? "bg-white/10 text-white hover:bg-white/20" : "bg-black/5 text-foreground hover:bg-black/10")}>
               <X className="w-5 h-5" />
             </Button>
           </div>
@@ -341,7 +348,7 @@ const Header = () => {
               <a
                 key={link.name}
                 href={link.href}
-                className="text-2xl font-black tracking-tighter text-foreground hover:text-primary transition-all duration-300 relative group"
+                className={cn("text-2xl font-black tracking-tighter hover:text-primary transition-all duration-300 relative group", isDark ? "text-white" : "text-foreground")}
                 onClick={(e) => {
                   if (link.name === 'Careers') {
                     e.preventDefault();
@@ -369,7 +376,7 @@ const Header = () => {
             ))}
           </nav>
           <div className="mt-auto pb-8">
-            <Button size="xl" className="w-full h-16 text-[11px] font-black bg-primary text-white rounded-2xl uppercase tracking-[0.2em] shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all" onClick={() => { toggleForm('contact'); setMenuOpen(false); }}>
+            <Button size="xl" className={cn("w-full h-16 text-[11px] font-black bg-primary rounded-2xl uppercase tracking-[0.2em] shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all", isDark ? "text-black" : "text-white")} onClick={() => { toggleForm('contact'); setMenuOpen(false); }}>
               Start Project
             </Button>
           </div>

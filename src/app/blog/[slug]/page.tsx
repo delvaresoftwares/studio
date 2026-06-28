@@ -10,6 +10,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return {
         title: `${post.title} | Delvare Blog`,
         description: post.excerpt,
+        keywords: ['who is alfas', 'alfas delvare', 'delvare', 'delvare.in', 'delvare softwares', 'best software startups', post.title.toLowerCase(), 'blog'],
         openGraph: {
             title: post.title,
             description: post.excerpt,

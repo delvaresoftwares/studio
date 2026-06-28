@@ -47,8 +47,8 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
                     </div>
 
                     {/* Header */}
-                    <div className="space-y-8 mb-16 text-center md:text-left print:hidden">
-                        <div className="flex flex-wrap justify-center md:justify-start gap-3">
+                    <div className="space-y-8 mb-16 text-center print:hidden">
+                        <div className="flex flex-wrap justify-center gap-3">
                             {post.tags.map((tag: string) => (
                                 <Badge key={tag} variant="outline" className="border-primary text-primary px-4 py-1">
                                     {tag}
@@ -58,7 +58,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
                         <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-foreground leading-[1.1]">
                             {post.title}
                         </h1>
-                        <div className="flex flex-wrap justify-center md:justify-start items-center gap-8 text-[11px] font-black uppercase tracking-[0.2em] text-muted-foreground">
+                        <div className="flex flex-wrap justify-center items-center gap-8 text-[11px] font-black uppercase tracking-[0.2em] text-muted-foreground">
                             <span className="flex items-center gap-3"><Calendar className="w-4 h-4 text-primary" /> {post.date}</span>
                             <span className="flex items-center gap-3"><User className="w-4 h-4 text-primary" /> {post.author}</span>
                         </div>
@@ -86,7 +86,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
                             This document is a proprietary technical briefing provided by Delvare Core. The information contained herein is intended for educational and strategic evaluation purposes. For implementation assistance or deployment inquiries, contact our engineering division at delvare.in/contact.
                         </p>
                         <div className="mt-8 flex justify-between items-center text-[8px] font-black uppercase text-muted-foreground opacity-50">
-                            <span>© 2026 Delvare MNC</span>
+                            <span>© 2026 Delvare.in</span>
                             <span>Ref: Protocol_{post.slug.toUpperCase()}</span>
                         </div>
                     </div>

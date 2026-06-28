@@ -11,6 +11,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return {
         title: `${data.title} | Delvare Specialty`,
         description: data.description,
+        keywords: ['who is alfas', 'alfas delvare', 'delvare', 'delvare.in', 'delvare softwares', 'best software startups', data.title.toLowerCase(), 'specialty'],
     };
 }
 

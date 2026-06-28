@@ -1,5 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
+.*
 # dependencies
 /node_modules
 /.pnp
@@ -16,6 +16,7 @@
 # next.js
 /.next/
 /out/
+/docs/
 
 # production
 /build
@@ -43,3 +44,6 @@ next-env.d.ts
 # firebase
 firebase-debug.log
 firestore-debug.log
+firestore.rules
+firebase.json
+envariables.txt

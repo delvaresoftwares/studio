@@ -48,11 +48,11 @@ const policies: Record<PolicyType, PolicyData> = {
                 </section>
                 <section>
                     <h4 className="font-bold text-lg mb-2">2. Service Provision</h4>
-                    <p>Delvare (XAAS by Delvare MNC) provides software development, IT consultation, and digital solutions. We reserve the right to modify or discontinue any service with or without notice.</p>
+                    <p>Delvare (XAAS by Delvare.in) provides software development, IT consultation, and digital solutions. We reserve the right to modify or discontinue any service with or without notice.</p>
                 </section>
                 <section>
                     <h4 className="font-bold text-lg mb-2">3. Intellectual Property</h4>
-                    <p>All content, branding, and proprietary code provided by Delvare remains the intellectual property of Delvare MNC unless otherwise specified in written contracts.</p>
+                    <p>All content, branding, and proprietary code provided by Delvare remains the intellectual property of Delvare.in unless otherwise specified in written contracts.</p>
                 </section>
                 <section>
                     <h4 className="font-bold text-lg mb-2">4. User Obligations</h4>

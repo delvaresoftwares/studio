@@ -6,26 +6,28 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Calendar, User } from 'lucide-react';
 import Link from 'next/link';
+import { FadeIn, StaggerContainer, StaggerItem, TypingText } from '@/components/ui/motion';
 
 const BlogSection = () => {
     return (
         <section id="blog" className="py-32 bg-white relative overflow-hidden">
             <div className="container mx-auto px-4">
-                <div className="text-center mb-20 animate-fade-in-up">
+                <FadeIn delay={0.2} className="text-center mb-20">
                     <Badge variant="outline" className="mb-6 border-primary text-primary px-6 py-1.5 text-[10px] font-black tracking-[0.3em] uppercase">
                         Our Blog
                     </Badge>
                     <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-8 text-foreground leading-none">
-                        Industry <span className="text-primary italic font-light">Insights.</span>
+                        <TypingText text="Industry" delay={0.4} /> <span className="text-primary italic font-light">Insights.</span>
                     </h2>
                     <p className="max-w-xl mx-auto text-lg text-muted-foreground font-medium italic">
                         "Fresh perspectives on tech, growth, and the future of business."
                     </p>
-                </div>
+                </FadeIn>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <StaggerContainer staggerDelay={0.15} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                     {blogs.map((post, idx) => (
-                        <Link href={`/blog/${post.slug}`} key={post.slug}>
+                        <StaggerItem key={post.slug}>
+                            <Link href={`/blog/${post.slug}`}>
                             {/* Desktop Card */}
                             <Card className="hidden md:flex flex-col group border border-border/50 hover:border-primary/20 transition-all duration-500 overflow-hidden bg-[#fdfdfd] rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:-translate-y-2 animate-fade-in-up h-full" style={{ animationDelay: `${idx * 150}ms` }}>
                                 <div className="relative h-64 overflow-hidden">
@@ -84,8 +86,9 @@ const BlogSection = () => {
                                 </div>
                             </Card>
                         </Link>
+                        </StaggerItem>
                     ))}
-                </div>
+                </StaggerContainer>
 
                 <div className="mt-20 text-center">
                     <Button size="xl" variant="outline" className="h-16 px-10 rounded-2xl border-primary text-primary hover:bg-primary hover:text-white transition-all font-black text-[10px] uppercase tracking-widest">

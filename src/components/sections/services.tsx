@@ -9,6 +9,7 @@ import { Cloud, BarChart3, ShieldCheck, ArrowRight, Zap, Check, Globe, Layout, L
 import { cn } from '@/lib/utils';
 import { useLocation } from '@/hooks/use-location';
 import { useRouter } from 'next/navigation';
+import { FadeIn, StaggerContainer, StaggerItem, TypingText } from '@/components/ui/motion';
 
 const services = [
   {
@@ -154,21 +155,36 @@ const ServicesSection = () => {
       />
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-16 gap-8">
-          <div className="max-w-xl">
-            <div className="text-center max-w-4xl mx-auto mb-20 animate-fade-in-up">
+        <div className="flex flex-col justify-center items-center mb-16 gap-8">
+          <div className="w-full max-w-4xl">
+            <FadeIn delay={0.2} className="text-center max-w-4xl mx-auto mb-32">
               <Badge variant="outline" className="mb-6 border-primary/20 py-1.5 px-6 text-[10px] font-black tracking-[0.3em] uppercase text-primary/60 bg-primary/5">
-                IT Support Services
+                Our Foundation
               </Badge>
-              <h2 className="font-headline text-5xl md:text-7xl font-black tracking-tight mb-8">
-                Reliable{' '}
-                <span className="text-primary italic font-light">IT Support</span>
-                {' '}For Your Growth.
+              <h2 className="font-headline text-5xl md:text-7xl font-black tracking-tight mb-12">
+                <TypingText text="Vision" delay={0.3} />{' '}
+                <span className="text-primary italic font-light">& Mission.</span>
               </h2>
-              <p className="max-w-2xl mx-auto text-lg md:text-xl text-muted-foreground leading-relaxed font-medium">
-                We provide proactive IT support, system management, and technical consulting to keep your business running smoothly, securely, and efficiently.
-              </p>
-            </div>
+              <div className="space-y-10 text-left bg-white p-8 md:p-12 rounded-[2rem] border border-border/50 shadow-sm">
+                <div>
+                   <h3 className="text-2xl font-black text-foreground mb-4">Vision</h3>
+                   <p className="text-lg text-muted-foreground leading-relaxed font-medium italic">"A leading organisation adapting fast-growing changes and modern frameworks available for public. To support the growth of ongoing business and tech community. To dive in the fundamentals for reinventions."</p>
+                   <div className="flex flex-wrap gap-3 mt-4">
+                      <Badge className="bg-primary/10 text-primary border-none font-bold uppercase tracking-widest text-[10px]">Adaptive Learning</Badge>
+                      <Badge className="bg-primary/10 text-primary border-none font-bold uppercase tracking-widest text-[10px]">Innovations</Badge>
+                      <Badge className="bg-primary/10 text-primary border-none font-bold uppercase tracking-widest text-[10px]">Product / Service</Badge>
+                   </div>
+                </div>
+                <div>
+                   <h3 className="text-2xl font-black text-foreground mb-4">Mission</h3>
+                   <p className="text-lg text-muted-foreground leading-relaxed font-medium italic">"Tech has changed. The idea has been rediscovered. At Delvare, we analyse our clients business nature and requirements delivering the perfect solution they require for a lifetime."</p>
+                </div>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={0.4} className="text-center max-w-4xl mx-auto mb-16">
+               <h3 className="text-4xl md:text-5xl font-black tracking-tighter">Showcasing All Our Fields</h3>
+            </FadeIn>
 
             {/* Empty space for structural consistency */}
             <div className="h-0"></div>
@@ -200,15 +216,16 @@ const ServicesSection = () => {
         </div>
 
         {/* Services Grid Container */}
-        <div
+        <StaggerContainer
           id="services-grid"
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-12"
+          staggerDelay={0.08}
         >
           {filteredServices.length > 0 ? (
             filteredServices.map((service, idx) => (
-              <div
+              <StaggerItem
                 key={idx}
-                className="w-full"
+                className="w-full h-full"
               >
                 {/* Desktop Card - stays vertical */}
                 <Card 
@@ -328,15 +345,15 @@ const ServicesSection = () => {
                     {service.icon}
                   </div>
                 </Card>
-              </div>
+              </StaggerItem>
             ))
           ) : (
-            <div className="w-full py-20 text-center">
+            <div className="w-full py-20 text-center col-span-full">
               <p className="text-muted-foreground font-bold">No matching protocols found in the active catalog.</p>
             </div>
           )}
 
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );

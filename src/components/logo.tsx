@@ -20,7 +20,7 @@ const Logo = ({ className, simple, light, variant = 'arrow', glow, compact }: {
       <div className={cn(
         "relative transition-all duration-500 flex items-center justify-center",
         simple ? "w-24 h-8" : "w-32 h-10",
-        compact && "bg-primary rounded-xl w-10 h-10",
+        compact && "bg-primary rounded-full w-10 h-10",
         light && !compact && "brightness-0 invert opacity-90 group-hover:opacity-100",
         glow && "glow-primary rounded-full"
       )}>

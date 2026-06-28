@@ -2,6 +2,7 @@
 
 import { Badge } from '@/components/ui/badge';
 import { ExternalLink, Globe } from 'lucide-react';
+import { FadeIn, StaggerContainer, StaggerItem, TypingText } from '@/components/ui/motion';
 
 const clients = [
   { name: 'EC Bills', url: 'https://ecbills.in' },
@@ -25,20 +26,22 @@ const ClientsSection = () => {
   return (
     <section id="clients" className="w-full py-32 relative overflow-hidden bg-[#fafafa]">
       <div className="container mx-auto px-4 relative z-10 text-center">
-        <Badge variant="outline" className="mb-8 border-border py-1.5 px-5 text-[10px] font-black tracking-[0.3em] uppercase text-muted-foreground">
-          Portfolio
-        </Badge>
-        <h2 className="font-headline text-5xl md:text-7xl font-black tracking-tighter mb-10 text-foreground leading-none">
-          Trusted by <br />
-          <span className="text-muted-foreground font-light italic tracking-tight">Leaders.</span>
-        </h2>
+        <FadeIn delay={0.2} className="mb-16">
+          <Badge variant="outline" className="mb-8 border-border py-1.5 px-5 text-[10px] font-black tracking-[0.3em] uppercase text-muted-foreground">
+            Portfolio
+          </Badge>
+          <h2 className="font-headline text-5xl md:text-7xl font-black tracking-tighter text-foreground leading-none">
+            <TypingText text="Trusted by" delay={0.4} /> <br />
+            <span className="text-muted-foreground font-light italic tracking-tight">Leaders.</span>
+          </h2>
+        </FadeIn>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-16 max-w-5xl mx-auto">
+        <StaggerContainer staggerDelay={0.1} className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {clients.map((client) => {
             const faviconUrl = getFaviconUrl(client.url);
             return (
+              <StaggerItem key={client.url}>
               <a
-                key={client.url}
                 href={client.url}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -61,9 +64,10 @@ const ClientsSection = () => {
                 </div>
                 <ExternalLink className="absolute top-4 right-4 w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-all duration-500" />
               </a>
+              </StaggerItem>
             );
           })}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );

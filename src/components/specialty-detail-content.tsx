@@ -156,7 +156,7 @@ export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentP
                 {/* Article Section: Why Better */}
                 <section className="py-20 bg-[#fafafa]">
                     <div className="container mx-auto px-4 max-w-4xl">
-                        <h2 className="text-5xl font-black mb-12 tracking-tighter">Why Delvare?</h2>
+                        <h2 className="text-5xl font-black mb-12 tracking-tighter text-center">Why Delvare?</h2>
                         <div className="space-y-10">
                             {data.whyBetter && Object.entries(data.whyBetter).map(([key, value]) => (
                                 <div key={key}>

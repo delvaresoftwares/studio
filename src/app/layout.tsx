@@ -26,8 +26,8 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   keywords: siteConfig.keywords as unknown as string[],
-  authors: [{ name: "Delvare MNC" }],
-  creator: "Delvare MNC",
+  authors: [{ name: "Delvare.in" }],
+  creator: "Delvare.in",
 
   icons: {
     icon: siteConfig.icon,
