@@ -114,7 +114,6 @@ const ServicesSection = () => {
   const router = useRouter();
   const { countryCode, isLoading } = useLocation();
   const [currentRegion, setCurrentRegion] = useState('Global');
-  const [showSpecs, setShowSpecs] = useState(false);
   const [budget, setBudget] = useState<string>('');
 
   useEffect(() => {
@@ -192,29 +191,6 @@ const ServicesSection = () => {
           </div>
         </div>
 
-        <div className="flex justify-between items-center mb-12">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <div className="flex items-center gap-2 bg-white p-1 rounded-xl border border-border shadow-sm">
-              <Button
-                variant={!showSpecs ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setShowSpecs(false)}
-                className="rounded-lg text-[10px] font-black uppercase tracking-widest px-4"
-              >
-                Concepts
-              </Button>
-              <Button
-                variant={showSpecs ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setShowSpecs(true)}
-                className="rounded-lg text-[10px] font-black uppercase tracking-widest px-4"
-              >
-                Specs
-              </Button>
-            </div>
-          </div>
-        </div>
-
         {/* Services Grid Container */}
         <StaggerContainer
           id="services-grid"
@@ -271,9 +247,9 @@ const ServicesSection = () => {
                         {service.description}
                       </p>
 
-                      {/* Dynamic Specs or Concepts View */}
+                      {/* Service Features */}
                       <div className="pt-4 h-24 overflow-hidden relative">
-                        <div className={cn("grid grid-cols-2 gap-x-4 gap-y-2 transition-all duration-500", showSpecs ? "opacity-0 -translate-y-4 scale-95 pointer-events-none" : "opacity-100 transform-none")}>
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                           {service.features.map((feature, i) => (
                             <div key={i} className="flex items-center gap-2 text-[10px] sm:text-xs font-bold text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis">
                               <Check className="w-3 h-3 text-primary shrink-0" />

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import Logo from '@/components/logo';
 import { Button } from '@/components/ui/button';
@@ -22,6 +22,8 @@ const Header = () => {
   const isDark = pathname === '/founder';
   const { toast } = useToast();
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastScrollY = useRef(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
   const [formType, setFormType] = useState<'contact' | 'career'>('contact');
@@ -36,9 +38,16 @@ const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      const y = window.scrollY;
+      setScrolled(y > 20);
+      if (y > lastScrollY.current && y > 140) {
+        setHidden(true);
+      } else if (y < lastScrollY.current) {
+        setHidden(false);
+      }
+      lastScrollY.current = y;
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -125,11 +134,12 @@ const Header = () => {
   return (
     <>
       <header className={cn(
-        "fixed z-[60] transition-all duration-500 ease-in-out",
+        "fixed z-[60] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
+        hidden && !formOpen && "-translate-y-[150%] opacity-0",
         formOpen
           ? `top-0 left-0 w-full rounded-none py-6 h-screen overflow-y-auto ${isDark ? 'bg-black text-white' : 'bg-white text-foreground'}`
           : scrolled
-            ? `top-0 left-0 w-full rounded-none py-3 ${isDark ? 'bg-black/95 text-white backdrop-blur-md' : 'bg-white text-foreground'}`
+            ? `top-0 left-0 w-full rounded-none py-3 ${isDark ? 'bg-black/10 text-white backdrop-blur-md' : 'bg-white/85 text-foreground backdrop-blur-md'}`
             : `top-4 left-1/2 -translate-x-1/2 w-[95%] lg:max-w-7xl rounded-2xl py-4 ${isDark ? 'bg-black text-white shadow-2xl' : 'bg-primary text-white'}`,
         "[box-shadow:none!important]"
       )}>
@@ -180,19 +190,21 @@ const Header = () => {
             </nav>
 
             <div className="flex items-center gap-4">
-              <Button
-                onClick={() => toggleForm('contact')}
-                variant={formOpen ? "ghost" : "default"}
-                className={cn(
-                  "h-10 px-6 rounded-lg font-black text-[10px] uppercase tracking-[0.1em] transition-all duration-500",
-                  (!scrolled && !formOpen) 
-                    ? (isDark ? "bg-primary text-black hover:bg-primary/90" : "bg-white text-primary hover:bg-white/90") 
-                    : "bg-primary text-white hover:bg-primary/90",
-                  formOpen && (isDark ? "bg-transparent text-white hover:bg-white/10 shadow-none border border-white/20" : "bg-transparent text-foreground hover:bg-secondary/50 shadow-none")
-                )}
-              >
-                {formOpen ? "Close" : "Start Now"}
-              </Button>
+              {!isDark && (
+                <Button
+                  onClick={() => toggleForm('contact')}
+                  variant={formOpen ? "ghost" : "default"}
+                  className={cn(
+                    "h-10 px-6 rounded-lg font-black text-[10px] uppercase tracking-[0.1em] transition-all duration-500",
+                    (!scrolled && !formOpen) 
+                      ? (isDark ? "bg-primary text-black hover:bg-primary/90" : "bg-white text-primary hover:bg-white/90") 
+                      : "bg-primary text-white hover:bg-primary/90",
+                    formOpen && (isDark ? "bg-transparent text-white hover:bg-white/10 shadow-none border border-white/20" : "bg-transparent text-foreground hover:bg-secondary/50 shadow-none")
+                  )}
+                >
+                  {formOpen ? "Close" : "Start Now"}
+                </Button>
+              )}
 
               <Button
                 variant="ghost"
@@ -375,11 +387,13 @@ const Header = () => {
               </a>
             ))}
           </nav>
-          <div className="mt-auto pb-8">
-            <Button size="xl" className={cn("w-full h-16 text-[11px] font-black bg-primary rounded-2xl uppercase tracking-[0.2em] shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all", isDark ? "text-black" : "text-white")} onClick={() => { toggleForm('contact'); setMenuOpen(false); }}>
-              Start Project
-            </Button>
-          </div>
+          {!isDark && (
+            <div className="mt-auto pb-8">
+              <Button size="xl" className={cn("w-full h-16 text-[11px] font-black bg-primary rounded-2xl uppercase tracking-[0.2em] shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all", isDark ? "text-black" : "text-white")} onClick={() => { toggleForm('contact'); setMenuOpen(false); }}>
+                Start Project
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </>

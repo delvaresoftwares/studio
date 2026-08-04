@@ -21,23 +21,33 @@ const Footer = () => {
   };
 
   return (
-    <footer className={cn("relative border-t border-border pt-24 pb-12 overflow-hidden border-b-4 border-primary", isDark ? "bg-black text-white" : "bg-white")}>
+    <footer className={cn("relative border-t border-border overflow-hidden border-b-4 border-primary", isDark ? "bg-black text-white" : "bg-white")}>
       {/* Refined Ambient Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-primary/[0.02] blur-[100px] rounded-full pointer-events-none" />
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 relative z-10 pt-24 pb-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-20">
           <div className="space-y-8">
-            <Logo glow simple light={isDark} className="!items-start opacity-90" />
+            <Logo glow simple light={isDark} variant="header" className="!items-start opacity-90" />
             <p className={cn("text-sm leading-relaxed max-w-xs font-semibold italic", isDark ? "text-white/60" : "text-muted-foreground")}>
               "We build simple, fast, and secure technology to help your business grow and succeed every day."
             </p>
             <div className="flex gap-4">
-              <div className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/20 transition-all cursor-pointer">
-                <ShieldCheck className="w-4 h-4" />
+              <div className="group relative">
+                <div className="w-10 h-10 rounded-full bg-black border border-white/10 flex items-center justify-center text-white hover:text-primary hover:border-primary/40 transition-all cursor-pointer">
+                  <ShieldCheck className="w-4 h-4" />
+                </div>
+                <div className="absolute top-full left-0 mt-2 w-60 p-3 rounded-xl bg-black border border-white/10 text-[11px] font-semibold leading-snug text-white/80 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 z-20 pointer-events-none">
+                  Latest Security. We adapt latest and advanced security.
+                </div>
               </div>
-              <div className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/20 transition-all cursor-pointer">
-                <Globe className="w-4 h-4" />
+              <div className="group relative">
+                <div className="w-10 h-10 rounded-full bg-black border border-white/10 flex items-center justify-center text-white hover:text-primary hover:border-primary/40 transition-all cursor-pointer">
+                  <Globe className="w-4 h-4" />
+                </div>
+                <div className="absolute top-full left-0 mt-2 w-60 p-3 rounded-xl bg-black border border-white/10 text-[11px] font-semibold leading-snug text-white/80 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 z-20 pointer-events-none">
+                  Frameworks: the web logo, showing our fastest and best frameworks.
+                </div>
               </div>
             </div>
           </div>
@@ -63,7 +73,7 @@ const Footer = () => {
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 group hover:text-primary transition-all"
                 >
-                  <div className={cn("h-10 w-10 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-white transition-all duration-500", isDark ? "bg-white/10" : "bg-secondary")}>
+                  <div className="h-10 w-10 rounded-xl bg-black border border-white/10 flex items-center justify-center shrink-0 text-white group-hover:bg-primary group-hover:text-black group-hover:border-primary transition-all duration-500">
                     <Package className="w-4 h-4" />
                   </div>
                   <div className="flex flex-col">
@@ -83,7 +93,7 @@ const Footer = () => {
             <h3 className={cn("text-[10px] font-black uppercase tracking-[0.4em]", isDark ? "text-white" : "text-foreground")}>Headquarters</h3>
             <ul className={cn("space-y-6 font-bold text-sm", isDark ? "text-white/60" : "text-muted-foreground")}>
               <li className="flex items-start gap-4">
-                <div className={cn("h-10 w-10 rounded-xl flex items-center justify-center shrink-0 text-primary", isDark ? "bg-white/10" : "bg-secondary")}>
+                <div className="h-10 w-10 rounded-xl bg-black border border-white/10 flex items-center justify-center shrink-0 text-primary">
                   <Mail className="w-4 h-4" />
                 </div>
                 <div className="flex flex-col gap-1">
@@ -92,7 +102,7 @@ const Footer = () => {
                 </div>
               </li>
               <li className="flex items-start gap-4">
-                <div className={cn("h-10 w-10 rounded-xl flex items-center justify-center shrink-0 text-primary", isDark ? "bg-white/10" : "bg-secondary")}>
+                <div className="h-10 w-10 rounded-xl bg-black border border-white/10 flex items-center justify-center shrink-0 text-primary">
                   <Phone className="w-4 h-4" />
                 </div>
                 <div className="flex flex-col gap-1">
@@ -104,15 +114,17 @@ const Footer = () => {
             </ul>
           </div>
         </div>
+      </div>
 
-        <div className="pt-12 border-t border-border flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex items-center gap-3 opacity-60">
-            <Logo simple light={isDark} className="w-16 grayscale scale-75" />
-            <p className={cn("text-[10px] font-black uppercase tracking-widest", isDark ? "text-white/60" : "text-muted-foreground")}>
+      <div className="relative z-10 bg-black text-white border-t border-white/10">
+        <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="flex items-center gap-3 opacity-70">
+            <Logo simple light variant="header" className="w-16 grayscale scale-75" />
+            <p className="text-[10px] font-black uppercase tracking-widest text-white/60">
               &copy; {currentYear} XAAS by Delvare.in. All Rights Reserved.
             </p>
           </div>
-          <div className={cn("flex gap-10 text-[10px] font-black uppercase tracking-[0.3em]", isDark ? "text-white/60" : "text-muted-foreground")}>
+          <div className="flex gap-10 text-[10px] font-black uppercase tracking-[0.3em] text-white/60">
             <button onClick={() => openPolicy('privacy')} className="hover:text-primary transition-all">Privacy</button>
             <button onClick={() => openPolicy('terms')} className="hover:text-primary transition-all">Terms</button>
             <button onClick={() => openPolicy('security')} className="hover:text-primary transition-all">Security</button>
