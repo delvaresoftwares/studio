@@ -116,18 +116,10 @@ const Footer = () => {
         </div>
       </div>
 
-<<<<<<< HEAD
         <div className="pt-12 border-t border-border flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-3 opacity-60">
             <Logo simple light={isDark} variant="header" className="w-16 grayscale scale-75" />
             <p className={cn("text-[10px] font-black uppercase tracking-widest", isDark ? "text-white/60" : "text-muted-foreground")}>
-=======
-      <div className="relative z-10 bg-black text-white border-t border-white/10">
-        <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex items-center gap-3 opacity-70">
-            <Logo simple light variant="header" className="w-16 grayscale scale-75" />
-            <p className="text-[10px] font-black uppercase tracking-widest text-white/60">
->>>>>>> e67eb9d90e50f0c6928877f799b56518d0adf940
               &copy; {currentYear} XAAS by Delvare.in. All Rights Reserved.
             </p>
           </div>
@@ -135,7 +127,6 @@ const Footer = () => {
             <button onClick={() => openPolicy('privacy')} className="hover:text-primary transition-all">Privacy</button>
             <button onClick={() => openPolicy('terms')} className="hover:text-primary transition-all">Terms</button>
             <button onClick={() => openPolicy('security')} className="hover:text-primary transition-all">Security</button>
-          </div>
         </div>
       </div>
 

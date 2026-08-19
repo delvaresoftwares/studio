@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { Zap, ShieldCheck, Code2, Globe, Cpu, Award, TrendingUp, Github, Linkedin, ArrowRight, Activity, Terminal, Layout, BookOpen, ExternalLink } from 'lucide-react';
+import { ShieldCheck, Code2, Globe, Cpu, Award, TrendingUp, Github, Linkedin, ArrowRight, Activity, Terminal, Layout, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -133,7 +132,6 @@ export default function FounderPortfolioPage() {
                                     <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-primary/30 bg-primary/10 backdrop-blur-md">
                                         <div className="w-2 h-2 rounded-full bg-primary" />
                                         <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Business Solutions</span>
-                                    </div>
                                     </div>
                                     <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.85]">
                                         {FOUNDER_DATA.name}<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-300 italic font-light">.</span>
