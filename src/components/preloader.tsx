@@ -14,8 +14,8 @@ const Preloader = () => {
             setProgress((prev) => {
                 if (prev >= 100) {
                     clearInterval(interval);
-                    setTimeout(() => setFadeOut(true), 100);
-                    setTimeout(() => setIsLoading(false), 600);
+                    setTimeout(() => setFadeOut(true), 10);
+                    setTimeout(() => setIsLoading(false), 60);
                     return 100;
                 }
                 const diff = 20 + Math.random() * 20;
@@ -51,7 +51,7 @@ const Preloader = () => {
                     </div>
                     <div className="flex items-center gap-6">
                         <span className="text-[10px] font-black uppercase tracking-[0.6em] text-white/20">
-                            INITIALIZING_SYSTEM
+                            INITIALIZING -:
                         </span>
                         <span className="text-[11px] font-black text-primary tabular-nums tracking-widest">
                             {Math.round(progress)}%

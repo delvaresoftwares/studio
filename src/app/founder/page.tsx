@@ -176,11 +176,13 @@ export default function FounderPortfolioPage() {
 
                                 <div className="flex flex-wrap justify-center md:justify-start gap-3 animate-fade-in-up [animation-delay:500ms]">
                                     {[
-                                        { title: "SaaS", sub: "Software Development" },
-                                        { title: "AI & Automation", sub: "Workflow Intelligence" },
-                                        { title: "Cloud Solutions", sub: "Infrastructure" },
-                                        { title: "UI/UX Design", sub: "Product Experience" },
-                                        { title: "Cyber Security", sub: "Zero-Trust Systems" },
+                                        { title: "Flutter", sub: "Android, iOS, Web" },
+                                        { title: "React framework", sub: "Next.js, Vite.js, Gatsby" },
+                                        { title: "Backend", sub: "Express, Supabase, SQL" },
+                                        { title: "Security", sub: "Exploitation & Defense" },
+                                        { title: "Automation", sub: "Workflow automation" },
+                                        { title: "AI & Machine Learning", sub: "Intelligent Systems" },
+
                                     ].map((cat) => (
                                         <div key={cat.title} className="flex flex-col px-4 py-2 rounded-2xl border border-white/10 bg-white/5 hover:bg-primary/10 hover:border-primary/40 transition-all cursor-default">
                                             <span className="text-[11px] font-black uppercase tracking-widest text-primary">{cat.title}</span>
@@ -242,9 +244,9 @@ export default function FounderPortfolioPage() {
                                 <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all text-white/60">
                                     <Code2 className="w-8 h-8" />
                                 </div>
-                                <h3 className="text-2xl font-black tracking-tighter mb-4 text-white">Engineering First</h3>
+                                <h3 className="text-2xl font-black tracking-tighter mb-4 text-white">Software Engineering</h3>
                                 <p className="text-white/50 leading-relaxed font-medium">
-                                    Experienced building React framework. Used Vite.js, Next.js and Gatsby. Worked with laynered.com, Masdar, etc. Writing for all clients. (SEO attached).
+                                    Experienced building diverse frameworks. Experienced with Vite.js, Next.js, Gatsby & Flutter.
                                 </p>
 
                                 <CommitActivity className="mt-8" animated />
@@ -254,9 +256,9 @@ export default function FounderPortfolioPage() {
                                 <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all text-white/60">
                                     <TrendingUp className="w-8 h-8" />
                                 </div>
-                                <h3 className="text-2xl font-black tracking-tighter mb-4 text-white">Networks</h3>
+                                <h3 className="text-2xl font-black tracking-tighter mb-4 text-white">Networking</h3>
                                 <p className="text-white/50 leading-relaxed font-medium">
-                                    Operating at 3-6 levels of active clients past few years. Pacing our service items such as ECBills.in and other services.
+                                Years of experience in Client-Relation, Sales and Decision Making. I have been a part of multiple startups. 
                                 </p>
 
                                 <div className="mt-8 space-y-3">
@@ -275,34 +277,44 @@ export default function FounderPortfolioPage() {
                                 <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all text-white/60">
                                     <Award className="w-8 h-8" />
                                 </div>
-                                <h3 className="text-2xl font-black tracking-tighter mb-4 text-white">C-Suite at Delvare</h3>
+                                <h3 className="text-2xl font-black tracking-tighter mb-4 text-white">Founder & CEO</h3>
 
                                 <div className="space-y-3">
                                     <div className="flex justify-center">
                                         <div className="px-5 py-2 rounded-xl bg-primary text-black text-[11px] font-black uppercase tracking-widest shadow-[0_0_30px_-8px_rgba(16,185,129,0.7)]">
-                                            CEO · Alfas
+                                            ME
                                         </div>
                                     </div>
                                     <div className="flex justify-center"><div className="w-px h-4 bg-primary/40" /></div>
                                     <div className="grid grid-cols-2 gap-3">
                                         <div className="flex flex-col items-center">
                                             <div className="w-full text-center px-3 py-2 rounded-lg border border-primary/30 bg-primary/5 text-[10px] font-black uppercase tracking-wider text-primary">
-                                                Finance & Business Ops
+                                                CEO
                                             </div>
                                             <div className="w-px h-3 bg-primary/30" />
-                                            <div className="text-[9px] font-bold text-white/40 uppercase tracking-wider text-center">Core Navigator</div>
+                                            <div className="text-[9px] font-bold text-white/40 uppercase tracking-wider text-center">A-Z operation</div>
                                         </div>
                                         <div className="flex flex-col items-center">
                                             <div className="w-full text-center px-3 py-2 rounded-lg border border-primary/30 bg-primary/5 text-[10px] font-black uppercase tracking-wider text-primary">
                                                 Development
                                             </div>
                                             <div className="w-px h-3 bg-primary/30" />
-                                            <div className="text-[9px] font-bold text-white/40 uppercase tracking-wider text-center">Top Dev · Interns (Up to 5)</div>
+                                            
+                                            <div className="text-[9px] font-bold text-white/40 uppercase tracking-wider text-center">Lead Dev</div>
                                         </div>
+                                        
                                     </div>
                                 </div>
+                                    
+                                
+                    
+                                                  <p className="text-white/50 p-4 leading-relaxed font-medium">
+Piloting Delvare from Zero to a structured enterprise, I oversee all operations, from strategic planning to hands-on development. 
+                                </p>
                             </div>
+                            
                         </div>
+                        
                     </div>
                 </section>
 
@@ -311,13 +323,13 @@ export default function FounderPortfolioPage() {
                     <div className="container max-w-6xl mx-auto px-4">
                         <div className="mb-20 text-center">
                             <Badge variant="outline" className="mb-6 border-primary/30 py-1.5 px-6 text-[10px] font-black tracking-[0.3em] uppercase text-primary bg-primary/10">
-                                First and Finest Modern Stack
+                                Comprehensive Expertise
                             </Badge>
                             <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-white leading-tight">
-                                Core <span className="text-primary italic font-light">Business Stack.</span>
+                                Services by <span className="text-primary italic font-light">Delvare.</span>
                             </h2>
                             <p className="max-w-2xl mx-auto text-lg text-white/50 mt-6 leading-relaxed font-medium">
-                                Delvare focuses on pillars of service/products from Delvare, third-party business, and startup founders. Below are the services provided at Delvare.
+                                Delvare focuses on pillars of service/products, third-party business, and startup founders. Below are the services provided at Delvare.
                             </p>
                         </div>
 
@@ -379,11 +391,11 @@ export default function FounderPortfolioPage() {
   
                             <div className="order-1 md:order-2 space-y-8">
                                 <Badge variant="outline" className="border-violet-500/30 py-1.5 px-6 text-[10px] font-black tracking-[0.3em] uppercase text-violet-400 bg-violet-500/10">
-                                    Social connection based on Book taste
+                                    Social network for Literature Lovers
                                 </Badge>
                                 <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-white leading-[0.9]">
-                                    Blendly <br />
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-pink-400 italic font-light">Read & Share.</span>
+                                    Founder <br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-pink-400 italic font-light">Blendly.sbs</span>
                                 </h2>
                                 <p className="text-lg text-white/50 leading-relaxed font-medium">
                                     Blendly is a community-driven platform to lend books nearby and read poetry online. Connecting readers, fostering sharing, and building a culture of knowledge exchange.
@@ -404,15 +416,14 @@ export default function FounderPortfolioPage() {
                         <div className="grid md:grid-cols-2 gap-16 items-center">
                             <div className="space-y-8">
                                 <Badge variant="outline" className="border-amber-500/30 py-1.5 px-6 text-[10px] font-black tracking-[0.3em] uppercase text-amber-400 bg-amber-500/10">
-                                    Published Author
+                                    Author (Philosophy & Spirituality)
                                 </Badge>
                                 <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-white leading-[0.9]">
                                     Nature of the<br />
                                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400 italic font-light">Divine.</span>
                                 </h2>
                                 <p className="text-lg text-white/50 leading-relaxed font-medium">
-                                    A guide to spiritual awakening and alignment with existence. Blending spiritual insight with practical wisdom — helping readers align their minds with the nature of the Divine, unlocking true motivation, clarity, and inner peace.
-                                </p>
+Non-Fiction on the Simple solution for humanity's complex struggles. The secret key, the divine code, the ultimate-truth. Nature of the Divine helps readers unlick the hidden understandings about a world created by God, the real world.                                </p>
                                 <div className="flex flex-wrap gap-4 pt-2">
                                     <a href="https://www.amazon.in/Nature-Divine-spiritual-awakening-development/dp/9334306513" target="_blank" rel="noopener noreferrer">
                                         <Button size="xl" className="h-14 px-8 rounded-2xl bg-[#FF9900] text-black hover:bg-[#FF9900]/90 font-black uppercase tracking-widest text-[10px] transition-all duration-500">
