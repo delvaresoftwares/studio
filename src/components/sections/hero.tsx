@@ -71,7 +71,7 @@ const HeroSection = () => {
                 XaaS by Delvare.in.
               </span>
             </div>
-            <h1 className="font-display font-extrabold text-5xl md:text-7xl lg:text-8xl tracking-tight leading-[0.95] text-foreground">
+            <h1 className="font-headline font-bold text-5xl md:text-7xl lg:text-8xl tracking-tight leading-[0.95] text-foreground">
               Managed IT Support
               <br />
               <span className="text-primary">& Business Solutions.</span>
@@ -105,7 +105,7 @@ const HeroSection = () => {
                   <Terminal className="w-5 h-5" />
                 </div>
                 <div className="space-y-1">
-                  <h3 className="font-display font-bold text-foreground text-xl">Custom Software</h3>
+                  <h3 className="font-headline font-bold text-foreground text-xl">Custom Software</h3>
                   <p className="text-sm text-muted-foreground">Tailored for You</p>
                 </div>
               </div>
@@ -114,7 +114,7 @@ const HeroSection = () => {
                   <Cloud className="w-5 h-5" />
                 </div>
                 <div className="space-y-1">
-                  <h3 className="font-display font-bold text-foreground text-xl">Cloud</h3>
+                  <h3 className="font-headline font-bold text-foreground text-xl">Cloud</h3>
                   <p className="text-sm text-muted-foreground">Scalable Services</p>
                 </div>
               </div>
@@ -123,7 +123,7 @@ const HeroSection = () => {
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="font-display font-bold text-foreground text-xl">Cybersecurity</h3>
+                  <h3 className="font-headline font-bold text-foreground text-xl">Cybersecurity</h3>
                   <p className="text-sm text-muted-foreground">Protect Assets</p>
                 </div>
               </div>
@@ -132,7 +132,7 @@ const HeroSection = () => {
                   <Cpu className="w-5 h-5" />
                 </div>
                 <div className="space-y-1">
-                  <h3 className={cn("font-display font-bold text-foreground text-xl transition-opacity duration-300", fade ? "opacity-100" : "opacity-0")}>
+                  <h3 className={cn("font-headline font-bold text-foreground text-xl transition-opacity duration-300", fade ? "opacity-100" : "opacity-0")}>
                     {keywords[keywordIndex]}
                   </h3>
                   <p className="text-sm text-muted-foreground">Integrated AI</p>

@@ -134,13 +134,13 @@ const Header = () => {
   return (
     <>
       <header className={cn(
-        "fixed z-[60] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
+        "fixed z-[60] left-1/2 -translate-x-1/2 w-[95%] lg:max-w-7xl transition-all duration-500 ease-out",
         hidden && !formOpen && "-translate-y-[150%] opacity-0",
         formOpen
-          ? `top-0 left-0 w-full rounded-none py-6 h-screen overflow-y-auto ${isDark ? 'bg-black text-white' : 'bg-white text-foreground'}`
+          ? `top-0 !w-full !rounded-none py-6 h-screen overflow-y-auto !-translate-x-1/2 ${isDark ? 'bg-black text-white' : 'bg-white text-foreground'}`
           : scrolled
-            ? `top-0 left-0 w-full rounded-none py-3 ${isDark ? 'bg-black/10 text-white backdrop-blur-md' : 'bg-white/85 text-foreground backdrop-blur-md'}`
-            : `top-4 left-1/2 -translate-x-1/2 w-[95%] lg:max-w-7xl rounded-2xl py-4 ${isDark ? 'bg-black text-white shadow-2xl' : 'bg-primary text-white'}`,
+            ? `top-0 !w-full !rounded-none py-3 !-translate-x-1/2 ${isDark ? 'bg-black/10 text-white backdrop-blur-md' : 'bg-white/85 text-foreground backdrop-blur-md'}`
+            : `top-4 rounded-2xl py-4 ${isDark ? 'bg-black text-white shadow-2xl' : 'bg-primary text-white'}`,
         "[box-shadow:none!important]"
       )}>
         <div className="container mx-auto px-4">
@@ -225,22 +225,22 @@ const Header = () => {
 
           {/* Expanded Drawer Form */}
           <div className={cn(
-            "overflow-hidden transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)]",
-            formOpen ? "max-h-[2000px] opacity-100 mt-16" : "max-h-0 opacity-0"
+            "transition-all duration-500 ease-out",
+            formOpen ? "opacity-100 mt-16" : "opacity-0 pointer-events-none mt-0"
           )}>
             <div className={cn("max-w-4xl mx-auto py-12 px-4 rounded-[3rem] border", isDark ? "shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] border-white/10 bg-[#0a0a0a] text-white" : "shadow-[0_40px_100px_-20px_rgba(0,0,0,0.05)] border-border/40 bg-white")}>
               {!isSubmitted ? (
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
                   <div className="lg:col-span-5 space-y-8">
                     <div className="space-y-4">
-                      <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Priority Contact</span>
+                      <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">{formType === 'contact' ? 'Get in Touch' : 'Join Us'}</span>
                       <h2 className={cn("text-4xl md:text-5xl font-black tracking-tighter leading-none", isDark ? "text-white" : "text-foreground")}>
-                        {formType === 'contact' ? "Direct Access to Experts." : "Join Our Team."}
+                        {formType === 'contact' ? "Talk to Us." : "Join Our Team."}
                       </h2>
                       <p className={cn("font-semibold italic text-lg leading-relaxed pt-4", isDark ? "text-white/60" : "text-muted-foreground")}>
                         {formType === 'contact'
-                          ? "Talk directly to our tech leads about your custom software or security needs."
-                          : "We're looking for elite talent to help us build the next generation of business tools."}
+                          ? "Tell us about your project and we'll get back to you within a day."
+                          : "We're hiring talented people who want to build great software."}
                       </p>
                     </div>
                     <div className={cn("p-8 rounded-[2rem] border", isDark ? "bg-white/5 border-white/10" : "bg-secondary/50 border-border")}>
@@ -255,7 +255,7 @@ const Header = () => {
                     <form className="space-y-6" onSubmit={handleSubmit}>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <label className={cn("text-[9px] font-black uppercase tracking-[0.3em] ml-2", isDark ? "text-white/40" : "text-muted-foreground")}>Identity</label>
+                          <label className={cn("text-[9px] font-black uppercase tracking-[0.3em] ml-2", isDark ? "text-white/40" : "text-muted-foreground")}>Name</label>
                           <input
                             required
                             name="name"
@@ -280,7 +280,7 @@ const Header = () => {
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <label className={cn("text-[9px] font-black uppercase tracking-[0.3em] ml-2", isDark ? "text-white/40" : "text-muted-foreground")}>Contact</label>
+                          <label className={cn("text-[9px] font-black uppercase tracking-[0.3em] ml-2", isDark ? "text-white/40" : "text-muted-foreground")}>Phone</label>
                         <input
                           required
                           name="phone"
@@ -292,14 +292,14 @@ const Header = () => {
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className={cn("text-[9px] font-black uppercase tracking-[0.3em] ml-2", isDark ? "text-white/40" : "text-muted-foreground")}>Requirements</label>
-                        <textarea
-                          required
-                          name="message"
-                          value={formData.message}
-                          onChange={handleInputChange}
-                          rows={4}
-                          placeholder={formType === 'contact' ? "Outline your project scope..." : "Describe your engineering background..."}
+                          <label className={cn("text-[9px] font-black uppercase tracking-[0.3em] ml-2", isDark ? "text-white/40" : "text-muted-foreground")}>Message</label>
+                          <textarea
+                            required
+                            name="message"
+                            value={formData.message}
+                            onChange={handleInputChange}
+                            rows={4}
+                            placeholder={formType === 'contact' ? "What do you need help with?" : "Tell us about your experience..."}
                           className={cn("w-full border-none rounded-2xl px-6 py-5 font-bold focus:ring-2 transition-all resize-none", isDark ? "bg-white/5 text-white focus:ring-primary/50 placeholder:text-white/20" : "bg-secondary/40 text-foreground focus:ring-primary/20")}
                         />
                       </div>
@@ -311,7 +311,7 @@ const Header = () => {
                         {isLoading ? (
                           <Loader2 className="w-6 h-6 animate-spin" />
                         ) : (
-                          formType === 'contact' ? "Transmit Inquiry" : "Submit Credentials"
+                          formType === 'contact' ? "Send Message" : "Apply Now"
                         )}
                       </Button>
                     </form>
@@ -323,8 +323,8 @@ const Header = () => {
                     <CheckCircle className="w-12 h-12 text-primary" />
                   </div>
                   <div className="space-y-3">
-                    <h2 className={cn("text-4xl font-black tracking-tighter leading-none", isDark ? "text-white" : "text-foreground")}>Submission Complete.</h2>
-                    <p className={cn("text-lg font-medium italic", isDark ? "text-white/60" : "text-muted-foreground")}>"Our team will reach out to facilitate the next phase."</p>
+                    <h2 className={cn("text-4xl font-black tracking-tighter leading-none", isDark ? "text-white" : "text-foreground")}>Sent!</h2>
+                    <p className={cn("text-lg font-medium italic", isDark ? "text-white/60" : "text-muted-foreground")}>We'll get back to you soon.</p>
                   </div>
                 </div>
               )}
