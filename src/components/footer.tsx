@@ -28,7 +28,7 @@ const Footer = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-20">
           <div className="space-y-8">
-            <Logo glow simple light={isDark} className="!items-start opacity-90" />
+            <Logo glow simple light={isDark} variant="header" className="!items-start opacity-90" />
             <p className={cn("text-sm leading-relaxed max-w-xs font-semibold italic", isDark ? "text-white/60" : "text-muted-foreground")}>
               "We build simple, fast, and secure technology to help your business grow and succeed every day."
             </p>
@@ -45,11 +45,11 @@ const Footer = () => {
           <div className="space-y-8">
             <h3 className={cn("text-[10px] font-black uppercase tracking-[0.4em]", isDark ? "text-white" : "text-foreground")}>Ecosystem</h3>
             <ul className={cn("space-y-5 font-bold text-sm", isDark ? "text-white/60" : "text-muted-foreground")}>
-              <li><a href="#services" onClick={(e) => { e.preventDefault(); document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' }); }} className="hover:text-primary transition-all flex items-center gap-2 group"><div className={cn("w-1 h-1 rounded-full transition-all group-hover:bg-primary", isDark ? "bg-white/20" : "bg-border")} />Services</a></li>
-              <li><a href="#products" onClick={(e) => { e.preventDefault(); document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' }); }} className="hover:text-primary transition-all flex items-center gap-2 group"><div className={cn("w-1 h-1 rounded-full transition-all group-hover:bg-primary", isDark ? "bg-white/20" : "bg-border")} />Our Work</a></li>
-              <li><a href="#clients" onClick={(e) => { e.preventDefault(); document.getElementById('clients')?.scrollIntoView({ behavior: 'smooth' }); }} className="hover:text-primary transition-all flex items-center gap-2 group"><div className={cn("w-1 h-1 rounded-full transition-all group-hover:bg-primary", isDark ? "bg-white/20" : "bg-border")} />Clients</a></li>
-              <li><a href="#blog" onClick={(e) => { e.preventDefault(); document.getElementById('blog')?.scrollIntoView({ behavior: 'smooth' }); }} className="hover:text-primary transition-all flex items-center gap-2 group"><div className={cn("w-1 h-1 rounded-full transition-all group-hover:bg-primary", isDark ? "bg-white/20" : "bg-border")} />Speciality</a></li>
-              <li><a href="#careers" onClick={(e) => { e.preventDefault(); document.getElementById('careers')?.scrollIntoView({ behavior: 'smooth' }); }} className="hover:text-primary transition-all flex items-center gap-2 group"><div className={cn("w-1 h-1 rounded-full transition-all group-hover:bg-primary", isDark ? "bg-white/20" : "bg-border")} />Careers</a></li>
+              <li><a href={isDark ? "/#services" : "#services"} onClick={(e) => { e.preventDefault(); if (isDark) { window.location.href = "/#services"; } else { document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' }); } }} className="hover:text-primary transition-all flex items-center gap-2 group"><div className={cn("w-1 h-1 rounded-full transition-all group-hover:bg-primary", isDark ? "bg-white/20" : "bg-border")} />Services</a></li>
+              <li><a href={isDark ? "/#products" : "#products"} onClick={(e) => { e.preventDefault(); if (isDark) { window.location.href = "/#products"; } else { document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' }); } }} className="hover:text-primary transition-all flex items-center gap-2 group"><div className={cn("w-1 h-1 rounded-full transition-all group-hover:bg-primary", isDark ? "bg-white/20" : "bg-border")} />Our Work</a></li>
+              <li><a href={isDark ? "/#clients" : "#clients"} onClick={(e) => { e.preventDefault(); if (isDark) { window.location.href = "/#clients"; } else { document.getElementById('clients')?.scrollIntoView({ behavior: 'smooth' }); } }} className="hover:text-primary transition-all flex items-center gap-2 group"><div className={cn("w-1 h-1 rounded-full transition-all group-hover:bg-primary", isDark ? "bg-white/20" : "bg-border")} />Clients</a></li>
+              <li><a href={isDark ? "/#blog" : "#blog"} onClick={(e) => { e.preventDefault(); if (isDark) { window.location.href = "/#blog"; } else { document.getElementById('blog')?.scrollIntoView({ behavior: 'smooth' }); } }} className="hover:text-primary transition-all flex items-center gap-2 group"><div className={cn("w-1 h-1 rounded-full transition-all group-hover:bg-primary", isDark ? "bg-white/20" : "bg-border")} />Speciality</a></li>
+              <li><a href={isDark ? "/#careers" : "#careers"} onClick={(e) => { e.preventDefault(); if (isDark) { window.location.href = "/#careers"; } else { document.getElementById('careers')?.scrollIntoView({ behavior: 'smooth' }); } }} className="hover:text-primary transition-all flex items-center gap-2 group"><div className={cn("w-1 h-1 rounded-full transition-all group-hover:bg-primary", isDark ? "bg-white/20" : "bg-border")} />Careers</a></li>
             </ul>
           </div>
 
@@ -107,7 +107,7 @@ const Footer = () => {
 
         <div className="pt-12 border-t border-border flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-3 opacity-60">
-            <Logo simple light={isDark} className="w-16 grayscale scale-75" />
+            <Logo simple light={isDark} variant="header" className="w-16 grayscale scale-75" />
             <p className={cn("text-[10px] font-black uppercase tracking-widest", isDark ? "text-white/60" : "text-muted-foreground")}>
               &copy; {currentYear} XAAS by Delvare.in. All Rights Reserved.
             </p>

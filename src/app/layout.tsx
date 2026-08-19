@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter, Space_Grotesk } from 'next/font/google';
+import { Inter, Space_Grotesk, Syne } from 'next/font/google';
 import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from "@/components/theme-provider"
 import { siteConfig } from '@/lib/site-config';
@@ -15,6 +15,13 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-space-grotesk',
+  display: 'swap',
+});
+
+const syne = Syne({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-syne',
   display: 'swap',
 });
 
@@ -82,7 +89,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${spaceGrotesk.variable} font-body antialiased`}>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} ${syne.variable} font-body antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

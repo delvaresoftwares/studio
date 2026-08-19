@@ -338,7 +338,7 @@ const Header = () => {
       )}>
         <div className="flex flex-col h-full uppercase px-8 py-10">
           <div className="flex justify-center items-center mb-16 relative">
-            <Logo simple variant="logo" light={isDark} className="scale-125" />
+            <Logo simple variant="header" light={isDark} className="scale-125" />
             <Button variant="ghost" size="icon" onClick={() => setMenuOpen(false)} className={cn("rounded-full absolute right-0", isDark ? "bg-white/10 text-white hover:bg-white/20" : "bg-black/5 text-foreground hover:bg-black/10")}>
               <X className="w-5 h-5" />
             </Button>

@@ -16,7 +16,7 @@ export const FOUNDER_DATA = {
     bio: "I ship business solutions under the mentioned categories. What started as an outburst of freelance services fueled by strong networking and commitments has now evolved into a structured enterprise.",
     profileUrl: "/assets/placeholder-founder.jpg", // Placeholder until we have a real image
     socials: {
-        github: "https://github.com/binaryraft",
+        github: "https://github.com/living-tuna",
         linkedin: "https://in.linkedin.com/in/alfas-b-717054222"
     },
     skills: [
