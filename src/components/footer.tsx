@@ -114,7 +114,6 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-      </div>
 
         <div className="pt-12 border-t border-border flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-3 opacity-60">
@@ -123,10 +122,11 @@ const Footer = () => {
               &copy; {currentYear} XAAS by Delvare.in. All Rights Reserved.
             </p>
           </div>
-          <div className="flex gap-10 text-[10px] font-black uppercase tracking-[0.3em] text-white/60">
+          <div className={cn("flex gap-10 text-[10px] font-black uppercase tracking-[0.3em]", isDark ? "text-white/60" : "text-muted-foreground")}>
             <button onClick={() => openPolicy('privacy')} className="hover:text-primary transition-all">Privacy</button>
             <button onClick={() => openPolicy('terms')} className="hover:text-primary transition-all">Terms</button>
             <button onClick={() => openPolicy('security')} className="hover:text-primary transition-all">Security</button>
+          </div>
         </div>
       </div>
 
