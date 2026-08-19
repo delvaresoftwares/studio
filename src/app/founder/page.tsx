@@ -131,10 +131,10 @@ export default function FounderPortfolioPage() {
                                 <div className="space-y-6">
                                     <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-primary/30 bg-primary/10 backdrop-blur-md">
                                         <div className="w-2 h-2 rounded-full bg-primary" />
-                                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Business Solutions</span>
+                                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Portfolio</span>
                                     </div>
                                     <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.85]">
-                                        {FOUNDER_DATA.name}<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-300 italic font-light">.</span>
+                                        {FOUNDER_DATA.name}<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-300 italic font-light"></span>
                                     </h1>
                                 </div>
 
