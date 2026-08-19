@@ -63,8 +63,8 @@ const HeroSection = () => {
     <section ref={heroRef} id="hero" className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white">
       <div className="absolute inset-0 z-0 " />
       <div className="container relative z-10 px-4 py-20">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <div className="space-y-8 text-center lg:text-left">
+        <div className="grid lg:grid-cols-2 gap-6 items-center">
+          <div className="space-y-2 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10">
               <Sparkles className="w-4 h-4 text-primary animate-pulse" />
               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">
@@ -72,9 +72,9 @@ const HeroSection = () => {
               </span>
             </div>
             <h1 className="font-headline font-bold text-5xl md:text-7xl lg:text-8xl tracking-tight leading-[0.95] text-foreground">
-              Managed IT Support
+              E-Solutions
               <br />
-              <span className="text-primary">& Business Solutions.</span>
+              <span className="text-primary">by Delvare.</span>
             </h1>
             <p className="max-w-xl mx-auto lg:mx-0 text-lg md:text-xl text-muted-foreground font-medium leading-relaxed">
               Proactive system maintenance, cloud management, cybersecurity, and technical consulting — keeping your business connected, secure, and productive around the clock.

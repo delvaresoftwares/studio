@@ -225,8 +225,8 @@ const Header = () => {
 
           {/* Expanded Drawer Form */}
           <div className={cn(
-            "transition-all duration-500 ease-out",
-            formOpen ? "opacity-100 mt-16" : "opacity-0 pointer-events-none mt-0"
+            "transition-all duration-500 ease-out overflow-hidden",
+            formOpen ? "opacity-100 max-h-[2000px] mt-16" : "opacity-0 max-h-0 pointer-events-none mt-0"
           )}>
             <div className={cn("max-w-4xl mx-auto py-12 px-4 rounded-[3rem] border", isDark ? "shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] border-white/10 bg-[#0a0a0a] text-white" : "shadow-[0_40px_100px_-20px_rgba(0,0,0,0.05)] border-border/40 bg-white")}>
               {!isSubmitted ? (
