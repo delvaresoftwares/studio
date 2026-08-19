@@ -72,12 +72,12 @@ const HeroSection = () => {
               </span>
             </div>
             <h1 className="font-display font-extrabold text-5xl md:text-7xl lg:text-8xl tracking-tight leading-[0.95] text-foreground">
-              Enterprise IT
+              Managed IT Support
               <br />
-              <span className="text-primary">Simplified.</span>
+              <span className="text-primary">& Business Solutions.</span>
             </h1>
             <p className="max-w-xl mx-auto lg:mx-0 text-lg md:text-xl text-muted-foreground font-medium leading-relaxed">
-              Proactive support, system maintenance, and technical consulting — keeping your business connected, secure, and productive around the clock.
+              Proactive system maintenance, cloud management, cybersecurity, and technical consulting — keeping your business connected, secure, and productive around the clock.
             </p>
             <div className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start pt-6">
               <Button
