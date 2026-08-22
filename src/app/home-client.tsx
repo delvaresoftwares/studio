@@ -11,11 +11,6 @@ import Footer from '@/components/footer';
 import BackgroundDecor from '@/components/background-decor';
 import WhatsAppButton from '@/components/whatsapp-button';
 
-const EcosystemSection = dynamic(() => import('@/components/sections/ecosystem'), {
-  ssr: false,
-  loading: () => null,
-});
-
 const ClientsSection = dynamic(() => import('@/components/sections/clients'), {
   ssr: false,
   loading: () => null,
@@ -35,7 +30,6 @@ export default function HomeClient() {
         <KeywordMarquee />
         <ServicesSection />
         <ProductsSection />
-        <EcosystemSection />
         <ClientsSection />
 
         <Footer />

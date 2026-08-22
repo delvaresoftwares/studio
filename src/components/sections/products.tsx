@@ -1,6 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import type { ReactNode } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -21,6 +23,7 @@ import {
     Heart,
     Bookmark,
     Lock,
+    ChevronDown,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FadeIn, StaggerContainer, StaggerItem, TypingText } from '@/components/ui/motion';
@@ -65,7 +68,7 @@ const products: Product[] = [
             'Our flagship PaaS platform that completely automates retail and enterprise operations. Built for infinite retail scale, precision inventory tracking and high-availability selling.',
         quote: '"From billing counter to balance sheet — one seamless system."',
         ctaLabel: 'Explore ECBills.in',
-        icon: <Receipt className="w-7 h-7 sm:w-8 sm:h-8 text-white" />,
+        icon: <Receipt className="w-6 h-6 sm:w-7 sm:h-7 text-white" />,
         panelGradient: 'bg-gradient-to-br from-emerald-500/[0.07] via-cyan-50 to-emerald-100/40',
         badgeClasses: 'border-primary/20 bg-primary/5 text-primary',
         iconBoxClasses: 'bg-gradient-to-br from-emerald-500 to-cyan-600 shadow-lg shadow-emerald-500/25',
@@ -115,7 +118,7 @@ const products: Product[] = [
             'A community-driven platform to lend books nearby and read poetry online. Connecting readers, fostering sharing and building a culture of knowledge exchange.',
         quote: '"Every book on your shelf is a story someone nearby is waiting for."',
         ctaLabel: 'Visit Blendly',
-        icon: <BookOpen className="w-7 h-7 sm:w-8 sm:h-8 text-white" />,
+        icon: <BookOpen className="w-6 h-6 sm:w-7 sm:h-7 text-white" />,
         panelGradient: 'bg-gradient-to-br from-violet-500/[0.07] via-pink-50 to-violet-100/40',
         badgeClasses: 'border-violet-500/20 bg-violet-500/5 text-violet-600',
         iconBoxClasses: 'bg-gradient-to-br from-violet-500 to-pink-500 shadow-lg shadow-violet-500/25',
@@ -160,8 +163,7 @@ const BrowserFrame = ({ domain }: { domain: string }) => (
 
 const EcbillVisual = ({ product }: { product: Product }) => (
     <div className="relative w-full max-w-xl mx-auto">
-        <div className={cn('absolute -inset-4 sm:-inset-8 blur-3xl rounded-[3rem] pointer-events-none', product.glowGradient)} />
-        <div className="relative rounded-2xl sm:rounded-3xl bg-white border border-border shadow-[0_40px_80px_-30px_rgba(0,0,0,0.25)] overflow-hidden transition-transform duration-700 hover:-translate-y-2 will-change-transform">
+        <div className="relative rounded-2xl bg-white border border-border shadow-lg overflow-hidden">
             <BrowserFrame domain={product.domain} />
             <img
                 src="/assets/ecbillmin.png"
@@ -170,44 +172,13 @@ const EcbillVisual = ({ product }: { product: Product }) => (
                 className="w-full h-auto object-cover"
             />
         </div>
-
-        <div className="absolute -bottom-4 -left-2 sm:left-6 flex items-center gap-2.5 rounded-2xl bg-white border border-border shadow-xl px-4 py-3 animate-float">
-            <span className="relative flex w-2.5 h-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-60" />
-                <span className="relative inline-flex rounded-full w-2.5 h-2.5 bg-primary" />
-            </span>
-            <div className="leading-tight">
-                <p className="text-[10px] sm:text-xs font-black text-foreground tracking-tight">Live Platform</p>
-                <p className="text-[8px] sm:text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Retail Ready</p>
-            </div>
-        </div>
-
-        <div className="hidden sm:flex absolute -top-4 right-4 lg:right-8 items-center gap-2 rounded-2xl bg-white border border-border shadow-xl px-4 py-3 animate-float [animation-delay:-4s]">
-            <Package className="w-4 h-4 text-primary" />
-            <p className="text-xs font-black text-foreground tracking-tight">99.9% Uptime</p>
-        </div>
     </div>
 );
 
 const BlendlyVisual = ({ product }: { product: Product }) => (
     <div className="relative w-full max-w-md mx-auto">
-        <div className={cn('absolute inset-x-0 top-1/2 -translate-y-1/2 aspect-square blur-3xl rounded-full pointer-events-none', product.glowGradient)} />
-
-        <div className="hidden sm:block relative z-0 w-[82%] ml-auto rotate-[2deg] opacity-95 -mb-3.5">
-            <div className="rounded-2xl bg-white border border-border shadow-lg p-4 flex items-center gap-3">
-                <div className="w-10 h-12 rounded-lg bg-gradient-to-br from-violet-200 to-pink-200 border border-violet-200/60 flex items-center justify-center shrink-0">
-                    <Bookmark className="w-4 h-4 text-violet-500" />
-                </div>
-                <div className="min-w-0 leading-tight">
-                    <p className="text-xs font-black text-foreground truncate">Now lending near you</p>
-                    <p className="text-[10px] font-bold text-muted-foreground">3 books available within 2 km</p>
-                </div>
-                <MapPin className="w-4 h-4 text-violet-500 ml-auto shrink-0" />
-            </div>
-        </div>
-
-        <div className="relative z-10 rotate-[1.5deg] hover:rotate-0 transition-transform duration-700 will-change-transform">
-            <div className="rounded-3xl bg-white border border-border shadow-[0_40px_80px_-30px_rgba(139,92,246,0.35)] overflow-hidden">
+        <div className="relative z-10 rotate-[1.5deg]">
+            <div className="rounded-3xl bg-white border border-border shadow-lg overflow-hidden">
                 <div className="h-1.5 bg-gradient-to-r from-violet-500 to-pink-500" />
                 <div className="p-5 sm:p-7 space-y-5">
                     <div className="flex items-center gap-3">
@@ -228,10 +199,10 @@ const BlendlyVisual = ({ product }: { product: Product }) => (
                     </div>
 
                     <div className="space-y-1.5 py-2">
-                        <p className="font-serif italic text-base sm:text-lg text-foreground/85 leading-relaxed">
+                        <p className="font-serif italic text-base text-foreground/85 leading-relaxed">
                             “Pages turn like tides at dusk,
                         </p>
-                        <p className="font-serif italic text-base sm:text-lg text-foreground/85 leading-relaxed pl-4 sm:pl-6">
+                        <p className="font-serif italic text-base text-foreground/85 leading-relaxed pl-4">
                             carrying borrowed worlds back home.”
                         </p>
                     </div>
@@ -251,9 +222,9 @@ const BlendlyVisual = ({ product }: { product: Product }) => (
             </div>
         </div>
 
-        <div className="relative z-20 -rotate-[2deg] hover:rotate-0 transition-transform duration-700 will-change-transform -mt-4 mx-auto w-[86%]">
-            <div className="rounded-2xl bg-white/95 backdrop-blur border border-border shadow-lg p-4 flex items-center gap-3">
-                <div className="w-11 h-11 rounded-xl bg-violet-500/10 flex items-center justify-center shrink-0">
+        <div className="relative z-20 -mt-4 mx-auto w-[86%]">
+            <div className="rounded-2xl bg-white/95 backdrop-blur border border-border shadow-md p-3.5 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-violet-500/10 flex items-center justify-center shrink-0">
                     <BookOpen className="w-5 h-5 text-violet-600" />
                 </div>
                 <div className="min-w-0 leading-tight">
@@ -266,127 +237,156 @@ const BlendlyVisual = ({ product }: { product: Product }) => (
     </div>
 );
 
-const ProductShowcase = ({ product, index }: { product: Product; index: number }) => (
-    <FadeIn delay={0.15 * (index + 1)}>
-        <article className="relative grid grid-cols-1 lg:grid-cols-2 rounded-[2rem] lg:rounded-[3rem] overflow-hidden border border-border bg-white shadow-[0_30px_80px_-40px_rgba(0,0,0,0.15)] hover:shadow-[0_50px_120px_-40px_rgba(0,0,0,0.25)] transition-all duration-700">
+const ProductVisual = ({ product }: { product: Product }) => (
+    <div className={cn('relative rounded-3xl p-6 sm:p-10 flex items-center justify-center overflow-hidden', product.panelGradient)}>
+        <div
+            className="absolute inset-0 opacity-[0.05] pointer-events-none"
+            style={{
+                backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)',
+                backgroundSize: '28px 28px',
+            }}
+        />
+        {product.visual === 'screenshot' ? <EcbillVisual product={product} /> : <BlendlyVisual product={product} />}
+    </div>
+);
 
-            {/* Visual panel */}
-            <div
-                className={cn(
-                    'relative order-1 p-6 pt-10 pb-12 sm:p-12 lg:p-16 flex items-center justify-center overflow-hidden',
-                    product.panelGradient,
-                    index % 2 === 1 && 'lg:order-2'
-                )}
-            >
-                <div
-                    className="absolute inset-0 opacity-[0.05] pointer-events-none"
-                    style={{
-                        backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)',
-                        backgroundSize: '28px 28px',
-                    }}
-                />
-                {product.visual === 'screenshot' ? (
-                    <EcbillVisual product={product} />
-                ) : (
-                    <BlendlyVisual product={product} />
-                )}
+const ProductCard = ({
+    product,
+    isOpen,
+    onToggle,
+}: {
+    product: Product;
+    isOpen: boolean;
+    onToggle: () => void;
+}) => (
+    <div
+        className={cn(
+            'bg-white rounded-[2rem] border transition-all duration-300 overflow-hidden',
+            isOpen ? 'border-primary/30 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.2)]' : 'border-border/70 hover:border-primary/25 shadow-sm'
+        )}
+    >
+        {/* Collapsed header */}
+        <button
+            onClick={onToggle}
+            aria-expanded={isOpen}
+            className="w-full flex items-center gap-4 sm:gap-5 p-6 sm:p-8 text-left cursor-pointer"
+        >
+            <div className={cn('w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shrink-0', product.iconBoxClasses)}>
+                {product.icon}
             </div>
+            <div className="flex-grow min-w-0">
+                <h3 className="text-2xl sm:text-3xl font-headline font-black tracking-tighter text-foreground leading-none break-words">
+                    {product.name}
+                </h3>
+                <p className="text-[9px] sm:text-xs font-black uppercase tracking-[0.25em] text-primary/70 mt-2 truncate">
+                    {product.tagline}
+                </p>
+            </div>
+            <ChevronDown
+                className={cn(
+                    'w-5 h-5 shrink-0 text-muted-foreground transition-transform duration-300',
+                    isOpen && 'rotate-180 text-primary'
+                )}
+            />
+        </button>
 
-            {/* Content panel */}
-            <div className={cn('relative order-2 p-7 sm:p-10 lg:p-14 flex flex-col justify-center gap-5 sm:gap-7', index % 2 === 1 && 'lg:order-1')}>
-                <div className="space-y-4">
-                    <Badge variant="outline" className={cn('py-1.5 px-4 text-[9px] sm:text-[10px] font-black tracking-[0.25em] uppercase', product.badgeClasses)}>
-                        {product.badgeLabel}
-                    </Badge>
+        {/* Expanded detailed view */}
+        <AnimatePresence initial={false}>
+            {isOpen && (
+                <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
+                    className="overflow-hidden"
+                >
+                    <div className="border-t border-border/60">
+                        <div className="p-6 sm:p-8 lg:p-10 space-y-6">
+                            <Badge variant="outline" className={cn('py-1.5 px-4 text-[9px] sm:text-[10px] font-black tracking-[0.25em] uppercase', product.badgeClasses)}>
+                                {product.badgeLabel}
+                            </Badge>
 
-                    <div className="flex items-center gap-4">
-                        <div className={cn('w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center shrink-0', product.iconBoxClasses)}>
-                            {product.icon}
-                        </div>
-                        <div className="min-w-0">
-                            <h3 className="text-3xl sm:text-4xl lg:text-5xl font-headline font-black tracking-tighter text-foreground leading-none break-words">
-                                {product.name}
-                            </h3>
-                            <p className="text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] text-primary/70 mt-2">
-                                {product.tagline}
+                            <p className="text-base text-muted-foreground leading-relaxed font-medium">
+                                {product.description}
                             </p>
+
+                            <ProductVisual product={product} />
+
+                            <StaggerContainer staggerDelay={0.06} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                {product.features.map((feat, i) => (
+                                    <StaggerItem key={i}>
+                                        <div className="flex items-start gap-3 rounded-2xl border border-border/70 bg-secondary/40 p-3.5 hover:border-primary/30 hover:bg-white transition-colors duration-300 h-full">
+                                            <div className="w-9 h-9 rounded-xl bg-white border border-border/60 flex items-center justify-center shrink-0 shadow-sm">
+                                                {feat.icon}
+                                            </div>
+                                            <div className="min-w-0 leading-tight">
+                                                <p className="text-[13px] font-black text-foreground tracking-tight">{feat.title}</p>
+                                                <p className="text-[11px] font-medium text-muted-foreground mt-1 line-clamp-2">{feat.desc}</p>
+                                            </div>
+                                        </div>
+                                    </StaggerItem>
+                                ))}
+                            </StaggerContainer>
+
+                            <p className="text-sm text-foreground/70 leading-relaxed font-medium italic border-l-2 border-primary/30 pl-4">
+                                {product.quote}
+                            </p>
+
+                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
+                                <a href={product.url} target="_blank" rel="noopener noreferrer" className="sm:w-auto">
+                                    <Button
+                                        className="w-full sm:w-auto h-14 rounded-2xl bg-foreground text-background hover:bg-primary hover:text-white font-black uppercase tracking-widest text-[11px] gap-3 px-8 transition-all duration-300"
+                                    >
+                                        {product.ctaLabel}
+                                        <ExternalLink className="w-4 h-4" />
+                                    </Button>
+                                </a>
+                                <Button
+                                    variant="ghost"
+                                    onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
+                                    className="h-14 rounded-2xl font-black uppercase tracking-widest text-[11px] gap-2 px-6 text-muted-foreground hover:text-primary hover:bg-secondary/60"
+                                >
+                                    Built by our team
+                                    <ArrowRight className="w-4 h-4" />
+                                </Button>
+                            </div>
                         </div>
                     </div>
-
-                    <p className="text-base sm:text-lg text-muted-foreground leading-relaxed font-medium">
-                        {product.description}
-                    </p>
-
-                    <p className="text-sm sm:text-base text-foreground/70 leading-relaxed font-medium italic border-l-2 border-primary/30 pl-4">
-                        {product.quote}
-                    </p>
-                </div>
-
-                <StaggerContainer staggerDelay={0.06} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {product.features.map((feat, i) => (
-                        <StaggerItem key={i}>
-                            <div className="flex items-start gap-3 rounded-2xl border border-border/70 bg-secondary/40 p-3.5 sm:p-4 hover:border-primary/30 hover:bg-white transition-colors duration-300 h-full">
-                                <div className="w-9 h-9 rounded-xl bg-white border border-border/60 flex items-center justify-center shrink-0 shadow-sm">
-                                    {feat.icon}
-                                </div>
-                                <div className="min-w-0 leading-tight">
-                                    <p className="text-[13px] sm:text-sm font-black text-foreground tracking-tight">{feat.title}</p>
-                                    <p className="text-[11px] sm:text-xs font-medium text-muted-foreground mt-1 line-clamp-2">{feat.desc}</p>
-                                </div>
-                            </div>
-                        </StaggerItem>
-                    ))}
-                </StaggerContainer>
-
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1 sm:pt-2">
-                    <a href={product.url} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-                        <Button
-                            size="xl"
-                            className="w-full sm:w-auto h-14 sm:h-16 rounded-2xl bg-foreground text-background hover:bg-primary hover:text-white font-black uppercase tracking-widest text-[11px] gap-3 px-8 shadow-xl transition-all duration-300"
-                        >
-                            {product.ctaLabel}
-                            <ExternalLink className="w-4 h-4" />
-                        </Button>
-                    </a>
-                    <Button
-                        variant="ghost"
-                        size="xl"
-                        onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
-                        className="w-full sm:w-auto h-14 sm:h-16 rounded-2xl font-black uppercase tracking-widest text-[11px] gap-2 px-6 text-muted-foreground hover:text-primary hover:bg-secondary/60"
-                    >
-                        Built by our team
-                        <ArrowRight className="w-4 h-4" />
-                    </Button>
-                </div>
-            </div>
-        </article>
-    </FadeIn>
+                </motion.div>
+            )}
+        </AnimatePresence>
+    </div>
 );
 
 const ProductsSection = () => {
-    return (
-        <section id="products" className="w-full relative py-24 md:py-32 overflow-hidden bg-white">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-primary/5 blur-[140px] rounded-full pointer-events-none" />
+    const [expandedId, setExpandedId] = useState<string | null>(null);
 
+    return (
+        <section id="products" className="w-full relative py-20 md:py-28 overflow-hidden bg-white">
             <div className="container mx-auto px-4 relative z-10">
-                <FadeIn delay={0.1} className="text-center mb-16 md:mb-24">
+                <FadeIn delay={0.1} className="text-center mb-12 md:mb-16">
                     <Badge variant="outline" className="mb-5 border-primary/20 py-1.5 px-5 text-[10px] font-black tracking-[0.3em] uppercase text-primary/70 bg-primary/5">
                         <Layers className="w-3 h-3 mr-2" />
                         Our Products
                     </Badge>
-                    <h2 className="font-headline text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter mb-6 leading-[1.05]">
+                    <h2 className="font-headline text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter mb-4 leading-[1.05]">
                         <TypingText text="Built by us." delay={0.3} />{' '}
                         <br className="sm:hidden" />
                         <span className="text-primary/60 font-light italic">Live in the wild.</span>
                     </h2>
-                    <p className="max-w-2xl mx-auto text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed font-medium">
-                        Beyond client services, we ship our own platforms — production-grade products serving real businesses and communities every day.
+                    <p className="max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground leading-relaxed font-medium">
+                        Beyond client services, we ship our own platforms. Click a product to see everything it offers.
                     </p>
                 </FadeIn>
 
-                <div className="space-y-12 md:space-y-16 max-w-6xl mx-auto">
-                    {products.map((product, i) => (
-                        <ProductShowcase key={product.id} product={product} index={i} />
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-6 max-w-6xl mx-auto items-start">
+                    {products.map((product) => (
+                        <ProductCard
+                            key={product.id}
+                            product={product}
+                            isOpen={expandedId === product.id}
+                            onToggle={() => setExpandedId(prev => (prev === product.id ? null : product.id))}
+                        />
                     ))}
                 </div>
             </div>
