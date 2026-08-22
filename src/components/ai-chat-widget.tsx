@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { ArrowUp, Sparkles, X } from 'lucide-react';
+import { ArrowUp, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SITE_KNOWLEDGE } from '@/lib/site-knowledge';
 import { useScrollLock } from '@/hooks/use-scroll-lock';
@@ -321,30 +321,30 @@ const AIChatWidget = () => {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 24 }}
                             transition={{ delay: 0.35, duration: 0.45, ease: 'easeOut' }}
-                            className="fixed inset-0 z-[106] pt-28 pb-6 px-4 flex justify-center pointer-events-none"
+                            className="fixed inset-0 z-[106] pt-28 flex justify-center pointer-events-none [padding-bottom:calc(1.5rem+env(safe-area-inset-bottom))]"
                         >
                             <span className="absolute top-10 left-8 text-[10px] font-black uppercase tracking-[0.3em] text-white/40 select-none">
                                 Delvare · AI Assistant
                             </span>
-                            <div className="pointer-events-auto w-full max-w-2xl h-full flex flex-col">
+                            <div className="pointer-events-auto w-full max-w-2xl h-full min-h-0 flex flex-col px-4">
                                 {/* Scrollable chat bubbles */}
                                 <div
                                     ref={scrollRef}
                                     data-lenis-prevent
-                                    className="flex-1 overflow-y-auto overscroll-contain space-y-4 px-1 pb-4 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-white/15 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent"
+                                    className="flex-1 min-h-0 overflow-y-auto overscroll-contain space-y-4 px-1 pb-4 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-white/15 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent"
                                 >
                                     <AnimatePresence initial={false}>
                                         {messages.map((msg, i) => (
                                             <motion.div
                                                 key={i}
-                                                initial={{ opacity: 0, y: 12, scale: 0.97 }}
-                                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                initial={{ opacity: 0, y: 12 }}
+                                                animate={{ opacity: 1, y: 0 }}
                                                 transition={{ duration: 0.3, ease: 'easeOut' }}
                                                 className={cn('flex', msg.role === 'user' ? 'justify-end' : 'justify-start')}
                                             >
                                                 {msg.role === 'assistant' && (
-                                                    <span className="w-8 h-8 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0 mr-3 mt-1 self-start">
-                                                        <Sparkles className="w-3.5 h-3.5 text-primary" />
+                                                    <span className="w-8 h-8 rounded-full bg-white border border-black/10 shadow-md flex items-center justify-center shrink-0 mr-3 mt-1 self-start overflow-hidden">
+                                                        <img src="/assets/arrow.png" alt="" className="w-[18px] h-[18px] object-contain" />
                                                     </span>
                                                 )}
                                                 <div
@@ -366,8 +366,8 @@ const AIChatWidget = () => {
                                     </AnimatePresence>
                                     {loading && (
                                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
-                                            <span className="w-8 h-8 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0 mr-3 mt-1 self-start">
-                                                <Sparkles className="w-3.5 h-3.5 text-primary" />
+                                            <span className="w-8 h-8 rounded-full bg-white border border-black/10 shadow-md flex items-center justify-center shrink-0 mr-3 mt-1 self-start overflow-hidden">
+                                                <img src="/assets/arrow.png" alt="" className="w-[18px] h-[18px] object-contain" />
                                             </span>
                                             <div className="bg-primary text-white rounded-3xl rounded-tl-md px-5 py-4 shadow-lg flex items-center gap-1.5">
                                                 {[0, 1, 2].map(d => (
@@ -405,7 +405,7 @@ const AIChatWidget = () => {
                                         value={input}
                                         onChange={(e) => setInput(e.target.value)}
                                         placeholder="Ask ..."
-                                        className="flex-1 bg-transparent outline-none text-white placeholder:text-white/40 text-sm font-medium min-w-0"
+                                        className="flex-1 bg-transparent outline-none text-white placeholder:text-white/40 text-base font-medium min-w-0"
                                         autoFocus
                                     />
                                     <button
