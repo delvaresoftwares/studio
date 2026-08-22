@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 
 const navLinks = [
   { name: 'Services', href: '#services' },
+  { name: 'Products', href: '#products' },
   { name: 'Founder', href: '/founder' },
   { name: 'Clients', href: '#clients' },
   { name: 'Speciality', href: '#blog' },
