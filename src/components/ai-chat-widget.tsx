@@ -32,7 +32,9 @@ const WELCOME: ChatMessage = {
 };
 
 const PLANNING_LINE =
-    /^(?:we\s+(?:need|should|must|have)\b|i\s+(?:need|should|will|must)\b|i'll\b|let me\b|make sure\b|ensure\b|keep (?:it|every|replies)\b|under ~?\d+ words\b|use markdown\b|use \d|\d-\d emojis?\b|already prepared\b|we have that\b|no preamble\b|the user\b|user says\b|provide (?:the )?final answer\b|respond concisely\b)[^\n]*$/i;
+    /^(?:we\s+(?:need|should|must|have)\b|i\s+(?:need|should|will|must)\b|i'll\b|let'?s\b|let us\b|make sure\b|ensure\b|keep (?:it|every|replies)\b|under ~?\d+ words\b|use markdown\b|use \d|\d-\d emojis?\b|emojis? count\b|word count\b|recount\b|check words\b|exceeding\b|must reduce\b|already prepared\b|we have that\b|no preamble\b|the user\b|user says\b|according to\b|provide (?:the )?final answer\b|respond concisely\b)[^\n]*$/i;
+
+const HANDOFF_CUE = /\b(?:let'?s\s+(?:output|craft|produce|write|finalize|answer|go)|provide\s+(?:the\s+)?final\s+answer|final\s+answer)\b\s*[:.!]*/gi;
 
 const stripPlanningLines = (text: string): string => {
     const lines = text.split('\n');
@@ -53,13 +55,18 @@ const stripMeta = (text: string): string => {
         .replace(/<think>[\s\S]*?<\/think>/gi, '')
         .replace(/^\s*(?:analysis|reasoning|thinking)\s*[:\-]\s*/i, '');
 
-    // Cut everything up to and including a "final answer" hand-off marker
-    const marker = /\bfinal answer\b\s*[:.\-—!]*/gi;
-    const matches = Array.from(out.matchAll(marker));
-    const last = matches[matches.length - 1];
-    if (last && typeof last.index === 'number' && last.index <= 600) {
+    // Cut everything up to and including the last "hand-off" cue near the top
+    const cues = Array.from(out.matchAll(HANDOFF_CUE)).filter(c => (c.index ?? 0) <= 800);
+    const last = cues[cues.length - 1];
+    if (last && typeof last.index === 'number') {
         out = out.slice(last.index + last[0].length);
     }
+
+    // Drop word-counter artifact lines, e.g. "📚 Lend(21) &(22)"
+    out = out
+        .split('\n')
+        .filter(line => !/[A-Za-z&]\(\d{1,4}\)/.test(line))
+        .join('\n');
 
     return stripPlanningLines(out);
 };
