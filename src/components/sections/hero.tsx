@@ -98,7 +98,7 @@ const HeroSection = () => {
             <div className="relative w-full h-full flex items-center justify-center transition-transform duration-700 ease-out">
               <div ref={arrowRef} className="absolute z-20 w-48 h-48 lg:w-64 lg:h-64 bg-white rounded-[2rem] lg:rounded-[3rem] flex flex-col items-center justify-center transition-transform duration-200 ease-out shadow-sm lg:shadow-none">
                 {/* Mobile static arrow (landing highlight) */}
-                <img src="/assets/arrow.png" alt="Our Expertise" className="w-24 h-24 object-contain lg:hidden" style={{ transform: 'rotate(0deg)' }} />
+                <img src="/assets/arrow.png" alt="Our Expertise" className="w-66 h-66 object-contain lg:hidden" style={{ transform: 'rotate(0deg)' }} />
                 {/* Desktop rotating arrow */}
                 <img src="/assets/arrow.png" alt="Our Expertise" className="hidden lg:block w-32 h-32 object-contain transition-transform duration-200 ease-out" style={{ transform: `rotate(${arrowRotation}deg)` }} />
               </div>

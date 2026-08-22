@@ -18,10 +18,12 @@ import {
   Brain,
   TrendingUp,
   ChevronDown,
+  MessageSquare,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLocation } from '@/hooks/use-location';
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/ui/motion';
+import FounderHighlight from '@/components/sections/founder-highlight';
 
 const services = [
   {
@@ -148,136 +150,158 @@ const ServicesSection = () => {
   };
 
   return (
-    <section id="services" className="w-full relative py-20 lg:py-28 overflow-hidden bg-[#fafafa]">
-      <div className="container mx-auto px-4 relative z-10">
+    <>
+      <section id="vision" className="w-full relative py-20 lg:py-28 overflow-hidden bg-white">
+        <div className="container mx-auto px-4 relative z-10">
+          {/* Section Header */}
+          <FadeIn delay={0.1} className="text-center mb-12">
+            <Badge variant="outline" className="mb-5 border-primary/20 py-1.5 px-5 text-[10px] font-black tracking-[0.3em] uppercase text-primary/70 bg-primary/5">
+              Our MOTTO
+            </Badge>
+            <h2 className="font-headline text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter mb-4">
+              Vision <span className="text-primary italic font-light">&amp; Mission.</span>
+            </h2>
+            <p className="max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground leading-relaxed font-medium">
+              Analysing your business&apos;s nature and requirements, we excel in delivering the perfect & optimal solution built to last a lifetime.
+            </p>
+          </FadeIn>
 
-        {/* Section Header */}
-        <FadeIn delay={0.1} className="text-center mb-12">
-          <Badge variant="outline" className="mb-5 border-primary/20 py-1.5 px-5 text-[10px] font-black tracking-[0.3em] uppercase text-primary/70 bg-primary/5">
-            Our Foundation
-          </Badge>
-          <h2 className="font-headline text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter mb-4">
-            Vision <span className="text-primary italic font-light">&amp; Mission.</span>
-          </h2>
-          <p className="max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground leading-relaxed font-medium">
-            Everything we do, in one simple place — click any service to see the full details.
-          </p>
-        </FadeIn>
-
-        {/* Condensed Vision & Mission */}
-        <FadeIn delay={0.2} className="max-w-4xl mx-auto mb-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-6 sm:p-8 rounded-[2rem] border border-border/60">
-            <div>
-              <h3 className="text-lg font-black text-foreground mb-2">Vision</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed font-medium">
-                A leading organisation adapting fast-growing changes and modern frameworks — supporting the growth of businesses and the tech community.
-              </p>
+          {/* Condensed Vision & Mission */}
+          <FadeIn delay={0.2} className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-6 sm:p-8 rounded-[2rem] border border-border/60 shadow-sm">
+              <div>
+                <h3 className="text-lg font-black text-foreground mb-2">Vision</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed font-medium">
+                  To be the most trusted and innovative technology partner, empowering AI and automation as our signature for businesses worldwide.
+                </p>
+              </div>
+              <div className="md:border-l md:border-border/60 md:pl-6">
+                <h3 className="text-lg font-black text-foreground mb-2">Mission</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed font-medium">
+                  To empower business and start-ups with radiant technology solutions that drive innovation, efficiency, and growth in the digital age.
+                </p>
+              </div>
             </div>
-            <div className="md:border-l md:border-border/60 md:pl-6">
-              <h3 className="text-lg font-black text-foreground mb-2">Mission</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed font-medium">
-                We analyse each client&apos;s business nature and requirements, delivering the perfect solution built to last a lifetime.
-              </p>
-            </div>
-          </div>
-        </FadeIn>
+          </FadeIn>
+        </div>
+      </section>
 
-        {/* Collapsed / Expandable Service Cards */}
-        <StaggerContainer
-          staggerDelay={0.06}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-start max-w-6xl mx-auto"
-        >
-          {services.map((service, idx) => {
-            const isOpen = expandedIndex === idx;
-            return (
-              <StaggerItem key={service.slug} className="w-full">
-                <div
-                  className={cn(
-                    'bg-white rounded-2xl border transition-all duration-300 overflow-hidden',
-                    isOpen ? 'border-primary/40 shadow-lg' : 'border-border/70 hover:border-primary/25 hover:shadow-md'
-                  )}
-                >
-                  {/* Collapsed header — always visible */}
-                  <button
-                    onClick={() => toggleService(idx)}
-                    aria-expanded={isOpen}
-                    className="w-full flex items-center gap-4 p-4 sm:p-5 text-left cursor-pointer"
+      <FounderHighlight />
+
+      <section id="services" className="w-full relative py-20 lg:py-28 overflow-hidden bg-[#fafafa]">
+        <div className="container mx-auto px-4 relative z-10">
+          {/* Services Header */}
+          <FadeIn delay={0.1} className="text-center mb-12">
+            <Badge variant="outline" className="mb-5 border-primary/20 py-1.5 px-5 text-[10px] font-black tracking-[0.3em] uppercase text-primary/70 bg-primary/5">
+              TECHNICAL SERVICES
+            </Badge>
+            <h2 className="font-headline text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter mb-4">
+              Technical <span className="text-primary italic font-light">Services.</span>
+            </h2>
+            <p className="max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground leading-relaxed font-medium">
+            A-Z of technical services, from business analysis to software development, cloud hosting, cybersecurity, and AI integration. We provide comprehensive solutions to meet your business needs.
+            </p>
+          </FadeIn>
+
+          {/* Collapsed / Expandable Service Cards */}
+          <StaggerContainer
+            staggerDelay={0.06}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-start max-w-6xl mx-auto"
+          >
+            {services.map((service, idx) => {
+              const isOpen = expandedIndex === idx;
+              return (
+                <StaggerItem key={service.slug} className="w-full">
+                  <div
+                    className={cn(
+                      'bg-white rounded-2xl border transition-all duration-300 overflow-hidden',
+                      isOpen ? 'border-primary/40 shadow-lg' : 'border-border/70 hover:border-primary/25 hover:shadow-md'
+                    )}
                   >
-                    <div className={cn('w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md', service.accent)}>
-                      {service.icon}
-                    </div>
-                    <h3 className="flex-grow min-w-0 text-sm sm:text-base font-black tracking-tight text-foreground truncate">
-                      {service.title}
-                    </h3>
-                    <span className="hidden sm:block shrink-0 text-primary font-black text-xs whitespace-nowrap">
-                      {formatPrice(service.price)}+
-                    </span>
-                    <ChevronDown className={cn('w-4 h-4 shrink-0 text-muted-foreground transition-transform duration-300', isOpen && 'rotate-180 text-primary')} />
-                  </button>
-
-                  {/* Expanded detail view */}
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-                        className="overflow-hidden"
-                      >
-                        <div className="border-t border-border/60">
-                          <div className="p-4 sm:p-5 space-y-4">
-                          <img
-                            src={service.image}
-                            alt={service.title}
-                            loading="lazy"
-                            className="w-full h-36 object-cover rounded-xl border border-border/50"
-                          />
-                          <p className="text-sm text-muted-foreground leading-relaxed font-medium">
-                            {service.description}
-                          </p>
-                          <div className="flex flex-wrap gap-x-4 gap-y-2">
-                            {service.features.map((feature, i) => (
-                              <div key={i} className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
-                                <Check className="w-3 h-3 text-primary shrink-0" />
-                                {feature}
+                    {/* Collapsed header — always visible */}
+                    <button
+                      onClick={() => toggleService(idx)}
+                      aria-expanded={isOpen}
+                      className="w-full flex items-center gap-4 p-4 sm:p-5 text-left cursor-pointer"
+                    >
+                      <div className={cn('w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md', service.accent)}>
+                        {service.icon}
+                      </div>
+                      <h3 className="flex-grow min-w-0 text-sm sm:text-base font-black tracking-tight text-foreground truncate">
+                        {service.title}
+                      </h3>
+                      <span className="hidden sm:block shrink-0 text-primary font-black text-xs whitespace-nowrap">
+                        {formatPrice(service.price)}+
+                      </span>
+                      <ChevronDown className={cn('w-4 h-4 shrink-0 text-muted-foreground transition-transform duration-300', isOpen && 'rotate-180 text-primary')} />
+                    </button>
+  
+                    {/* Expanded detail view */}
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                          className="overflow-hidden"
+                        >
+                          <div className="border-t border-border/60">
+                            <div className="p-4 sm:p-5 space-y-4">
+                            <Link href={`/main/${service.slug}`} prefetch={true} className="block space-y-4 group cursor-pointer">
+                              <img
+                                src={service.image}
+                                alt={service.title}
+                                loading="lazy"
+                                className="w-full h-36 object-cover rounded-xl border border-border/50 group-hover:opacity-90 transition-opacity"
+                              />
+                              <p className="text-sm text-muted-foreground leading-relaxed font-medium group-hover:text-foreground transition-colors">
+                                {service.description}
+                              </p>
+                              <div className="flex flex-wrap gap-x-4 gap-y-2">
+                                {service.features.map((feature, i) => (
+                                  <div key={i} className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
+                                    <Check className="w-3 h-3 text-primary shrink-0" />
+                                    {feature}
+                                  </div>
+                                ))}
                               </div>
-                            ))}
-                          </div>
-                          <div className="flex items-center justify-between pt-1">
-                            <span className="sm:hidden text-primary font-black text-sm">{formatPrice(service.price)}+</span>
-                            <div className="flex-grow flex items-center gap-2">
-                              <Link href={`/main/${service.slug}`} className="flex-grow">
-                                <Button className="w-full h-10 bg-foreground text-background hover:bg-primary hover:text-white transition-all rounded-xl font-black uppercase tracking-widest text-[9px]">
-                                  Full Details
-                                  <ArrowRight className="ml-2 w-3 h-3" />
+                            </Link>
+                            <div className="flex items-center justify-between pt-1">
+                              <div className="flex-grow flex items-center gap-2">
+                                <Link href={`/main/${service.slug}`} prefetch={true} className="flex-grow">
+                                  <Button className="w-full h-10 bg-foreground text-background hover:bg-primary hover:text-white transition-all rounded-xl font-black uppercase tracking-widest text-[9px]">
+                                    Full Details
+                                    <ArrowRight className="ml-2 w-3 h-3" />
+                                  </Button>
+                                </Link>
+                                <Button
+                                  variant="outline"
+                                  onClick={() => {
+                                    window.dispatchEvent(new CustomEvent('delvare:autofill', {
+                                      detail: { message: `I am interested in ${service.title}.` }
+                                    }));
+                                  }}
+                                  className="h-10 px-4 rounded-xl border-border hover:bg-secondary font-black text-foreground uppercase tracking-widest text-[9px]"
+                                  aria-label="Enquire"
+                                >
+                                  <MessageSquare className="w-4 h-4" />
                                 </Button>
-                              </Link>
-                              <Button
-                                variant="outline"
-                                onClick={() => {
-                                  window.dispatchEvent(new CustomEvent('delvare:autofill', {
-                                    detail: { message: `I am interested in ${service.title}.` }
-                                  }));
-                                }}
-                                className="h-10 px-4 rounded-xl border-border hover:bg-secondary font-black uppercase tracking-widest text-[9px]"
-                              >
-                                Enquire
-                              </Button>
+                              </div>
+                            </div>
                             </div>
                           </div>
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </StaggerItem>
-            );
-          })}
-        </StaggerContainer>
-      </div>
-    </section>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </StaggerItem>
+              );
+            })}
+          </StaggerContainer>
+        </div>
+      </section>
+    </>
   );
 };
 

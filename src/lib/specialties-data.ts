@@ -324,5 +324,73 @@ export const specialties = [
             { label: "Support", value: "24/7" },
             { label: "Analysis", value: "Ongoing" }
         ]
+    },
+    {
+        slug: "ecbills",
+        title: "ECBills.in",
+        description: "Intelligent & Haste Inventory System. Billing & Accounting, Multi-store / Staff.",
+        detailedDescription: "Our flagship PaaS platform that completely automates retail and enterprise operations. Built for infinite retail scale, precision inventory tracking and high-availability selling. From billing counter to balance sheet — one seamless system.",
+        features: [
+            "Fast & Easy Billing",
+            "Multi-Store & Staff",
+            "Accounting & Reports",
+            "Live Stock Tracking",
+            "Built-in Team Chat",
+            "Secure Cloud Sync"
+        ],
+        featureDefinitions: [
+            { title: "Fast & Easy Billing", definition: "Rapid checkouts built for busy counters." },
+            { title: "Multi-Store & Staff", definition: "Role-based access across locations." },
+            { title: "Accounting & Reports", definition: "Deep financial insights on demand." },
+            { title: "Live Stock Tracking", definition: "Real-time inventory, zero discrepancies." },
+            { title: "Built-in Team Chat", definition: "Instant admin-to-staff messaging." },
+            { title: "Secure Cloud Sync", definition: "Encrypted sync across every device." }
+        ],
+        whyBetter: {
+            performance: "Engineered for speed, handling thousands of transactions per minute with zero lag.",
+            security: "Enterprise-grade encryption and secure cloud sync keep your business data private and safe.",
+            optimality: "An all-in-one system designed specifically to streamline and automate retail workflows."
+        },
+        icon: "Receipt",
+        accent: "bg-emerald-500",
+        image: "/assets/ecbillmin.png",
+        portfolioImages: ["/assets/ecbillmin.png", "/assets/projects/p2.png", "/assets/projects/p1.png"],
+        stats: [
+            { label: "Transactions", value: "Rapid" },
+            { label: "Scale", value: "Infinite" },
+            { label: "Availability", value: "High" }
+        ]
+    },
+    {
+        slug: "blendly",
+        title: "Blendly.sbs",
+        description: "Social Network for Literature Lovers. Where Readers Meet.",
+        detailedDescription: "A community-driven platform to lend books nearby and read poetry online. Connecting readers, fostering sharing and building a culture of knowledge exchange. Every book on your shelf is a story someone nearby is waiting for.",
+        features: [
+            "Lend & Borrow Books",
+            "Read & Write Poetry",
+            "Discover Nearby Readers",
+            "Community Driven"
+        ],
+        featureDefinitions: [
+            { title: "Lend & Borrow Books", definition: "Share titles with readers near you." },
+            { title: "Read & Write Poetry", definition: "A home for verse, online." },
+            { title: "Discover Nearby Readers", definition: "Find bibliophiles around you." },
+            { title: "Community Driven", definition: "Knowledge exchange, powered by people." }
+        ],
+        whyBetter: {
+            performance: "A seamless, lightweight social platform built for real-time interactions and fast discovery.",
+            security: "Community safety is our priority, with secure profiles and moderation tools built-in.",
+            optimality: "Designed for readers, offering an intuitive interface to easily share and discover literature."
+        },
+        icon: "BookOpen",
+        accent: "bg-violet-500",
+        image: "/assets/projects/p3.png",
+        portfolioImages: ["/assets/projects/p3.png", "/assets/projects/p2.png", "/assets/projects/p1.png"],
+        stats: [
+            { label: "Community", value: "Active" },
+            { label: "Discovery", value: "Local" },
+            { label: "Culture", value: "Shared" }
+        ]
     }
 ];

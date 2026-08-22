@@ -6,13 +6,12 @@ import Footer from '@/components/footer';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ArrowRight, ArrowLeft, CheckCircle2, Zap, Cloud, Code2, ShieldCheck, LifeBuoy, GitBranch, Cpu, Brain, MessageSquare, Layout, Database, Search, TrendingUp, Calendar } from 'lucide-react';
+import { ArrowRight, ArrowLeft, CheckCircle2, Zap, Cloud, Code2, ShieldCheck, LifeBuoy, GitBranch, Cpu, Brain, MessageSquare, Layout, Database, Search, TrendingUp, Calendar, Receipt, BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useEffect, useState } from 'react';
-import { BookingModal } from './booking-modal';
+import { useEffect } from 'react';
 
 const iconMap: Record<string, any> = {
-    Cloud, Brain, Code2, ShieldCheck, LifeBuoy, GitBranch, Zap, MessageSquare, Cpu, Layout, Database, Search, TrendingUp, Calendar
+    Cloud, Brain, Code2, ShieldCheck, LifeBuoy, GitBranch, Zap, MessageSquare, Cpu, Layout, Database, Search, TrendingUp, Calendar, Receipt, BookOpen
 };
 
 interface SpecialtyDetailContentProps {
@@ -21,11 +20,11 @@ interface SpecialtyDetailContentProps {
 
 export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentProps) {
     const router = useRouter();
-    const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
     const Icon = iconMap[data.icon] || Zap;
 
     useEffect(() => {
-        window.scrollTo(0, 0);
+        const timer = setTimeout(() => window.scrollTo(0, 0), 10);
+        return () => clearTimeout(timer);
     }, [data.slug]);
 
     if (!data) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
@@ -34,11 +33,9 @@ export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentP
         <div className="flex flex-col min-h-screen bg-white text-foreground">
             <Header />
 
-            <BookingModal isOpen={isBookingModalOpen} onOpenChange={setIsBookingModalOpen} serviceTitle={data.title} />
-
             <main className="flex-grow">
                 {/* Immersion Section */}
-                <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-32 pb-20">
+                <section className="relative min-h-screen flex flex-col items-center pt-32 pb-20 overflow-hidden">
                     {/* Background Visuals */}
                     <div className="absolute inset-0 z-0 pointer-events-none">
                         <div className={cn("absolute top-0 right-0 w-[80%] h-[80%] blur-[150px] opacity-10 rounded-full -translate-y-1/2 translate-x-1/2", data.accent)} />
@@ -54,100 +51,85 @@ export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentP
                     </div>
 
                     <div className="container mx-auto px-4 relative z-10">
-                        <div className="max-w-7xl mx-auto">
-                            {/* Navigation */}
-                            <div className="flex items-center justify-between mb-16 animate-fade-in-up">
-                                <button
-                                    onClick={() => router.back()}
-                                    className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground hover:text-primary transition-all group"
+                        <div className="max-w-4xl mx-auto flex flex-col items-center text-center">
+                            {/* Heading line with Back Button */}
+                            <div className="flex items-center justify-center gap-4 sm:gap-6 w-full animate-fade-in-up">
+                                <button 
+                                    onClick={() => router.back()} 
+                                    className="w-12 h-12 sm:w-16 sm:h-16 shrink-0 rounded-2xl bg-primary text-white flex items-center justify-center hover:bg-primary/90 hover:-translate-x-1 transition-all shadow-lg"
                                 >
-                                    <div className="w-8 h-8 rounded-full border border-border flex items-center justify-center group-hover:border-primary group-hover:bg-primary group-hover:text-white transition-all">
-                                        <ArrowLeft className="w-4 h-4" />
-                                    </div>
-                                    Go Back
+                                    <ArrowLeft className="w-6 h-6 sm:w-8 sm:h-8" />
                                 </button>
-
-                                <Badge variant="outline" className="border-primary/20 text-primary px-5 py-2 text-[10px] font-black tracking-[0.3em] uppercase bg-primary/5">
-                                    Service Details
-                                </Badge>
+                                <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] text-foreground text-left sm:text-center">
+                                    {data.title.split(' ')[0]}{' '}
+                                    <span className="text-primary italic font-light tracking-tight">{data.title.split(' ').slice(1).join(' ')}</span>
+                                </h1>
                             </div>
 
-                            <div className="grid lg:grid-cols-12 gap-10 lg:gap-20 items-center">
-                                {/* Left Content */}
-                                <div className="lg:col-span-12 xl:col-span-7 space-y-10">
-                                    <div className="space-y-6">
-                                        <h1 className="text-5xl md:text-7xl lg:text-9xl font-black tracking-tighter leading-[0.85] text-foreground animate-fade-in-up">
-                                            {data.title.split(' ')[0]} <br />
-                                            <span className="text-primary italic font-light tracking-tight">{data.title.split(' ').slice(1).join(' ')}</span>
-                                        </h1>
-                                        <p className="text-xl md:text-3xl text-muted-foreground font-medium leading-tight max-w-2xl italic tracking-tight animate-fade-in-up [animation-delay:100ms]">
-                                            "{data.detailedDescription || data.description}"
-                                        </p>
+                            {/* Large Image & Icon Visualization */}
+                            <div className="py-10 w-full animate-fade-in-up [animation-delay:100ms]">
+                                <div className="relative z-10 bg-white p-3 sm:p-4 rounded-[2.5rem] sm:rounded-[4rem] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.15)] border border-border overflow-hidden mx-auto max-w-2xl w-full">
+                                    <div className={cn("w-full aspect-[4/3] sm:aspect-video rounded-[2rem] sm:rounded-[3.5rem] flex flex-col items-center justify-center text-white relative overflow-hidden", data.accent)}>
+                                        {/* Service Image */}
+                                        <img
+                                            src={data.portfolioImages ? data.portfolioImages[0] : data.image}
+                                            alt={data.title}
+                                            className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay"
+                                        />
+
+                                        <Icon className="w-20 h-20 sm:w-28 sm:h-28 drop-shadow-2xl z-10" />
+
+                                        {/* Data Lines Overlay */}
+                                        <div className="absolute inset-0 opacity-20 z-0"
+                                            style={{
+                                                backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 1px, white 1px, white 2px)',
+                                                backgroundSize: '100% 4px'
+                                            }}
+                                        />
+
+                                        {/* Rotating Ring */}
+                                        <div className="absolute inset-[-10%] border-[15px] sm:border-[20px] border-white/10 rounded-full animate-[spin_10s_linear_infinite]" />
                                     </div>
+                                </div>
+                            </div>
 
-                                    <div className="grid sm:grid-cols-2 gap-8 pt-6 animate-fade-in-up [animation-delay:200ms]">
-                                        {(data.featureDefinitions || data.features.map((f: string) => ({ title: f, definition: "Elite Protocol" }))).map((feat: { title: string, definition: string }, i: number) => (
-                                            <div key={i} className="flex gap-4 items-start group">
-                                                <div className="h-10 w-10 shrink-0 flex items-center justify-center rounded-xl bg-secondary border border-border group-hover:border-primary/30 transition-all">
-                                                    <CheckCircle2 className="w-5 h-5 text-primary" />
-                                                </div>
-                                                <div className="space-y-1">
-                                                    <p className="font-black text-[11px] uppercase tracking-widest text-foreground">{feat.title}</p>
-                                                    <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest opacity-40">{feat.definition}</p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
+                            {/* Subheading */}
+                            <p className="text-lg sm:text-2xl text-muted-foreground font-medium leading-relaxed max-w-3xl italic tracking-tight animate-fade-in-up [animation-delay:200ms]">
+                                "{data.detailedDescription || data.description}"
+                            </p>
 
-                                    <div className="relative z-20 flex flex-wrap gap-5 pt-10 animate-fade-in-up [animation-delay:300ms]">
-                                        <Button
-                                            size="sm"
-                                            className="px-8 bg-primary hover:bg-primary/90 text-white rounded-xl shadow-lg hover:-translate-y-1 transition-all font-black uppercase tracking-[0.2em] text-[10px]"
-                                            onClick={() => setIsBookingModalOpen(true)}
-                                        >
-                                            Priority Contact <Calendar className="ml-2 w-4 h-4" />
-                                        </Button>
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            className="px-8 border-border border-2 hover:bg-secondary rounded-xl transition-all font-black uppercase tracking-[0.2em] text-[10px]"
-                                            onClick={() => router.push('/#services')}
-                                        >
-                                            See All Services <ArrowRight className="ml-2 w-4 h-4" />
-                                        </Button>
-                                    </div>
-
-                                    </div>
-
-                                {/* Right Visualization */}
-                                <div className="lg:col-span-12 xl:col-span-5 relative animate-fade-in-up [animation-delay:500ms] print:hidden">
-                                    <div className="relative z-10 bg-white p-4 rounded-[4rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] border border-border overflow-hidden">
-                                        <div className={cn("w-full aspect-square rounded-[3.5rem] flex flex-col items-center justify-center text-white relative overflow-hidden", data.accent)}>
-                                            {/* Service Image */}
-                                            <img
-                                                src={data.portfolioImages ? data.portfolioImages[0] : data.image}
-                                                alt={data.title}
-                                                className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay"
-                                            />
-
-                                            <Icon className="w-32 h-32 md:w-48 md:h-48 drop-shadow-2xl z-10" />
-
-                                            {/* Data Lines Overlay */}
-                                            <div className="absolute inset-0 opacity-20 z-0"
-                                                style={{
-                                                    backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 1px, white 1px, white 2px)',
-                                                    backgroundSize: '100% 4px'
-                                                }}
-                                            />
-
-                                            {/* Rotating Ring */}
-                                            <div className="absolute inset-[-10%] border-[20px] border-white/10 rounded-full animate-[spin_10s_linear_infinite]" />
+                            {/* Points (Readable formatting) */}
+                            <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 pt-12 text-left animate-fade-in-up [animation-delay:300ms] w-full">
+                                {(data.featureDefinitions || data.features.map((f: string) => ({ title: f, definition: "Elite Protocol" }))).map((feat: { title: string, definition: string }, i: number) => (
+                                    <div key={i} className="flex gap-4 items-start group bg-white p-5 rounded-2xl border border-border hover:border-primary/30 transition-all shadow-sm">
+                                        <div className="h-10 w-10 shrink-0 flex items-center justify-center rounded-xl bg-primary/10 border border-primary/20 group-hover:bg-primary group-hover:text-white text-primary transition-colors">
+                                            <CheckCircle2 className="w-5 h-5" />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="font-black text-sm sm:text-base text-foreground tracking-tight">{feat.title}</p>
+                                            <p className="text-xs sm:text-sm text-muted-foreground font-medium leading-relaxed">{feat.definition}</p>
                                         </div>
                                     </div>
+                                ))}
+                            </div>
 
-                                    {/* Stats Glow */}
-                                    <div className={cn("absolute -inset-10 blur-[100px] opacity-10 rounded-full pointer-events-none", data.accent)} />
-                                </div>
+                            {/* Buttons */}
+                            <div className="relative z-20 flex flex-col sm:flex-row w-full sm:w-auto justify-center gap-4 pt-12 animate-fade-in-up [animation-delay:400ms]">
+                                <Button
+                                    size="lg"
+                                    className="w-full sm:w-auto px-10 bg-primary hover:bg-primary/90 text-white rounded-xl shadow-lg hover:-translate-y-1 transition-all font-black uppercase tracking-[0.15em] text-[11px] h-14"
+                                    onClick={() => window.dispatchEvent(new CustomEvent('open-contact-form', { detail: { type: 'contact' } }))}
+                                >
+                                    Schedule Meeting <Calendar className="ml-2 w-4 h-4" />
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    size="lg"
+                                    className="w-full sm:w-auto px-10 border-border border-2 hover:bg-secondary rounded-xl transition-all font-black uppercase tracking-[0.15em] text-[11px] h-14"
+                                    onClick={() => router.push('/#services')}
+                                >
+                                    See Other Services <ArrowRight className="ml-2 w-4 h-4" />
+                                </Button>
                             </div>
                         </div>
                     </div>
@@ -169,24 +151,19 @@ export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentP
                 </section>
 
                 {/* Footer Insight Section */}
-                <section className="py-20 bg-[#fafafa] border-t border-border">
+                <section className="py-20 border-t border-border">
                     <div className="container mx-auto px-4">
                         <div className="flex flex-col md:flex-row items-center justify-between gap-10 max-w-6xl mx-auto">
                             <div className="flex items-center gap-6">
-                                <div className="h-16 w-16 rounded-2xl bg-white border border-border shadow-sm flex items-center justify-center font-black text-primary italic text-2xl">
-                                    D
+                                <div className="h-16 w-16 rounded-2xl bg-white flex items-center justify-center font-black text-primary italic text-2xl">
+                                    <img src="/assets/arrow.png" alt="D" />
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-foreground">Made by Delvare</p>
-                                    <p className="text-sm font-medium text-muted-foreground italic">"Elite solutions for elite businesses."</p>
+                                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-foreground">DELVARE.IN</p>
+                                    <p className="text-sm font-medium text-muted-foreground italic">"IT Solutions"</p>
                                 </div>
                             </div>
 
-                            <div className="flex gap-4">
-                                {[1, 2, 3, 4].map(i => (
-                                    <div key={i} className="h-1.5 w-8 rounded-full bg-border" />
-                                ))}
-                            </div>
                         </div>
                     </div>
                 </section>
