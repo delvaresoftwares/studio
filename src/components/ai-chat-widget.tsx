@@ -31,12 +31,38 @@ const WELCOME: ChatMessage = {
     content: "Hey! I'm Delvare's AI assistant. Ask me anything about our services, products like ECBills.in or Blendly.sbs, pricing, or the team.",
 };
 
-const stripMeta = (text: string): string =>
-    text
+const PLANNING_LINE =
+    /^(?:we\s+(?:need|should|must|have)\b|i\s+(?:need|should|will|must)\b|i'll\b|let me\b|make sure\b|ensure\b|keep (?:it|every|replies)\b|under ~?\d+ words\b|use markdown\b|use \d|\d-\d emojis?\b|already prepared\b|we have that\b|no preamble\b|the user\b|user says\b|provide (?:the )?final answer\b|respond concisely\b)[^\n]*$/i;
+
+const stripPlanningLines = (text: string): string => {
+    const lines = text.split('\n');
+    let i = 0;
+    while (i < lines.length) {
+        const t = lines[i].trim();
+        if (!t || PLANNING_LINE.test(t)) {
+            i++;
+            continue;
+        }
+        break;
+    }
+    return lines.slice(i).join('\n').trim();
+};
+
+const stripMeta = (text: string): string => {
+    let out = text
         .replace(/<think>[\s\S]*?<\/think>/gi, '')
-        .replace(/^\s*(?:analysis|reasoning|thinking)\s*[:\-]\s*/i, '')
-        .replace(/^(?:The user (?:says|asked|wants|is asking)[^\n]*\n+)+/g, '')
-        .trim();
+        .replace(/^\s*(?:analysis|reasoning|thinking)\s*[:\-]\s*/i, '');
+
+    // Cut everything up to and including a "final answer" hand-off marker
+    const marker = /\bfinal answer\b\s*[:.\-—!]*/gi;
+    const matches = Array.from(out.matchAll(marker));
+    const last = matches[matches.length - 1];
+    if (last && typeof last.index === 'number' && last.index <= 600) {
+        out = out.slice(last.index + last[0].length);
+    }
+
+    return stripPlanningLines(out);
+};
 
 const extractReply = (raw: string): string => {
     try {
