@@ -16,6 +16,6 @@ export const siteConfig = {
     phone: '+91 8606821125',
     phoneHref: 'tel:+918606821125',
     whatsapp: 'https://wa.me/918606281125',
-    address: 'VSVC Building, 4th Floor, Spectra School of Designs, Co-working Space, Iron Bridge, Aleppey, Kerala, India - 688001'
+    address: 'CO-Space | VSV Building, 4th Floor, Spectra School of Designs | East of Iron Bridge, CCNB Road, Aleppuzha, Kerala, India - 688001'
   },
 } as const;
