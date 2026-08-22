@@ -10,7 +10,7 @@ import {
 import { cn } from '@/lib/utils';
 import { FadeIn, StaggerContainer, StaggerItem, TypingText } from '@/components/ui/motion';
 
-type Product = {
+export type Product = {
     id: string;
     name: string;
     domain: string;
@@ -24,7 +24,7 @@ type Product = {
     features: string[];
 };
 
-const products: Product[] = [
+export const products: Product[] = [
     {
         id: 'ecbills',
         name: 'ECBills.in',

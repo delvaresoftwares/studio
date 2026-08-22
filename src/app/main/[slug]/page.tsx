@@ -2,6 +2,9 @@ import { specialties } from '@/lib/specialties-data';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import SpecialtyDetailContent from '@/components/specialty-detail-content';
+import ProductDetailContent from '@/components/product-detail-content';
+
+const PRODUCT_SLUGS = ['ecbills', 'blendly'];
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params;
@@ -23,5 +26,9 @@ export default async function SpecialtyPortfolioPage({ params }: { params: Promi
         notFound();
     }
 
-    return <SpecialtyDetailContent data={data} />;
+    return PRODUCT_SLUGS.includes(slug) ? (
+        <ProductDetailContent data={data} />
+    ) : (
+        <SpecialtyDetailContent data={data} />
+    );
 }

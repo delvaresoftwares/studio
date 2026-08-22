@@ -9,7 +9,6 @@ import ProductsSection from '@/components/sections/products';
 
 import Footer from '@/components/footer';
 import BackgroundDecor from '@/components/background-decor';
-import WhatsAppButton from '@/components/whatsapp-button';
 
 const ClientsSection = dynamic(() => import('@/components/sections/clients'), {
   ssr: false,
@@ -33,7 +32,6 @@ export default function HomeClient() {
         <ClientsSection />
 
         <Footer />
-        <WhatsAppButton />
       </main>
     </div>
   );

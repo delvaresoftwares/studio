@@ -81,6 +81,7 @@ export const metadata: Metadata = {
 };
 
 import SmoothScroll from '@/components/smooth-scroll';
+import AIChatWidget from '@/components/ai-chat-widget';
 
 export default function RootLayout({
   children,
@@ -99,6 +100,7 @@ export default function RootLayout({
         >
           <SmoothScroll>
             {children}
+            <AIChatWidget />
           </SmoothScroll>
           <Toaster />
         </ThemeProvider>

@@ -7,7 +7,9 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Menu, X, ArrowRight, Loader2, CheckCircle } from 'lucide-react';
 import { saveContactInfoAction, type ContactFormData } from '@/app/actions';
+import { submitEnquiry } from '@/lib/enquiry';
 import { useToast } from '@/hooks/use-toast';
+import { useScrollLock } from '@/hooks/use-scroll-lock';
 
 const navLinks = [
   { name: 'Services', href: '#services' },
@@ -36,6 +38,8 @@ const Header = () => {
     phone: '',
     message: ''
   });
+
+  useScrollLock(formOpen);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -113,16 +117,30 @@ const Header = () => {
         type: formType
       };
 
-      const result = await saveContactInfoAction(submissionData);
+      const [dbResult, mailResult] = await Promise.allSettled([
+        saveContactInfoAction(submissionData),
+        submitEnquiry({
+          full_name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          title: formType === 'career' ? 'Career Application' : 'Website Enquiry',
+          subject: formData.message,
+        }),
+      ]);
 
-      if (result.success) {
+      const dbSaved = dbResult.status === 'fulfilled' && dbResult.value.success;
+      const mailSent = mailResult.status === 'fulfilled' && (mailResult.value?.success ?? false);
+
+      if (dbSaved || mailSent) {
         setIsSubmitted(true);
         setTimeout(() => {
           setFormOpen(false);
           setIsSubmitted(false);
         }, 3000);
       } else {
-        toast({ variant: 'destructive', title: 'Submission Failed', description: result.error ?? 'Connection lost. Please try again.' });
+        const dbError = dbResult.status === 'fulfilled' ? dbResult.value.error : undefined;
+        const mailError = mailResult.status === 'rejected' ? (mailResult.reason as Error)?.message : undefined;
+        toast({ variant: 'destructive', title: 'Submission Failed', description: dbError ?? mailError ?? 'Connection lost. Please try again.' });
       }
     } catch (error) {
       console.error("Submission error:", error);
@@ -134,11 +152,13 @@ const Header = () => {
 
   return (
     <>
-      <header className={cn(
+      <header
+        data-lenis-prevent={formOpen || undefined}
+        className={cn(
         "fixed z-[60] left-1/2 -translate-x-1/2 w-[95%] lg:max-w-7xl transition-all duration-500 ease-out",
         hidden && !formOpen && "-translate-y-[150%] opacity-0",
         formOpen
-          ? `top-0 !w-full !rounded-none py-6 h-screen overflow-y-auto !-translate-x-1/2 ${isDark ? 'bg-black text-white' : 'bg-white text-foreground'}`
+          ? `top-0 !w-full !rounded-none py-6 h-screen overflow-y-auto overscroll-contain !-translate-x-1/2 ${isDark ? 'bg-black text-white' : 'bg-white text-foreground'}`
           : scrolled
             ? `top-0 !w-full !rounded-none py-3 !-translate-x-1/2 ${isDark ? 'bg-black/10 text-white backdrop-blur-md' : 'bg-white/85 text-foreground backdrop-blur-md'}`
             : `top-4 rounded-2xl py-4 ${isDark ? 'bg-black text-white shadow-2xl' : 'bg-primary text-white'}`,
@@ -240,16 +260,11 @@ const Header = () => {
                       </h2>
                       <p className={cn("font-semibold italic text-lg leading-relaxed pt-4", isDark ? "text-white/60" : "text-muted-foreground")}>
                         {formType === 'contact'
-                          ? "Tell us about your project and we'll get back to you within a day."
-                          : "We're hiring talented people who want to build great software."}
+                          ? "Tell us about your project and we'll get back to you ASAP."
+                          : "We're hiring."}
                       </p>
                     </div>
-                    <div className={cn("p-8 rounded-[2rem] border", isDark ? "bg-white/5 border-white/10" : "bg-secondary/50 border-border")}>
-                      <div className={cn("flex items-center gap-4 font-black text-sm uppercase tracking-widest", isDark ? "text-white" : "text-foreground")}>
-                        <ArrowRight className="w-4 h-4 text-primary" />
-                        Response in &lt; 24h
-                      </div>
-                    </div>
+
                   </div>
 
                   <div className="lg:col-span-7">
@@ -312,7 +327,7 @@ const Header = () => {
                         {isLoading ? (
                           <Loader2 className="w-6 h-6 animate-spin" />
                         ) : (
-                          formType === 'contact' ? "Send Message" : "Apply Now"
+                          formType === 'contact' ? "Send" : "Apply Now"
                         )}
                       </Button>
                     </form>
