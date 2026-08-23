@@ -10,6 +10,9 @@ import { cn } from '@/lib/utils';
 import { SITE_KNOWLEDGE } from '@/lib/site-knowledge';
 import { useScrollLock } from '@/hooks/use-scroll-lock';
 
+const TEASER_DISMISSED_KEY = 'delvare-ai-teaser-dismissed';
+const TEASER_DELAY_MS = 3500;
+
 type ChatMessage = {
     role: 'user' | 'assistant';
     content: string;
@@ -26,10 +29,32 @@ const SUGGESTIONS = [
     'How do I contact you?',
 ];
 
-const WELCOME: ChatMessage = {
-    role: 'assistant',
-    content: "Hey! I'm Delvare's AI assistant. Ask me anything about our services, products like ECBills.in or Blendly.sbs, pricing, or the team.",
-};
+// Ten hook openers — one is picked at random per session as the first
+// message, each written to invite a tap and continue the conversation.
+const HOOK_MESSAGES: string[] = [
+    "Hey! I'm Delvare's AI assistant. Ask me anything — services, products like ECBills.in or Blendly.sbs, pricing, or the team.",
+    "Hi there! 👋 Want to know what we can build for your business? Just ask.",
+    "Hello! Curious about our starting prices? Tap a question below and I'll break it down.",
+    "Hey! I know all about our SEO, cloud, AI and cybersecurity work. What would you like to explore?",
+    "Welcome! Ask me about Delvare's services — or tap one of the quick questions below.",
+    "Hi! Looking for custom software, automation or a security audit? I can point you the right way.",
+    "Hey! Wondering who's behind Delvare or what we've shipped? Go ahead, ask me.",
+    "Hello! Need help picking the right service for your project? I'm great at that — try me.",
+    "Hi! Ask me anything about our platforms — ECBills.in for retail or Blendly.sbs for book lovers.",
+    "Hey! From billing systems to AI ecosystems — ask me what fits your business best.",
+];
+
+// Animated status notifiers shown inside the streaming bubble while the
+// model warms up; replaced by the typed-out answer as soon as tokens flow.
+const THINKING_STATUSES = [
+    'Linking up with Delvare AI…',
+    'Reading our service sheet…',
+    'Analyzing your question…',
+    'Checking products & pricing…',
+    'Composing your reply…',
+];
+
+const TYPE_INTERVAL_MS = 24;
 
 const PLANNING_LINE =
     /^(?:we\s+(?:need|should|must|have)\b|i\s+(?:need|should|will|must)\b|i'll\b|let'?s\b|let us\b|make sure\b|ensure\b|keep (?:it|every|replies)\b|under ~?\d+ words\b|use markdown\b|use \d|\d-\d emojis?\b|emojis? count\b|word count\b|recount\b|check words\b|exceeding\b|must reduce\b|already prepared\b|we have that\b|no preamble\b|the user\b|user says\b|according to\b|provide (?:the )?final answer\b|respond concisely\b)[^\n]*$/i;
@@ -103,6 +128,77 @@ const extractReply = (raw: string): string => {
     }
 };
 
+/**
+ * Reads the edge function's SSE protocol:
+ *   {"type":"start"} | {"type":"delta","text"} | {"type":"done"} | {"type":"error","error"}
+ * Falls back to plain-JSON parsing when a non-streaming body is returned.
+ */
+const consumeStream = async (
+    res: Response,
+    onDelta: (text: string) => void
+): Promise<{ ok: boolean; error?: string }> => {
+    const contentType = res.headers.get('content-type') ?? '';
+
+    // Legacy non-streaming JSON response (or an error payload).
+    if (!res.body || contentType.includes('application/json')) {
+        const raw = await res.text();
+        if (!res.ok) {
+            let serverError = raw.slice(0, 140);
+            try {
+                const parsed = JSON.parse(raw);
+                if (typeof parsed?.error === 'string') serverError = parsed.error;
+            } catch { /* keep raw */ }
+            return { ok: false, error: serverError };
+        }
+        const reply = extractReply(raw);
+        if (!reply) return { ok: false, error: 'AI returned an empty response' };
+        onDelta(reply);
+        return { ok: true };
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let streamError: string | undefined;
+
+    while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+
+        let sep: number;
+        while ((sep = buffer.indexOf('\n\n')) >= 0) {
+            const frame = buffer.slice(0, sep);
+            buffer = buffer.slice(sep + 2);
+
+            for (const line of frame.split('\n')) {
+                if (!line.startsWith('data:')) continue;
+                let evt: any = null;
+                try {
+                    evt = JSON.parse(line.slice(5).trim());
+                } catch {
+                    continue;
+                }
+
+                switch (evt?.type) {
+                    case 'delta':
+                        if (typeof evt.text === 'string') onDelta(evt.text);
+                        break;
+                    case 'error':
+                        streamError = typeof evt.error === 'string' ? evt.error : 'AI request failed';
+                        break;
+                    case 'done':
+                    case 'start':
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    return { ok: !streamError, error: streamError };
+};
+
 const MarkdownContent = ({ content }: { content: string }) => (
     <ReactMarkdown
         remarkPlugins={[remarkGfm]}
@@ -145,16 +241,29 @@ const MarkdownContent = ({ content }: { content: string }) => (
     </ReactMarkdown>
 );
 
+const pickHook = () =>
+    HOOK_MESSAGES[Math.floor(Math.random() * HOOK_MESSAGES.length)];
+
 const AIChatWidget = () => {
     const pathname = usePathname();
     const [mounted, setMounted] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [open, setOpen] = useState(false);
     const [arrived, setArrived] = useState(false);
-    const [messages, setMessages] = useState<ChatMessage[]>([WELCOME]);
+    const [hook] = useState(pickHook);
+    const [messages, setMessages] = useState<ChatMessage[]>(() => [{ role: 'assistant', content: hook }]);
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
+    const [teaserVisible, setTeaserVisible] = useState(false);
+
+    // Streaming state: statusIdx cycles while waiting for the first token,
+    // streamText holds the progressively revealed answer.
+    const [statusIdx, setStatusIdx] = useState(0);
+    const [streamText, setStreamText] = useState<string | null>(null);
+
     const scrollRef = useRef<HTMLDivElement>(null);
+    const abortRef = useRef<AbortController | null>(null);
+    const cancelledRef = useRef(false);
 
     useEffect(() => {
         setMounted(true);
@@ -168,12 +277,46 @@ const AIChatWidget = () => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
-    }, [messages, loading]);
+    }, [messages, loading, streamText]);
+
+    // Cycle the animated status notifier until the first token arrives.
+    useEffect(() => {
+        if (!loading || streamText !== null) return;
+        const id = setInterval(() => setStatusIdx(i => i + 1), 900);
+        return () => clearInterval(id);
+    }, [loading, streamText]);
+
+    // Abort any in-flight stream when the widget closes or unmounts.
+    useEffect(() => () => abortRef.current?.abort(), []);
+
+    // Pop the hook teaser bubble once per session, shortly after load.
+    useEffect(() => {
+        let dismissed = false;
+        try {
+            dismissed = sessionStorage.getItem(TEASER_DISMISSED_KEY) === '1';
+        } catch { /* storage unavailable */ }
+        if (dismissed) return;
+
+        const id = setTimeout(() => setTeaserVisible(true), TEASER_DELAY_MS);
+        return () => clearTimeout(id);
+    }, []);
 
     useScrollLock(open);
 
-    const openChat = () => setOpen(true);
+    const dismissTeaser = useCallback(() => {
+        setTeaserVisible(false);
+        try {
+            sessionStorage.setItem(TEASER_DISMISSED_KEY, '1');
+        } catch { /* storage unavailable */ }
+    }, []);
+
+    const openChat = () => {
+        dismissTeaser();
+        setOpen(true);
+    };
     const closeChat = useCallback(() => {
+        cancelledRef.current = true;
+        abortRef.current?.abort();
         setArrived(false);
         setOpen(false);
     }, []);
@@ -190,10 +333,68 @@ const AIChatWidget = () => {
         const clean = text.trim();
         if (!clean || loading) return;
 
+        cancelledRef.current = false;
+        const controller = new AbortController();
+        abortRef.current = controller;
+
         const history: ChatMessage[] = [...messages, { role: 'user', content: clean }];
         setMessages(history);
         setInput('');
         setLoading(true);
+        setStatusIdx(0);
+        setStreamText(null);
+
+        /*
+         * Typewriter engine: network chunks land in `received`, a steady
+         * interval reveals characters at typing speed (accelerating when
+         * the backlog grows so it always catches up before finishing).
+         */
+        let received = '';
+        let revealCount = 0;
+        let inferenceDone = false;
+        let failed = false;
+        let errorMessage = '';
+
+        const finishTyping = () => {
+            const finalText =
+                received.trim()
+                    ? (stripMeta(received).trim() || received.trim())
+                    : '';
+
+            setStreamText(null);
+            setLoading(false);
+
+            if (!finalText && failed) {
+                console.error('[ai-chat]', errorMessage || 'stream failed');
+                setMessages(prev => [
+                    ...prev,
+                    { role: 'assistant', content: 'Hmm, I guess our AI service are Snoozed Zzzz!' },
+                ]);
+                return;
+            }
+
+            setMessages(prev => [
+                ...prev,
+                {
+                    role: 'assistant',
+                    content:
+                        finalText ||
+                        'Hmm, I guess our AI service are Snoozed Zzzz!',
+                },
+            ]);
+        };
+
+        const typer = setInterval(() => {
+            const backlog = received.length - revealCount;
+            if (backlog > 0) {
+                revealCount += Math.max(3, Math.ceil(backlog / 12));
+                if (revealCount > received.length) revealCount = received.length;
+                setStreamText(received.slice(0, revealCount));
+            } else if (inferenceDone || failed) {
+                clearInterval(typer);
+                finishTyping();
+            }
+        }, TYPE_INTERVAL_MS);
 
         const priorTurns = history.slice(0, -1).slice(-12);
         const transcript = priorTurns.length
@@ -209,10 +410,11 @@ const AIChatWidget = () => {
                     Authorization: `Bearer ${SUPABASE_KEY}`,
                     apikey: SUPABASE_KEY as string,
                 },
+                signal: controller.signal,
                 body: JSON.stringify({
                     name: 'delvare-ai',
                     message: clean,
-                    system: SITE_KNOWLEDGE + transcript ,
+                    system: SITE_KNOWLEDGE + transcript,
                     context: SITE_KNOWLEDGE,
                     messages: [
                         { role: 'user', content: SITE_KNOWLEDGE },
@@ -220,55 +422,90 @@ const AIChatWidget = () => {
                     ],
                 }),
             });
-            const raw = await res.text();
-            const reply = res.ok ? extractReply(raw) : '';
-            if (!reply) {
-                let serverError = '';
-                try {
-                    const parsed = JSON.parse(raw);
-                    if (typeof parsed?.error === 'string') serverError = parsed.error;
-                } catch {
-                    serverError = raw.slice(0, 140);
-                }
-                console.error('[ai-chat]', serverError || `HTTP ${res.status}`);
-                throw new Error(serverError || `Request failed (${res.status})`);
+
+            const result = await consumeStream(res, chunk => {
+                received += chunk;
+            });
+
+            if (cancelledRef.current) return;
+
+            if (!result.ok || !received.trim()) {
+                failed = true;
+                errorMessage = result.error ?? `Request failed (${res.status})`;
             }
-            console.log("reply ", reply)
-            setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
-        } catch (err) {
-            console.error('[ai-chat]', err);
-            setMessages(prev => [
-                ...prev,
-                {
-                    role: 'assistant',
-                    content: "Hmm, I guess our AI service are Snoozed Zzzz!",
-                },
-            ]);
+        } catch (err: any) {
+            if (cancelledRef.current || err?.name === 'AbortError') return;
+            failed = true;
+            errorMessage = err?.message ?? 'AI request failed';
         } finally {
-            setLoading(false);
+            if (cancelledRef.current) {
+                clearInterval(typer);
+                setStreamText(null);
+                setLoading(false);
+            } else {
+                inferenceDone = true;
+            }
         }
     };
 
     if (!mounted || pathname?.startsWith('/admin')) return null;
 
+    const currentStatus = THINKING_STATUSES[statusIdx % THINKING_STATUSES.length];
+
     return (
         <>
             {/* Floating orb (closed) */}
             {!open && (
-                <button
-                    onClick={openChat}
-                    aria-label="Ask Delvare AI"
-                    className={cn(
-                        'fixed bottom-8 right-8 z-[100] group flex items-center justify-center w-16 h-16 bg-white rounded-full shadow-2xl border border-border transition-all duration-500 hover:scale-110 active:scale-95 cursor-pointer',
-                        scrolled ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'
-                    )}
-                >
-                    <span className="absolute inset-0 rounded-full bg-primary/20 animate-ping" />
-                    <img src="/assets/arrow.png" alt="" className="relative w-9 h-9 object-contain" />
-                    <span className="absolute right-20 bg-white text-brand-dark text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-lg shadow-xl border border-border opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap">
-                        Ask AI
-                    </span>
-                </button>
+                <>
+                    {/* Hook teaser — random opener inviting the first click */}
+                    <AnimatePresence>
+                        {teaserVisible && scrolled && (
+                            <motion.div
+                                key="teaser"
+                                initial={{ opacity: 0, y: 16, scale: 0.9 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: 8, scale: 0.92 }}
+                                transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+                                className="fixed bottom-10 right-28 z-[100] max-w-[250px] sm:max-w-[280px] cursor-pointer"
+                                onClick={openChat}
+                                role="button"
+                                aria-label="Open chat with Delvare AI"
+                            >
+                                <div className="relative bg-white rounded-3xl rounded-br-md shadow-2xl border border-border px-4 py-3">
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); dismissTeaser(); }}
+                                        aria-label="Dismiss message"
+                                        className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-brand-dark text-white flex items-center justify-center shadow-md hover:bg-primary hover:text-black transition-colors cursor-pointer"
+                                    >
+                                        <X className="w-3.5 h-3.5" />
+                                    </button>
+                                    <p className="text-xs font-bold leading-relaxed text-brand-dark pr-1">
+                                        {hook}
+                                    </p>
+                                    <span className="mt-2 flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-primary">
+                                        Tap to chat
+                                        <ArrowUp className="w-3 h-3 rotate-45" />
+                                    </span>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    <button
+                        onClick={openChat}
+                        aria-label="Ask Delvare AI"
+                        className={cn(
+                            'fixed bottom-8 right-8 z-[100] group flex items-center justify-center w-16 h-16 bg-white rounded-full shadow-2xl border border-border transition-all duration-500 hover:scale-110 active:scale-95 cursor-pointer',
+                            scrolled ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'
+                        )}
+                    >
+                        <span className="absolute inset-0 rounded-full bg-primary/20 animate-ping" />
+                        <img src="/assets/arrow.png" alt="" className="relative w-9 h-9 object-contain" />
+                        <span className="absolute right-20 bg-white text-brand-dark text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-lg shadow-xl border border-border opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap">
+                            Ask AI
+                        </span>
+                    </button>
+                </>
             )}
 
             <AnimatePresence>
@@ -364,19 +601,46 @@ const AIChatWidget = () => {
                                             </motion.div>
                                         ))}
                                     </AnimatePresence>
+
+                                    {/* Streaming bubble: animated status -> typed-out reply */}
                                     {loading && (
-                                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 12 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.3, ease: 'easeOut' }}
+                                            className="flex justify-start"
+                                        >
                                             <span className="w-8 h-8 rounded-full bg-white border border-black/10 shadow-md flex items-center justify-center shrink-0 mr-3 mt-1 self-start overflow-hidden">
                                                 <img src="/assets/arrow.png" alt="" className="w-[18px] h-[18px] object-contain" />
                                             </span>
-                                            <div className="bg-primary text-white rounded-3xl rounded-tl-md px-5 py-4 shadow-lg flex items-center gap-1.5">
-                                                {[0, 1, 2].map(d => (
-                                                    <span
-                                                        key={d}
-                                                        className="w-1.5 h-1.5 rounded-full bg-white/90 animate-bounce"
-                                                        style={{ animationDelay: `${d * 150}ms` }}
-                                                    />
-                                                ))}
+                                            <div className="max-w-[85%] bg-primary text-white rounded-3xl rounded-tl-md px-5 py-3.5 shadow-lg">
+                                                {streamText === null ? (
+                                                    <AnimatePresence mode="wait">
+                                                        <motion.span
+                                                            key={currentStatus}
+                                                            initial={{ opacity: 0, y: 4 }}
+                                                            animate={{ opacity: 1, y: 0 }}
+                                                            exit={{ opacity: 0, y: -4 }}
+                                                            transition={{ duration: 0.25 }}
+                                                            className="flex items-center gap-2 text-[13px] font-bold whitespace-nowrap"
+                                                        >
+                                                            {currentStatus}
+                                                            <span className="flex items-center gap-1">
+                                                                {[0, 1, 2].map(d => (
+                                                                    <span
+                                                                        key={d}
+                                                                        className="w-1.5 h-1.5 rounded-full bg-white/90 animate-bounce"
+                                                                        style={{ animationDelay: `${d * 150}ms` }}
+                                                                    />
+                                                                ))}
+                                                            </span>
+                                                        </motion.span>
+                                                    </AnimatePresence>
+                                                ) : (
+                                                    <>
+                                                        <MarkdownContent content={`${streamText}▍`} />
+                                                    </>
+                                                )}
                                             </div>
                                         </motion.div>
                                     )}
