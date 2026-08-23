@@ -19,56 +19,56 @@ const stackItems = [
     name: "Cloud Infrastructure",
     icon: <Zap className="w-8 h-8" />,
     description: "Reliable, secure cloud management services with high availability and global performance.",
-    price: "From ₹5,000/mo",
+    price: "From $60/mo",
     gradient: "from-blue-500/10 to-cyan-500/10"
   },
   {
     name: "AI & Automation",
     icon: <Zap className="w-8 h-8" />,
     description: "Intelligent automation solutions to streamline business processes and improve productivity.",
-    price: "From ₹25,000/mo",
+    price: "From $300/mo",
     gradient: "from-purple-500/10 to-pink-500/10"
   },
   {
     name: "UI/UX Design",
     icon: <Zap className="w-8 h-8" />,
     description: "User-focused design strategies to enhance engagement and improve digital product usability.",
-    price: "From ₹50,000",
+    price: "From $600",
     gradient: "from-emerald-500/10 to-teal-500/10"
   },
   {
     name: "Cybersecurity",
     icon: <Zap className="w-8 h-8" />,
     description: "Comprehensive security measures to protect your business data and digital infrastructure.",
-    price: "From ₹15,000/mo",
+    price: "From $180/mo",
     gradient: "from-red-500/10 to-orange-500/10"
   },
   {
     name: "Technical Support",
     icon: <Zap className="w-8 h-8" />,
     description: "Dedicated maintenance and technical support to keep your platforms running efficiently.",
-    price: "From ₹8,000/mo",
+    price: "From $96/mo",
     gradient: "from-amber-500/10 to-yellow-500/10"
   },
   {
     name: "System Migration",
     icon: <Zap className="w-8 h-8" />,
     description: "Seamless transition and upgrade services for your existing software and data assets.",
-    price: "From ₹1,00,000",
+    price: "From $1,200",
     gradient: "from-indigo-500/10 to-blue-500/10"
   },
   {
     name: "Platform Optimization",
     icon: <Zap className="w-8 h-8" />,
     description: "Continuous performance improvements and feature updates to keep your business competitive.",
-    price: "From ₹10,000/mo",
+    price: "From $120/mo",
     gradient: "from-yellow-400/10 to-orange-400/10"
   },
   {
     name: "IT Consulting",
     icon: <Zap className="w-8 h-8" />,
     description: "Strategic technology consulting to guide your business growth and digital transformation.",
-    price: "From ₹15,000/hr",
+    price: "From $180/hr",
     gradient: "from-teal-400/10 to-cyan-400/10"
   }
 ];

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -21,7 +21,7 @@ import {
   MessageSquare,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useLocation } from '@/hooks/use-location';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/ui/motion';
 import FounderHighlight from '@/components/sections/founder-highlight';
 
@@ -30,7 +30,7 @@ const services = [
     title: "SEO & Digital Presence",
     slug: "seo-optimization",
     description: "Improve your search engine rankings and increase your online visibility to reach more potential customers.",
-    price: 4000,
+    price: 48,
     icon: <TrendingUp className="w-5 h-5" />,
     features: ["Keyword Strategy", "Content Marketing", "Technical SEO", "Performance Analysis", "Organic Search Growth", "Local SEO"],
     accent: "bg-orange-500 shadow-orange-500/20",
@@ -40,7 +40,7 @@ const services = [
     title: "Strategic Business Analysis",
     slug: "business-analyst",
     description: "In-depth analysis of your business performance to guide strategic decision-making and operational improvements.",
-    price: 12000,
+    price: 145,
     icon: <BarChart3 className="w-5 h-5" />,
     features: ["Operational Efficiency", "Market Analysis", "Strategic Planning"],
     accent: "bg-yellow-500 shadow-yellow-500/20",
@@ -50,7 +50,7 @@ const services = [
     title: "Custom Software Solutions",
     slug: "software-engineering",
     description: "Bespoke software applications tailored to meet your unique business requirements and goals.",
-    price: 20000,
+    price: 240,
     icon: <Database className="w-5 h-5" />,
     features: ["Enterprise Software", "Web Applications", "Scalable Systems"],
     accent: "bg-blue-600 shadow-blue-600/20",
@@ -60,7 +60,7 @@ const services = [
     title: "Business Intelligence Dashboards",
     slug: "ai-dashboard",
     description: "Centralized dashboards providing real-time data insights to manage your operations effectively.",
-    price: 15000,
+    price: 180,
     icon: <Globe className="w-5 h-5" />,
     features: ["Real-time Reporting", "Data Visualization", "Operational Oversight"],
     accent: "bg-indigo-600 shadow-indigo-600/20",
@@ -70,7 +70,7 @@ const services = [
     title: "Process Automation & AI",
     slug: "ai-ecosystems",
     description: "Streamline repetitive tasks and integrate AI to increase productivity and reduce costs.",
-    price: 10000,
+    price: 120,
     icon: <Brain className="w-5 h-5" />,
     features: ["Workflow Automation", "AI Integration", "Process Optimization"],
     accent: "bg-purple-600 shadow-purple-600/20",
@@ -80,7 +80,7 @@ const services = [
     title: "UI/UX Design & Strategy",
     slug: "software-design",
     description: "User-focused design that enhances engagement and improves the usability of your digital products.",
-    price: 4999,
+    price: 60,
     icon: <Layout className="w-5 h-5" />,
     features: ["User Research", "Interface Design", "Usability Testing"],
     accent: "bg-emerald-500 shadow-emerald-500/20",
@@ -90,7 +90,7 @@ const services = [
     title: "Cloud Infrastructure",
     slug: "cloud-hosting",
     description: "Secure and reliable cloud management services to ensure your business stays online and efficient.",
-    price: 2999,
+    price: 36,
     icon: <Cloud className="w-5 h-5" />,
     features: ["Cloud Migration", "Hosting Solutions", "Architecture Design"],
     accent: "bg-cyan-500 shadow-cyan-500/20",
@@ -100,7 +100,7 @@ const services = [
     title: "Professional Cybersecurity",
     slug: "cyber-security",
     description: "Protect your digital assets and customer data with proactive security monitoring and defense strategies.",
-    price: 3499,
+    price: 42,
     icon: <ShieldCheck className="w-5 h-5" />,
     features: ["Security Audits", "Data Protection", "Threat Mitigation"],
     accent: "bg-red-600 shadow-red-600/20",
@@ -110,7 +110,7 @@ const services = [
     title: "Business Support & Consulting",
     slug: "technical-sla",
     description: "On-demand technical support and consulting to keep your systems running smoothly.",
-    price: 499,
+    price: 6,
     icon: <LifeBuoy className="w-5 h-5" />,
     features: ["Technical Consulting", "Maintenance Support", "Process Guidance"],
     accent: "bg-amber-500 shadow-amber-500/20",
@@ -118,34 +118,15 @@ const services = [
   },
 ];
 
-const pricingData: Record<string, { currency: string, symbol: string, rate: number, name: string }> = {
-  'US': { currency: 'USD', symbol: '$', rate: 1, name: 'United States' },
-  'IN': { currency: 'INR', symbol: '₹', rate: 83, name: 'India' },
-  'Global': { currency: 'USD', symbol: '$', rate: 1, name: 'Global' }
-};
+const formatPrice = (value: number) =>
+  new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
 
 const ServicesSection = () => {
-  const { countryCode, isLoading } = useLocation();
-  const [currentRegion, setCurrentRegion] = useState('Global');
+  const isMobile = useIsMobile();
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
-  useEffect(() => {
-    if (!isLoading && countryCode && pricingData[countryCode]) {
-      setCurrentRegion(countryCode);
-    }
-  }, [countryCode, isLoading]);
-
-  const formatPrice = (value: number) => {
-    const region = pricingData[currentRegion] || pricingData['Global'];
-    const converted = value * region.rate;
-    if (region.currency === 'INR') {
-      if (converted >= 100000) return `₹${(converted / 100000).toFixed(converted % 100000 === 0 ? 0 : 1)}L`;
-      return `₹${Math.round(converted / 1000)}k`;
-    }
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: region.currency, maximumFractionDigits: 0 }).format(converted);
-  };
-
   const toggleService = (idx: number) => {
+    if (!isMobile) return;
     setExpandedIndex(prev => (prev === idx ? null : idx));
   };
 
@@ -209,7 +190,7 @@ const ServicesSection = () => {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-start max-w-6xl mx-auto"
           >
             {services.map((service, idx) => {
-              const isOpen = expandedIndex === idx;
+              const isOpen = !isMobile || expandedIndex === idx;
               return (
                 <StaggerItem key={service.slug} className="w-full">
                   <div
@@ -218,11 +199,11 @@ const ServicesSection = () => {
                       isOpen ? 'border-primary/40 shadow-lg' : 'border-border/70 hover:border-primary/25 hover:shadow-md'
                     )}
                   >
-                    {/* Collapsed header — always visible */}
+                    {/* Collapsed header — always visible; toggling is mobile-only */}
                     <button
                       onClick={() => toggleService(idx)}
                       aria-expanded={isOpen}
-                      className="w-full flex items-center gap-4 p-4 sm:p-5 text-left cursor-pointer"
+                      className={cn('w-full flex items-center gap-4 p-4 sm:p-5 text-left', isMobile ? 'cursor-pointer' : 'cursor-default')}
                     >
                       <div className={cn('w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md', service.accent)}>
                         {service.icon}
@@ -233,7 +214,9 @@ const ServicesSection = () => {
                       <span className="hidden sm:block shrink-0 text-primary font-black text-xs whitespace-nowrap">
                         {formatPrice(service.price)}+
                       </span>
-                      <ChevronDown className={cn('w-4 h-4 shrink-0 text-muted-foreground transition-transform duration-300', isOpen && 'rotate-180 text-primary')} />
+                      {isMobile && (
+                        <ChevronDown className={cn('w-4 h-4 shrink-0 text-muted-foreground transition-transform duration-300', isOpen && 'rotate-180 text-primary')} />
+                      )}
                     </button>
   
                     {/* Expanded detail view */}

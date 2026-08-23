@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 
 export function BookingModal({
@@ -16,7 +15,7 @@ export function BookingModal({
 }) {
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-xl w-[95vw] max-h-[90vh] flex flex-col p-0 overflow-hidden bg-background border-[#FBFF00]/20">
+            <DialogContent className="max-w-xl w-[95vw] h-[80vh] max-h-[90vh] grid grid-rows-[auto_minmax(0,1fr)] gap-0 p-0 overflow-hidden bg-background border-border/60">
                 <DialogHeader className="p-6 border-b border-border shrink-0">
                     <DialogTitle className="text-2xl font-black text-foreground">
                         Priority Contact
@@ -25,7 +24,7 @@ export function BookingModal({
                         Direct access to our technical leads for your software and security requirements.
                     </DialogDescription>
                 </DialogHeader>
-                <ScrollArea className="flex-1 p-6">
+                <div className="min-h-0 overflow-y-auto overscroll-contain p-6">
                     <div className="space-y-6">
                         <p className="text-sm text-muted-foreground">
                             Please provide the following details to ensure a prompt response from our technical team.
@@ -39,7 +38,7 @@ export function BookingModal({
                             </Button>
                         </div>
                     </div>
-                </ScrollArea>
+                </div>
             </DialogContent>
         </Dialog>
     );

@@ -10,13 +10,13 @@ import {
     ArrowUpRight,
     Calendar,
     Check,
-    CheckCircle2,
     Receipt,
     BookOpen,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/ui/motion';
 import { products } from '@/components/sections/products';
+import ServiceFaq from '@/components/service-faq';
 
 const productIconMap: Record<string, any> = {
     ecbills: Receipt,
@@ -235,39 +235,12 @@ const ProductDetailContent = ({ data }: ProductDetailContentProps) => {
                     </div>
                 </section>
 
-                {/* Why Delvare */}
-                <section className="py-20 bg-[#fafafa]">
-                    <div className="container mx-auto px-4 max-w-4xl">
-                        <FadeIn>
-                            <h2 className="text-4xl sm:text-5xl font-black mb-12 tracking-tighter text-center">
-                                Why <span className="text-primary italic font-light">Delvare?</span>
-                            </h2>
-                        </FadeIn>
-                        <StaggerContainer staggerDelay={0.12} className="space-y-10">
-                            {data.whyBetter &&
-                                Object.entries(data.whyBetter).map(([key, value]) => (
-                                    <StaggerItem key={key}>
-                                        <div className="flex gap-5 items-start">
-                                            <CheckCircle2 className="w-6 h-6 mt-1 shrink-0 text-primary" />
-                                            <div>
-                                                <h3
-                                                    className={cn(
-                                                        'text-2xl font-black capitalize mb-2 tracking-tight',
-                                                        accent.heading
-                                                    )}
-                                                >
-                                                    {key}
-                                                </h3>
-                                                <p className="text-lg text-muted-foreground leading-relaxed font-medium">
-                                                    {value as string}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </StaggerItem>
-                                ))}
-                        </StaggerContainer>
-                    </div>
-                </section>
+                {/* Product FAQs — unique questions per product */}
+                <ServiceFaq
+                    faqs={data.faqs}
+                    title={`${product.name} — FAQs`}
+                    subtitle={`Real questions people ask before using ${product.name}. Click any question to see the answer.`}
+                />
 
                 {/* Closing CTA band */}
                 <section className="relative py-24 overflow-hidden">

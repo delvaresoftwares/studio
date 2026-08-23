@@ -1,7 +1,6 @@
 'use client';
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
 export type PolicyType = 'privacy' | 'terms' | 'security';
 
@@ -104,8 +103,8 @@ export function LegalModals({
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-2xl w-[95vw] max-h-[90vh] flex flex-col p-0 overflow-hidden bg-background border-[#FBFF00]/20">
-                <DialogHeader className="p-6 border-b border-[#FBFF00]/10 shrink-0">
+            <DialogContent className="max-w-2xl w-[95vw] h-[85vh] max-h-[90vh] grid grid-rows-[auto_minmax(0,1fr)] gap-0 p-0 overflow-hidden bg-background border-border/60">
+                <DialogHeader className="p-6 border-b border-border/60 shrink-0">
                     <DialogTitle className="text-2xl font-headline font-bold text-foreground">
                         {policy.title}
                     </DialogTitle>
@@ -113,11 +112,11 @@ export function LegalModals({
                         Last updated: February 2026
                     </DialogDescription>
                 </DialogHeader>
-                <ScrollArea className="flex-1 p-6">
-                    <div className="pb-8">
+                <div className="min-h-0 overflow-y-auto overscroll-contain p-6">
+                    <div className="pb-4">
                         {policy.content}
                     </div>
-                </ScrollArea>
+                </div>
             </DialogContent>
         </Dialog>
     );

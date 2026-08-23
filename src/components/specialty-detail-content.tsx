@@ -5,10 +5,10 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { ArrowRight, ArrowLeft, CheckCircle2, Zap, Cloud, Code2, ShieldCheck, LifeBuoy, GitBranch, Cpu, Brain, MessageSquare, Layout, Database, Search, TrendingUp, Calendar, Receipt, BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useEffect } from 'react';
+import ServiceFaq from '@/components/service-faq';
 
 const iconMap: Record<string, any> = {
     Cloud, Brain, Code2, ShieldCheck, LifeBuoy, GitBranch, Zap, MessageSquare, Cpu, Layout, Database, Search, TrendingUp, Calendar, Receipt, BookOpen
@@ -54,8 +54,8 @@ export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentP
                         <div className="max-w-4xl mx-auto flex flex-col items-center text-center">
                             {/* Heading line with Back Button */}
                             <div className="flex items-center justify-center gap-4 sm:gap-6 w-full animate-fade-in-up">
-                                <button 
-                                    onClick={() => router.back()} 
+                                <button
+                                    onClick={() => router.back()}
                                     className="w-12 h-12 sm:w-16 sm:h-16 shrink-0 rounded-2xl bg-primary text-white flex items-center justify-center hover:bg-primary/90 hover:-translate-x-1 transition-all shadow-lg"
                                 >
                                     <ArrowLeft className="w-6 h-6 sm:w-8 sm:h-8" />
@@ -98,6 +98,18 @@ export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentP
                                 "{data.detailedDescription || data.description}"
                             </p>
 
+                            {/* Stats strip */}
+                            {(data.stats ?? []).length > 0 && (
+                                <div className="grid grid-cols-3 gap-4 sm:gap-8 pt-12 w-full max-w-xl animate-fade-in-up [animation-delay:250ms]">
+                                    {data.stats.map((stat: { label: string; value: string }) => (
+                                        <div key={stat.label} className="text-center">
+                                            <p className="font-headline text-lg sm:text-2xl font-black tracking-tighter italic text-primary">{stat.value}</p>
+                                            <p className="mt-1 text-[9px] font-black uppercase tracking-[0.25em] text-muted-foreground">{stat.label}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
                             {/* Points (Readable formatting) */}
                             <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 pt-12 text-left animate-fade-in-up [animation-delay:300ms] w-full">
                                 {(data.featureDefinitions || data.features.map((f: string) => ({ title: f, definition: "Elite Protocol" }))).map((feat: { title: string, definition: string }, i: number) => (
@@ -135,20 +147,11 @@ export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentP
                     </div>
                 </section>
 
-                {/* Article Section: Why Better */}
-                <section className="py-20 bg-[#fafafa]">
-                    <div className="container mx-auto px-4 max-w-4xl">
-                        <h2 className="text-5xl font-black mb-12 tracking-tighter text-center">Why Delvare?</h2>
-                        <div className="space-y-10">
-                            {data.whyBetter && Object.entries(data.whyBetter).map(([key, value]) => (
-                                <div key={key}>
-                                    <h3 className="text-2xl font-black capitalize mb-3 text-primary">{key}</h3>
-                                    <p className="text-lg text-muted-foreground leading-relaxed">{value as string}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
+                {/* FAQ Section — unique questions per service */}
+                <ServiceFaq
+                    faqs={data.faqs}
+                    title={`${data.title} — FAQs`}
+                />
 
                 {/* Footer Insight Section */}
                 <section className="py-20 border-t border-border">
@@ -164,6 +167,10 @@ export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentP
                                 </div>
                             </div>
 
+                            <Link href="/#services" className="group inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.25em] text-muted-foreground hover:text-primary transition-colors">
+                                Explore all services
+                                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                            </Link>
                         </div>
                     </div>
                 </section>

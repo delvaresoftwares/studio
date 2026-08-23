@@ -3,12 +3,14 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Phone, Mail, Copyright, Package, ExternalLink, ShieldCheck, MapPin, Globe, ArrowLeft } from 'lucide-react';
+import { Mail, Phone, MapPin, CalendarCheck, ArrowUpRight, ArrowLeft, Package, ArrowRight } from 'lucide-react';
 import Logo from '@/components/logo';
 import { cn } from '@/lib/utils';
 import { LegalModals, type PolicyType } from '@/components/legal-modals';
 import { siteConfig } from '@/lib/site-config';
+import { specialties } from '@/lib/specialties-data';
 
+const PRODUCT_SLUGS = ['ecbills', 'blendly'];
 
 const Footer = () => {
   const pathname = usePathname();
@@ -22,129 +24,148 @@ const Footer = () => {
     setIsModalOpen(true);
   };
 
-  return (
-    <footer className={cn("relative border-t border-border overflow-hidden border-b-4 border-primary", isDark ? "bg-black text-white" : "bg-white")}>
-      {/* Refined Ambient Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-primary/[0.02] blur-[100px] rounded-full pointer-events-none" />
+  const services = specialties.filter(s => !PRODUCT_SLUGS.includes(s.slug)).slice(0, 6);
 
-      <div className="container mx-auto px-4 relative z-10 pt-24 pb-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 mb-20">
-          
-          <div className="space-y-8">
-            <div className="bg-white p-3 rounded-2xl inline-block mb-4 border border-border shadow-sm">
-              <img src="/assets/logo.png" alt="Delvare Logo" className="h-10 w-auto object-contain" onError={(e) => { e.currentTarget.src = 'https://res.cloudinary.com/dt4mweku7/image/upload/v1751266408/buissware_h6bmig.png' }} />
+  // Shared tone helpers
+  const heading = cn('text-[10px] font-black uppercase tracking-[0.35em] mb-5', isDark ? 'text-white' : 'text-foreground');
+  const bodyMuted = isDark ? 'text-white/50 hover:text-white' : 'text-muted-foreground hover:text-foreground';
+  const iconBox = cn(
+    'h-9 w-9 rounded-xl border flex items-center justify-center shrink-0 transition-all duration-300',
+    isDark ? 'border-white/10 bg-white/5 text-white/70 group-hover:text-primary group-hover:border-primary/40' : 'border-border bg-secondary text-muted-foreground group-hover:text-primary group-hover:border-primary/30'
+  );
+
+  return (
+    <footer className={cn('relative overflow-hidden border-t border-b-4 border-primary', isDark ? 'bg-black text-white' : 'bg-white')}>
+      {/* Ambient glow */}
+      <div className={cn('absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[320px] blur-[120px] rounded-full pointer-events-none', isDark ? 'bg-primary/[0.06]' : 'bg-primary/[0.04]')} />
+
+      <div className="container mx-auto px-4 relative z-10 pt-16 md:pt-20 pb-10">
+        {/* Top band */}
+        <div className="grid grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.3fr] gap-x-8 gap-y-12 pb-14">
+          {/* Brand */}
+          <div className="col-span-2 lg:col-span-1 space-y-6">
+            <div className={cn('inline-block p-3 rounded-2xl border shadow-sm', isDark ? 'bg-white border-white/10' : 'bg-white border-border')}>
+              <img src="/assets/logo.png" alt="Delvare" className="h-9 w-auto object-contain" onError={(e) => { e.currentTarget.src = 'https://res.cloudinary.com/dt4mweku7/image/upload/v1751266408/buissware_h6bmig.png'; }} />
             </div>
-            <p className={cn("text-sm leading-relaxed max-w-xs font-semibold italic", isDark ? "text-white/60" : "text-muted-foreground")}>
-              "We build Scalable & Secure solutions for Your Business by adapting Innovative approaches and Emerging technologies."
+            <p className={cn('text-sm leading-relaxed max-w-xs font-medium italic', isDark ? 'text-white/60' : 'text-muted-foreground')}>
+              Scalable &amp; secure solutions for your business — built with innovative approaches and emerging technologies.
             </p>
-            <div className="flex gap-4">
-              <div className="group relative">
-                <div className="w-10 h-10 rounded-full bg-black border border-white/10 flex items-center justify-center text-white hover:text-primary hover:border-primary/40 transition-all cursor-pointer">
-                  <ShieldCheck className="w-4 h-4" />
-                </div>
-                <div className="absolute top-full left-0 mt-2 w-60 p-3 rounded-xl bg-black border border-white/10 text-[11px] font-semibold leading-snug text-white/80 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 z-20 pointer-events-none">
-                  Cyber-Shield. We adapt latest and advanced security.
-                </div>
-              </div>
-              <div className="group relative">
-                <div className="w-10 h-10 rounded-full bg-black border border-white/10 flex items-center justify-center text-white hover:text-primary hover:border-primary/40 transition-all cursor-pointer">
-                  <Globe className="w-4 h-4" />
-                </div>
-                <div className="absolute top-full left-0 mt-2 w-60 p-3 rounded-xl bg-black border border-white/10 text-[11px] font-semibold leading-snug text-white/80 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 z-20 pointer-events-none">
-                  Frameworks: Reactive & Optimal frameworks.
-                </div>
-              </div>
+            <div className={cn('inline-flex items-center gap-2 rounded-full border px-4 py-1.5', isDark ? 'border-primary/40 bg-primary/10' : 'border-primary/20 bg-primary/5')}>
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-60" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+              </span>
+              <span className="text-[9px] font-black uppercase tracking-[0.25em] text-primary">Accepting New Projects</span>
             </div>
           </div>
 
-          <div className="space-y-8">
-            <h3 className={cn("text-[10px] font-black uppercase tracking-[0.4em]", isDark ? "text-white" : "text-foreground")}>Assets</h3>
-            <ul className="space-y-6">
+          {/* Services */}
+          <nav aria-label="Services" className="space-y-1">
+            <h3 className={heading}>Services</h3>
+            <ul className="space-y-2.5">
+              {services.map(service => (
+                <li key={service.slug}>
+                  <Link href={`/main/${service.slug}`} className={cn('group inline-flex items-center gap-1.5 text-[13px] font-bold transition-colors', bodyMuted)}>
+                    {service.title}
+                    <ArrowRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-primary" />
+                  </Link>
+                </li>
+              ))}
               <li>
-                <a
-                  href="https://ecbills.in"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 group hover:text-primary transition-all"
-                >
-                  <div className="h-10 w-10 rounded-xl bg-black border border-white/10 flex items-center justify-center shrink-0 text-white group-hover:bg-primary group-hover:text-black group-hover:border-primary transition-all duration-500">
-                    <Package className="w-4 h-4" />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className={cn("text-sm font-black tracking-tight", isDark ? "text-white" : "text-foreground")}>ECBills.in</span>
-                    <span className={cn("text-[10px] uppercase font-bold tracking-widest", isDark ? "text-white/60" : "text-muted-foreground")}>Inventory Management</span>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://blendly.sbs"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 group hover:text-primary transition-all"
-                >
-                  <div className="h-10 w-10 rounded-xl bg-black border border-white/10 flex items-center justify-center shrink-0 text-white group-hover:bg-primary group-hover:text-black group-hover:border-primary transition-all duration-500">
-                    <Package className="w-4 h-4" />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className={cn("text-sm font-black tracking-tight", isDark ? "text-white" : "text-foreground")}>Blendly.sbs</span>
-                    <span className={cn("text-[10px] uppercase font-bold tracking-widest", isDark ? "text-white/60" : "text-muted-foreground")}>Literature Network</span>
-                  </div>
-                </a>
-              </li>
-              <li className="flex items-center gap-3 opacity-40 grayscale pl-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-border" />
-                <span className="text-xs font-bold uppercase tracking-widest">Delvare</span>
+                <Link href="/#services" className="inline-flex items-center gap-1 text-[11px] font-black uppercase tracking-widest text-primary mt-2 hover:gap-2 transition-all">
+                  All services <ArrowUpRight className="w-3 h-3" />
+                </Link>
               </li>
             </ul>
-          </div>
+          </nav>
 
-          <div className="space-y-8">
-            <h3 className={cn("text-[10px] font-black uppercase tracking-[0.4em]", isDark ? "text-white" : "text-foreground")}>Headquarters</h3>
-            <ul className={cn("space-y-6 font-bold text-sm", isDark ? "text-white/60" : "text-muted-foreground")}>
-              <li className="flex items-start gap-4">
-                <div className="h-10 w-10 rounded-xl bg-black border border-white/10 flex items-center justify-center shrink-0 text-primary">
-                  <MapPin className="w-4 h-4" />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className={cn("text-[10px] uppercase tracking-widest", isDark ? "text-white/40" : "text-muted-foreground/60")}>Office Address</span>
-                  <span className={cn("text-sm leading-relaxed", isDark ? "text-white" : "text-foreground")}>
-                    {siteConfig.contact.address || 'VSVC Building, 4th Floor, Spectra School of Designs, Co-working Space, Iron Bridge, Aleppey, Kerala, India - 688001'}
+          {/* Products */}
+          <nav aria-label="Products" className="space-y-1">
+            <h3 className={heading}>Products</h3>
+            <ul className="space-y-3">
+              <li>
+                <a href="https://ecbills.in" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3">
+                  <div className={iconBox}><Package className="w-4 h-4" /></div>
+                  <span>
+                    <span className={cn('block text-[13px] font-black tracking-tight', isDark ? 'text-white' : 'text-foreground')}>ECBills.in</span>
+                    <span className={cn('block text-[10px] uppercase font-bold tracking-widest', isDark ? 'text-white/40' : 'text-muted-foreground')}>Billing &amp; Inventory</span>
                   </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://blendly.sbs" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3">
+                  <div className={iconBox}><Package className="w-4 h-4" /></div>
+                  <span>
+                    <span className={cn('block text-[13px] font-black tracking-tight', isDark ? 'text-white' : 'text-foreground')}>Blendly.sbs</span>
+                    <span className={cn('block text-[10px] uppercase font-bold tracking-widest', isDark ? 'text-white/40' : 'text-muted-foreground')}>Literature Network</span>
+                  </span>
+                </a>
+              </li>
+            </ul>
+            <Link href="/#products" className={cn('inline-flex items-center gap-1 text-[11px] font-black uppercase tracking-widest text-primary pt-2 hover:gap-2 transition-all')}>
+              Explore products <ArrowUpRight className="w-3 h-3" />
+            </Link>
+          </nav>
+
+          {/* Contact */}
+          <div className="col-span-2 lg:col-span-1">
+            <h3 className={heading}>Get in Touch</h3>
+            <ul className="space-y-4">
+              <li>
+                <a href={siteConfig.contact.emailHref} className="group flex items-start gap-3">
+                  <div className={iconBox}><Mail className="w-4 h-4" /></div>
+                  <div>
+                    <span className={cn('block text-[9px] uppercase font-bold tracking-widest', isDark ? 'text-white/40' : 'text-muted-foreground/70')}>Email</span>
+                    <span className={cn('block text-[13px] font-bold break-all', isDark ? 'text-white/80' : 'text-foreground')}>{siteConfig.contact.email}</span>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <button onClick={() => window.dispatchEvent(new CustomEvent('open-contact-form', { detail: { type: 'contact' } }))} className="group flex items-start gap-3 w-full text-left">
+                  <div className={iconBox}><Phone className="w-4 h-4" /></div>
+                  <div>
+                    <span className={cn('block text-[9px] uppercase font-bold tracking-widest', isDark ? 'text-white/40' : 'text-muted-foreground/70')}>Phone / WhatsApp</span>
+                    <span className={cn('block text-[13px] font-bold', isDark ? 'text-white/80' : 'text-foreground')}>{siteConfig.contact.phone}</span>
+                  </div>
+                </button>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className={iconBox}><MapPin className="w-4 h-4" /></div>
+                <div>
+                  <span className={cn('block text-[9px] uppercase font-bold tracking-widest', isDark ? 'text-white/40' : 'text-muted-foreground/70')}>Headquarters</span>
+                  <span className={cn('block text-[12px] font-medium leading-relaxed max-w-[26ch]', isDark ? 'text-white/60' : 'text-muted-foreground')}>{siteConfig.contact.address}</span>
                 </div>
               </li>
-              <li className="flex items-start gap-4">
-                <div className="h-10 w-10 rounded-xl bg-black border border-white/10 flex items-center justify-center shrink-0 text-primary cursor-pointer hover:bg-primary/20 transition-all" onClick={() => window.dispatchEvent(new CustomEvent('open-contact-form', { detail: { type: 'contact' } }))}>
-                  <Phone className="w-4 h-4" />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className={cn("text-[10px] uppercase tracking-widest", isDark ? "text-white/40" : "text-muted-foreground/60")}>Schedule Meetings</span>
-                  <button onClick={() => window.dispatchEvent(new CustomEvent('open-contact-form', { detail: { type: 'contact' } }))} className={cn("text-left font-bold hover:text-primary transition-colors", isDark ? "text-white" : "text-foreground")}>
-                    Click here
-                  </button>
-                </div>
+              <li>
+                <button
+                  onClick={() => window.dispatchEvent(new CustomEvent('open-contact-form', { detail: { type: 'contact' } }))}
+                  className="group inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-primary text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-lg hover:-translate-y-0.5 hover:shadow-xl transition-all"
+                >
+                  <CalendarCheck className="w-4 h-4" />
+                  Schedule a Meeting
+                </button>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="pt-12 border-t border-border flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex items-center gap-3 opacity-60">
-            <Logo simple light={isDark} variant="header" className="w-16 grayscale scale-75" />
-            <p className={cn("text-[10px] font-black uppercase tracking-widest", isDark ? "text-white/60" : "text-muted-foreground")}>
-              &copy; {currentYear} XAAS by Delvare.in. All Rights Reserved.
+        {/* Bottom bar */}
+        <div className={cn('pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-5', isDark ? 'border-white/10' : 'border-border')}>
+          <div className="flex items-center gap-3">
+            <Logo simple light={isDark} variant="header" className="w-14 grayscale opacity-70 scale-90" />
+            <p className={cn('text-[10px] font-black uppercase tracking-widest', isDark ? 'text-white/50' : 'text-muted-foreground')}>
+              &copy; {currentYear} XAAS by Delvare.in. All rights reserved.
             </p>
           </div>
-          <div className={cn("flex flex-wrap justify-center gap-x-10 gap-y-4 text-[10px] font-black uppercase tracking-[0.3em]", isDark ? "text-white/60" : "text-muted-foreground")}>
+          <div className={cn('flex flex-wrap justify-center items-center gap-x-8 gap-y-3 text-[10px] font-black uppercase tracking-[0.25em]', isDark ? 'text-white/50' : 'text-muted-foreground')}>
             {pathname !== '/' && (
-              <Link href="/" className="flex items-center gap-2 hover:text-primary transition-all">
-                <ArrowLeft className="w-3 h-3" />
-                Back to Main Page
+              <Link href="/" className="flex items-center gap-1.5 hover:text-primary transition-colors">
+                <ArrowLeft className="w-3 h-3" /> Back to Main Page
               </Link>
             )}
-            <button onClick={() => openPolicy('privacy')} className="hover:text-primary transition-all">Privacy</button>
-            <button onClick={() => openPolicy('terms')} className="hover:text-primary transition-all">Terms</button>
-            <button onClick={() => openPolicy('security')} className="hover:text-primary transition-all">Security</button>
+            <button onClick={() => openPolicy('privacy')} className="hover:text-primary transition-colors">Privacy</button>
+            <button onClick={() => openPolicy('terms')} className="hover:text-primary transition-colors">Terms</button>
+            <button onClick={() => openPolicy('security')} className="hover:text-primary transition-colors">Security</button>
           </div>
         </div>
       </div>
