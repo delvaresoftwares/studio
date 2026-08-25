@@ -14,5 +14,11 @@ service cloud.firestore {
       // TEMPORARY: Allow read/delete for testing. In production, use Firebase Admin SDK.
       allow read, delete, update: if true;
     }
+
+    // Anonymous page-visit tracking (read by the admin dashboard).
+    match /visits/{visitId} {
+      allow create, read: if true;
+      allow update, delete: if false;
+    }
   }
 }

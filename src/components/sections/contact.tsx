@@ -11,10 +11,10 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Send, CheckCircle, Loader2, Mail, MessageSquare } from 'lucide-react';
 import { saveContactInfoAction } from '@/app/actions';
-import { submitEnquiry } from '@/lib/enquiry';
 import { useToast } from "@/hooks/use-toast";
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
+import { smoothScrollTo } from '@/lib/smooth-scroll';
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]\d{3}[)])?[\s-]?\d{3}[\s-]?\d{4}$/
@@ -44,7 +44,8 @@ const ContactSection = () => {
       const message = (e as CustomEvent<{ message?: string }>).detail?.message;
       if (message) {
         form.setValue('message', message);
-        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+        const target = document.getElementById('contact');
+        if (target) smoothScrollTo(target);
       }
     };
     window.addEventListener('delvare:autofill', handleAutofill as EventListener);
@@ -54,29 +55,15 @@ const ContactSection = () => {
   const onSubmit = async (data: FormValues) => {
     setIsLoading(true);
     try {
-      const [dbResult, mailResult] = await Promise.allSettled([
-        saveContactInfoAction({ ...data, type: 'contact' }),
-        submitEnquiry({
-          full_name: data.name,
-          phone: data.phone,
-          email: data.email,
-          title: 'Website Enquiry',
-          subject: data.message,
-        }),
-      ]);
+      const result = await saveContactInfoAction({ ...data, type: 'contact' });
 
-      const dbSaved = dbResult.status === 'fulfilled' && dbResult.value.success;
-      const mailSent = mailResult.status === 'fulfilled' && (mailResult.value?.success ?? false);
-
-      if (dbSaved || mailSent) {
+      if (result.success) {
         setIsSubmitted(true);
       } else {
-        const dbError = dbResult.status === 'fulfilled' ? dbResult.value.error : undefined;
-        const mailError = mailResult.status === 'rejected' ? (mailResult.reason as Error)?.message : undefined;
         toast({
           variant: "destructive",
           title: "Submission Failed",
-          description: dbError ?? mailError ?? "An unknown error occurred.",
+          description: result.error ?? "An unknown error occurred.",
         });
       }
     } catch (error) {

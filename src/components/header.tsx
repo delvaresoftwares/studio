@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Menu, X, ArrowRight, Loader2, CheckCircle } from 'lucide-react';
 import { saveContactInfoAction, type ContactFormData } from '@/app/actions';
-import { submitEnquiry } from '@/lib/enquiry';
+import { smoothScrollTo } from '@/lib/smooth-scroll';
 import { useToast } from '@/hooks/use-toast';
 import { useScrollLock } from '@/hooks/use-scroll-lock';
 
@@ -65,7 +65,7 @@ const Header = () => {
       setMenuOpen(false);
       setIsSubmitted(false);
       setFormData({ name: '', email: '', phone: '', message: '' });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      smoothScrollTo(0);
     };
 
     window.addEventListener('open-contact-form', handleOpenForm);
@@ -81,9 +81,10 @@ const Header = () => {
         setMenuOpen(false);
         setIsSubmitted(false);
         setFormData(prev => ({ ...prev, message }));
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        smoothScrollTo(0);
       }
     };
+
     window.addEventListener('delvare:autofill', handleAutofill);
     return () => window.removeEventListener('delvare:autofill', handleAutofill);
   }, []);
@@ -112,35 +113,19 @@ const Header = () => {
     setIsLoading(true);
 
     try {
-      const submissionData: ContactFormData = {
+      const result = await saveContactInfoAction({
         ...formData,
         type: formType
-      };
+      });
 
-      const [dbResult, mailResult] = await Promise.allSettled([
-        saveContactInfoAction(submissionData),
-        submitEnquiry({
-          full_name: formData.name,
-          phone: formData.phone,
-          email: formData.email,
-          title: formType === 'career' ? 'Career Application' : 'Website Enquiry',
-          subject: formData.message,
-        }),
-      ]);
-
-      const dbSaved = dbResult.status === 'fulfilled' && dbResult.value.success;
-      const mailSent = mailResult.status === 'fulfilled' && (mailResult.value?.success ?? false);
-
-      if (dbSaved || mailSent) {
+      if (result.success) {
         setIsSubmitted(true);
         setTimeout(() => {
           setFormOpen(false);
           setIsSubmitted(false);
         }, 3000);
       } else {
-        const dbError = dbResult.status === 'fulfilled' ? dbResult.value.error : undefined;
-        const mailError = mailResult.status === 'rejected' ? (mailResult.reason as Error)?.message : undefined;
-        toast({ variant: 'destructive', title: 'Submission Failed', description: dbError ?? mailError ?? 'Connection lost. Please try again.' });
+        toast({ variant: 'destructive', title: 'Submission Failed', description: result.error ?? 'Connection lost. Please try again.' });
       }
     } catch (error) {
       console.error("Submission error:", error);
@@ -198,7 +183,7 @@ const Header = () => {
                       e.preventDefault();
                       const element = document.getElementById(link.href.substring(1));
                       if (element) {
-                        element.scrollIntoView({ behavior: 'smooth' });
+                        smoothScrollTo(element);
                       } else {
                         window.location.href = '/' + link.href;
                       }
@@ -388,7 +373,7 @@ const Header = () => {
                     setTimeout(() => {
                       const element = document.getElementById(link.href.substring(1));
                       if (element) {
-                        element.scrollIntoView({ behavior: 'smooth' });
+                        smoothScrollTo(element);
                       } else {
                         window.location.href = '/' + link.href;
                       }

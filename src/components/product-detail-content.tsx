@@ -17,6 +17,7 @@ import { cn } from '@/lib/utils';
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/ui/motion';
 import { products } from '@/components/sections/products';
 import ServiceFaq from '@/components/service-faq';
+import { useLenis } from 'lenis/react';
 
 const productIconMap: Record<string, any> = {
     ecbills: Receipt,
@@ -44,14 +45,18 @@ interface ProductDetailContentProps {
 
 const ProductDetailContent = ({ data }: ProductDetailContentProps) => {
     const router = useRouter();
+    const lenis = useLenis();
     const product = products.find(p => p.id === data?.slug);
     const Icon = productIconMap[data?.slug];
     const accent = accents[data?.slug] ?? accents.ecbills;
 
     useEffect(() => {
-        const timer = setTimeout(() => window.scrollTo(0, 0), 10);
+        const timer = setTimeout(() => {
+            if (lenis) lenis.scrollTo(0, { immediate: true });
+            else window.scrollTo(0, 0);
+        }, 10);
         return () => clearTimeout(timer);
-    }, [data?.slug]);
+    }, [data?.slug, lenis]);
 
     if (!product || !Icon) return null;
 

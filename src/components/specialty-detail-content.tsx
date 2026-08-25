@@ -9,6 +9,7 @@ import { ArrowRight, ArrowLeft, CheckCircle2, Zap, Cloud, Code2, ShieldCheck, Li
 import { cn } from '@/lib/utils';
 import { useEffect } from 'react';
 import ServiceFaq from '@/components/service-faq';
+import { useLenis } from 'lenis/react';
 
 const iconMap: Record<string, any> = {
     Cloud, Brain, Code2, ShieldCheck, LifeBuoy, GitBranch, Zap, MessageSquare, Cpu, Layout, Database, Search, TrendingUp, Calendar, Receipt, BookOpen
@@ -20,12 +21,16 @@ interface SpecialtyDetailContentProps {
 
 export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentProps) {
     const router = useRouter();
+    const lenis = useLenis();
     const Icon = iconMap[data.icon] || Zap;
 
     useEffect(() => {
-        const timer = setTimeout(() => window.scrollTo(0, 0), 10);
+        const timer = setTimeout(() => {
+            if (lenis) lenis.scrollTo(0, { immediate: true });
+            else window.scrollTo(0, 0);
+        }, 10);
         return () => clearTimeout(timer);
-    }, [data.slug]);
+    }, [data.slug, lenis]);
 
     if (!data) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 

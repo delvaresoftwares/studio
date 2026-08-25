@@ -82,6 +82,7 @@ export const metadata: Metadata = {
 
 import SmoothScroll from '@/components/smooth-scroll';
 import AIChatWidget from '@/components/ai-chat-widget';
+import VisitorTracker from '@/components/visitor-tracker';
 
 export default function RootLayout({
   children,
@@ -102,6 +103,7 @@ export default function RootLayout({
             {children}
             <AIChatWidget />
           </SmoothScroll>
+          <VisitorTracker />
           <Toaster />
         </ThemeProvider>
       </body>

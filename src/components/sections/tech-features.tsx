@@ -126,7 +126,7 @@ const TechFeaturesSection = () => {
                   className="w-10 h-10 rounded-full bg-white border border-border flex items-center justify-center hover:bg-primary hover:text-white transition-all"
                   onClick={() => {
                     const msg = `Executive inquiry for ${item.name} (${item.price}).`;
-                    window.open(`https://wa.me/918606821125?text=${encodeURIComponent(msg)}`, '_blank');
+                    window.dispatchEvent(new CustomEvent('delvare:autofill', { detail: { message: msg } }));
                   }}
                 >
                   <ArrowRight className="w-4 h-4" />

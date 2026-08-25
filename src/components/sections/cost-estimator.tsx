@@ -8,6 +8,8 @@ import { Bot, User, Send, Download, Share2, Cloud, Brain, Code, Hammer, RefreshC
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { generatePDF } from '@/lib/pdf-generator';
+import { saveContactInfoAction } from '@/app/actions';
+import { smoothScrollTo } from '@/lib/smooth-scroll';
 
 type Message = {
   id: string;
@@ -55,12 +57,30 @@ const CostEstimatorSection = ({ onQuoteGenerated }: { onQuoteGenerated?: (data: 
   const [selections, setSelections] = useState<any>({});
   const [isTyping, setIsTyping] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [quoteStatus, setQuoteStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
   const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  const handleConfirmBlueprint = async (finalSelections: any, finalAmount: string, domainLabel: string) => {
+    if (quoteStatus !== 'idle') return;
+    setQuoteStatus('sending');
+    try {
+      await saveContactInfoAction({
+        name: String(finalSelections.clientName || 'Cost Estimator Lead'),
+        email: String(finalSelections.clientEmail || ''),
+        phone: String(finalSelections.clientPhone || ''),
+        message: `AI CORE INQUIRY\nDomain: ${domainLabel}\nComplexity: ${finalSelections.complexity}\nEstimate: ${finalAmount}`,
+        type: 'contact',
+      });
+      setQuoteStatus('sent');
+    } catch {
+      setQuoteStatus('idle');
+    }
+  };
 
   useEffect(() => {
     const handleOpen = () => {
       setIsOpen(true);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      smoothScrollTo(0);
     };
     window.addEventListener('open-estimator', handleOpen);
     return () => window.removeEventListener('open-estimator', handleOpen);
@@ -192,13 +212,17 @@ const CostEstimatorSection = ({ onQuoteGenerated }: { onQuoteGenerated?: (data: 
 
           <div className="space-y-4">
             <Button
-              className="w-full h-16 text-lg font-black bg-primary text-white rounded-2xl shadow-xl hover:shadow-[0_0_30px_-5px_hsl(var(--primary))] transition-all"
-              onClick={() => {
-                const msg = `AI CORE INQUIRY: ${finalSelections.clientName} project.\nEstimate: ${finalAmount}\nDomain: ${pricingBase[domain].label}`;
-                window.open(`https://wa.me/919426372026?text=${encodeURIComponent(msg)}`, '_blank');
-              }}
+              className="w-full h-16 text-lg font-black bg-primary text-white rounded-2xl shadow-xl hover:shadow-[0_0_30px_-5px_hsl(var(--primary))] transition-all disabled:opacity-70"
+              disabled={quoteStatus !== 'idle'}
+              onClick={() => handleConfirmBlueprint(finalSelections, finalAmount, pricingBase[domain].label)}
             >
-              Confirm Blueprint
+              {quoteStatus === 'sent' ? (
+                <span className="flex items-center gap-3"><CheckCircle className="w-6 h-6" /> Blueprint Received</span>
+              ) : quoteStatus === 'sending' ? (
+                <span className="flex items-center gap-3"><Loader2 className="w-6 h-6 animate-spin" /> Transmitting...</span>
+              ) : (
+                'Confirm Blueprint'
+              )}
             </Button>
             <div className="flex gap-4">
               <Button variant="outline" className="flex-1 h-14 rounded-xl border-white/10 bg-white/5 text-white font-bold text-sm hover:bg-white/10" onClick={() => generatePDF('catalog-pdf-template', 'Delvare_Full_Catalog')}>

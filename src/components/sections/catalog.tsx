@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Download, FileText, ArrowRight, Sparkles, BookOpen, Layers } from 'lucide-react';
 import { generatePDF } from '@/lib/pdf-generator';
+import { smoothScrollTo } from '@/lib/smooth-scroll';
 
 const CatalogSection = () => {
     return (
@@ -90,7 +91,10 @@ const CatalogSection = () => {
                                 <Button
                                     size="lg"
                                     className="h-16 px-10 font-bold bg-primary text-white rounded-xl shadow-xl hover:shadow-2xl transition-all"
-                                    onClick={() => document.getElementById('estimator')?.scrollIntoView({ behavior: 'smooth' })}
+                                    onClick={() => {
+                                        const target = document.getElementById('estimator');
+                                        if (target) smoothScrollTo(target);
+                                    }}
                                 >
                                     Access Estimator <ArrowRight className="ml-2 w-5 h-5" />
                                 </Button>

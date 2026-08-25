@@ -13,13 +13,14 @@ const keywords = [
 const HeroSection = () => {
   const [keywordIndex, setKeywordIndex] = useState(0);
   const [fade, setFade] = useState(true);
-  const [arrowRotation, setArrowRotation] = useState(90);
   const heroRef = useRef<HTMLElement>(null);
   const arrowRef = useRef<HTMLDivElement>(null);
+  const arrowImgRef = useRef<HTMLImageElement>(null);
+  const geometryRef = useRef<{ hero: DOMRect | null; ax: number; ay: number }>({ hero: null, ax: 0, ay: 0 });
 
   useEffect(() => {
     const sequence = setTimeout(() => {
-      setArrowRotation(0);
+      if (arrowImgRef.current) arrowImgRef.current.style.transform = 'rotate(0deg)';
     }, 1500);
 
     const interval = setInterval(() => {
@@ -30,32 +31,53 @@ const HeroSection = () => {
       }, 300);
     }, 2500);
 
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!heroRef.current || !arrowRef.current) return;
-
-      const heroRect = heroRef.current.getBoundingClientRect();
-      const inBounds =
-        e.clientX >= heroRect.left &&
-        e.clientX <= heroRect.right &&
-        e.clientY >= heroRect.top &&
-        e.clientY <= heroRect.bottom;
-
-      if (inBounds) {
-        const arrowRect = arrowRef.current.getBoundingClientRect();
-        const centerX = arrowRect.left + arrowRect.width / 2;
-        const centerY = arrowRect.top + arrowRect.height / 2;
-
-        const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI);
-        setArrowRotation(angle - 90);
-      }
+    // Geometry is cached and refreshed on scroll/resize so the mousemove
+    // path performs zero layout reads and zero React re-renders.
+    const measure = () => {
+      const heroRect = heroRef.current?.getBoundingClientRect() ?? null;
+      const arrowRect = arrowRef.current?.getBoundingClientRect();
+      geometryRef.current = {
+        hero: heroRect,
+        ax: arrowRect ? arrowRect.left + arrowRect.width / 2 : 0,
+        ay: arrowRect ? arrowRect.top + arrowRect.height / 2 : 0,
+      };
     };
 
+    let raf = 0;
+    let mouseX = -1;
+    let mouseY = -1;
+
+    const applyRotation = () => {
+      raf = 0;
+      const geo = geometryRef.current;
+      const heroRect = geo.hero;
+      if (!heroRect || !arrowImgRef.current) return;
+      if (
+        mouseX < heroRect.left || mouseX > heroRect.right ||
+        mouseY < heroRect.top || mouseY > heroRect.bottom
+      ) return;
+      const angle = Math.atan2(mouseY - geo.ay, mouseX - geo.ax) * (180 / Math.PI);
+      arrowImgRef.current.style.transform = `rotate(${angle - 90}deg)`;
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (!raf) raf = requestAnimationFrame(applyRotation);
+    };
+
+    measure();
     window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('scroll', measure, { passive: true });
+    window.addEventListener('resize', measure, { passive: true });
 
     return () => {
       clearInterval(interval);
       clearTimeout(sequence);
+      if (raf) cancelAnimationFrame(raf);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', measure);
+      window.removeEventListener('resize', measure);
     };
   }, []);
 
@@ -100,7 +122,7 @@ const HeroSection = () => {
                 {/* Mobile static arrow (landing highlight) */}
                 <img src="/assets/arrow.png" alt="Our Expertise" className="w-66 h-66 object-contain lg:hidden" style={{ transform: 'rotate(0deg)' }} />
                 {/* Desktop rotating arrow */}
-                <img src="/assets/arrow.png" alt="Our Expertise" className="hidden lg:block w-32 h-32 object-contain transition-transform duration-200 ease-out" style={{ transform: `rotate(${arrowRotation}deg)` }} />
+                <img ref={arrowImgRef} src="/assets/arrow.png" alt="Our Expertise" className="hidden lg:block w-32 h-32 object-contain will-change-transform" style={{ transform: 'rotate(90deg)' }} />
               </div>
               <div className="hidden lg:flex absolute top-20 left-10 w-48 h-56 bg-white rounded-3xl p-6 flex-col justify-between transition-all cursor-default group/card shadow-lg">
                 <div className="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center text-primary group-hover/card:bg-primary group-hover/card:text-primary-foreground transition-colors duration-300">

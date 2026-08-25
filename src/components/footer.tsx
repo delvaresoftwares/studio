@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Mail, Phone, MapPin, CalendarCheck, ArrowUpRight, ArrowLeft, Package, ArrowRight } from 'lucide-react';
+import { Mail, MapPin, CalendarCheck, ArrowUpRight, ArrowLeft, Package, ArrowRight } from 'lucide-react';
 import Logo from '@/components/logo';
 import { cn } from '@/lib/utils';
 import { LegalModals, type PolicyType } from '@/components/legal-modals';
@@ -119,15 +119,6 @@ const Footer = () => {
                     <span className={cn('block text-[13px] font-bold break-all', isDark ? 'text-white/80' : 'text-foreground')}>{siteConfig.contact.email}</span>
                   </div>
                 </a>
-              </li>
-              <li>
-                <button onClick={() => window.dispatchEvent(new CustomEvent('open-contact-form', { detail: { type: 'contact' } }))} className="group flex items-start gap-3 w-full text-left">
-                  <div className={iconBox}><Phone className="w-4 h-4" /></div>
-                  <div>
-                    <span className={cn('block text-[9px] uppercase font-bold tracking-widest', isDark ? 'text-white/40' : 'text-muted-foreground/70')}>Phone / WhatsApp</span>
-                    <span className={cn('block text-[13px] font-bold', isDark ? 'text-white/80' : 'text-foreground')}>{siteConfig.contact.phone}</span>
-                  </div>
-                </button>
               </li>
               <li className="flex items-start gap-3">
                 <div className={iconBox}><MapPin className="w-4 h-4" /></div>

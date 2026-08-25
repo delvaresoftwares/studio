@@ -14,9 +14,10 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, ShieldCheck, ShieldOff, MoreHorizontal, Trash2, Eye, Copy, Download, User, Phone, Mail, Calculator, FileText } from 'lucide-react';
+import { Loader2, ShieldCheck, ShieldOff, MoreHorizontal, Trash2, Eye, Copy, Download, User, Phone, Mail, Calculator, FileText, BarChart3 } from 'lucide-react';
 import Logo from '@/components/logo';
 import { Separator } from '@/components/ui/separator';
+import AnalyticsPanel from '@/app/admin/analytics';
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -207,12 +208,14 @@ export default function AdminPage() {
           </div>
 
           <Tabs value={mainTab} onValueChange={setMainTab} className="mb-8">
-            <TabsList className="grid w-full grid-cols-2 max-w-[400px]">
+            <TabsList className="grid w-full grid-cols-3 max-w-[560px]">
               <TabsTrigger value="contacts"><User className="mr-2 h-4 w-4" /> Contacts</TabsTrigger>
               <TabsTrigger value="estimations"><Calculator className="mr-2 h-4 w-4" /> Estimations</TabsTrigger>
+              <TabsTrigger value="analytics"><BarChart3 className="mr-2 h-4 w-4" /> Analytics</TabsTrigger>
             </TabsList>
           </Tabs>
 
+          {mainTab !== 'analytics' && (
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <div className="flex justify-between items-center mb-4">
               <TabsList>
@@ -255,6 +258,9 @@ export default function AdminPage() {
               />
             </TabsContent>
           </Tabs>
+          )}
+
+          {mainTab === 'analytics' && <AnalyticsPanel />}
 
         </div>
       </div>

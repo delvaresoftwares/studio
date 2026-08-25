@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, Code2, Globe, Cpu, Award, TrendingUp, Github, Linkedin, ArrowRight, Activity, Terminal, Layout, ExternalLink, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,7 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { FOUNDER_DATA } from './constants';
 import { roadmap } from './roadmap';
+import { useLenis } from 'lenis/react';
 
 const iconMap: Record<string, any> = {
     Terminal, Cpu, Globe, Award, TrendingUp, Code2, ShieldCheck, Layout, Activity
@@ -90,31 +91,49 @@ const CommitActivity = ({ className, animated }: { className?: string; animated?
 };
 
 export default function FounderPortfolioPage() {
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
     const [profileActive, setProfileActive] = useState(false);
     const [expandedRoadmap, setExpandedRoadmap] = useState<number | null>(null);
+    const glowRef = useRef<HTMLDivElement>(null);
+    const mouseXRef = useRef(0);
+    const mouseYRef = useRef(0);
+    const lenis = useLenis();
 
     useEffect(() => {
-        window.scrollTo(0, 0);
+        if (lenis) lenis.scrollTo(0, { immediate: true });
+        else window.scrollTo(0, 0);
 
+        // Cursor glow is driven by direct style writes inside a rAF — no
+        // per-mousemove React re-render of the whole page.
+        let raf = 0;
         const handleMouseMove = (e: MouseEvent) => {
-            setMousePos({
-                x: e.clientX,
-                y: e.clientY,
-            });
+            const glow = glowRef.current;
+            mouseXRef.current = e.clientX;
+            mouseYRef.current = e.clientY;
+            if (!raf) {
+                raf = requestAnimationFrame(() => {
+                    raf = 0;
+                    if (glow) {
+                        glow.style.background = `radial-gradient(600px circle at ${mouseXRef.current}px ${mouseYRef.current}px, rgba(16, 185, 129, 0.08), transparent 40%)`;
+                    }
+                });
+            }
         };
 
         window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
+        return () => {
+            if (raf) cancelAnimationFrame(raf);
+            window.removeEventListener('mousemove', handleMouseMove);
+        };
+    }, [lenis]);
 
     return (
         <div className="min-h-screen bg-[#030303] text-white selection:bg-primary/30 selection:text-white font-sans overflow-hidden">
             {/* Custom Mouse Cursor Glow */}
-            <div 
+            <div
+                ref={glowRef}
                 className="fixed inset-0 pointer-events-none z-0 opacity-40 transition-opacity duration-300"
                 style={{
-                    background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(16, 185, 129, 0.08), transparent 40%)`
+                    background: `radial-gradient(600px circle at -200px -200px, rgba(16, 185, 129, 0.08), transparent 40%)`
                 }}
             />
 

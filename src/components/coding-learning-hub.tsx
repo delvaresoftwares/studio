@@ -18,6 +18,7 @@ import {
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { smoothScrollTo } from '@/lib/smooth-scroll';
 
 const CodingLearningHub = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -39,7 +40,7 @@ const CodingLearningHub = () => {
     useEffect(() => {
         const handleOpen = () => {
             setIsOpen(true);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            smoothScrollTo(0);
         };
         window.addEventListener('open-learning-hub', handleOpen);
         return () => window.removeEventListener('open-learning-hub', handleOpen);

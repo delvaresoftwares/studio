@@ -46,7 +46,6 @@
   body {
     @apply text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
-    scroll-behavior: smooth;
   }
 
   .hero-headline-shadow {
@@ -286,6 +285,30 @@
 
   .animate-bubble-pop {
     animation: bubble-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  }
+}
+
+/* Respect reduced-motion preferences: kill looping/transform-heavy animations */
+@media (prefers-reduced-motion: reduce) {
+
+  .animate-marquee-scroll,
+  .animate-marquee-scroll-reverse,
+  .animate-orbit,
+  .animate-pulse-glow,
+  .animate-data-flow,
+  .animate-breath,
+  .animate-float,
+  .animate-loading-bar,
+  .animate-fade-in-up,
+  .animate-slide-in-left,
+  .animate-slide-in-right,
+  .animate-fade-in,
+  .animate-bubble-pop {
+    animation: none !important;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
   }
 }
 

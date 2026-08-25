@@ -5,6 +5,7 @@ import { db, app } from '@/lib/firebase';
 import { collection, addDoc, getDocs, query, orderBy, serverTimestamp, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import type { Timestamp } from 'firebase/firestore';
 import { revalidatePath } from "next/cache";
+import { sendEnquiryEmail } from '@/lib/mailer';
 
 // --- START of New Cost Calculation Logic ---
 
@@ -175,7 +176,7 @@ export async function saveContactInfoAction(formData: ContactFormData): Promise<
     };
   }
 
-  // 2. Save data to Firestore
+    // Save data to Firestore, then email the enquiry to the admin inbox.
   try {
     const contactsCollection = collection(db, 'contacts');
     await addDoc(contactsCollection, {
@@ -184,6 +185,25 @@ export async function saveContactInfoAction(formData: ContactFormData): Promise<
       createdAt: serverTimestamp(),
       read: false, // Default to unread
     });
+
+    // Fire-and-forget: a mail delivery failure must not fail the submission
+    // (the lead is already safely stored in Firestore).
+    let emailed = false;
+    try {
+      emailed = await sendEnquiryEmail({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        message: formData.message,
+        type: formData.type || 'contact',
+      });
+    } catch (mailError) {
+      console.error("Unexpected error while sending enquiry email:", mailError);
+    }
+    if (!emailed) {
+      console.warn(`[enquiry] Email NOT delivered to admin for "${formData.name}". Check SMTP configuration (SMTP_USER / SMTP_PASS).`);
+    }
+
     return { success: true };
   } catch (error: unknown) {
     console.error("Error saving to Firestore:", error);
@@ -339,6 +359,70 @@ export async function deleteEstimationAction(id: string): Promise<{ success: boo
   } catch (error: unknown) {
     console.error("Error deleting estimation:", error);
     return { success: false, error: "Failed to delete estimation." };
+  }
+}
+
+// --- Visitor analytics ---
+
+export type VisitEntry = {
+  id: string;
+  path: string;
+  sessionId: string;
+  createdAt: number; // epoch ms
+}
+
+export type AnalyticsSummary = {
+  views: number;
+  visitors: number;
+}
+
+// Records a page visit (called from the client-side visitor tracker).
+export async function trackVisitAction(path: string, sessionId: string): Promise<{ success: boolean }> {
+  if (!app.options.projectId || !path || !sessionId) {
+    return { success: false };
+  }
+  try {
+    await addDoc(collection(db, 'visits'), {
+      path,
+      sessionId,
+      createdAt: serverTimestamp(),
+    });
+    return { success: true };
+  } catch (error) {
+    console.error("Error tracking visit:", error);
+    return { success: false };
+  }
+}
+
+// Returns raw visit entries used to compute analytics on the client.
+export async function getVisitsAction(): Promise<{ visits?: VisitEntry[]; error?: string }> {
+  if (!app.options.projectId) {
+    return { error: "Firebase is not configured on the server." };
+  }
+
+  try {
+    const visitsCollection = collection(db, 'visits');
+    const q = query(visitsCollection, orderBy('createdAt', 'desc'));
+    const querySnapshot = await getDocs(q);
+
+    const visits = querySnapshot.docs
+      .map(docSnap => {
+        const data = docSnap.data();
+        const createdAt = data.createdAt as Timestamp | undefined;
+        return {
+          id: docSnap.id,
+          path: data.path || '/',
+          sessionId: data.sessionId || '',
+          createdAt: createdAt ? createdAt.seconds * 1000 : 0,
+        };
+      })
+      .filter(v => v.createdAt > 0);
+
+    return { visits };
+  } catch (error: unknown) {
+    console.error("Error fetching visits:", error);
+    const err = error as { code?: string; message?: string };
+    return { error: `Failed to fetch analytics: ${err?.message ?? 'Unknown error'}` };
   }
 }
 

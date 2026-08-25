@@ -6,12 +6,11 @@ import {
     X,
     Zap,
     Calculator,
-    MessageCircle,
+    Mail,
     FileText,
     ArrowUpRight
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { siteConfig } from '@/lib/site-config';
 import { generatePDF } from '@/lib/pdf-generator';
 
 const FloatingActionDock = () => {
@@ -22,17 +21,17 @@ const FloatingActionDock = () => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 400);
         };
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     const actions = [
         {
-            id: 'whatsapp',
-            icon: <MessageCircle className="w-6 h-6" />,
+            id: 'contact',
+            icon: <Mail className="w-6 h-6" />,
             label: 'Executive Support',
             color: 'bg-primary',
-            onClick: () => window.open(siteConfig.contact.whatsapp, '_blank')
+            onClick: () => window.dispatchEvent(new CustomEvent('open-contact-form', { detail: { type: 'contact' } }))
         },
         {
             id: 'learning',

@@ -47,14 +47,16 @@ const HOOK_MESSAGES: string[] = [
 // Animated status notifiers shown inside the streaming bubble while the
 // model warms up; replaced by the typed-out answer as soon as tokens flow.
 const THINKING_STATUSES = [
-    'Linking up with Delvare AI…',
-    'Reading our service sheet…',
+    'Thinking …',
+    'Processing …',
     'Analyzing your question…',
-    'Checking products & pricing…',
-    'Composing your reply…',
+    'Double checking …',
+    'Composing response …',
 ];
 
-const TYPE_INTERVAL_MS = 24;
+const TYPE_INTERVAL_MS = 55;
+const TYPE_MIN_CHARS_PER_TICK = 2;
+const TYPE_CATCH_UP_DIVISOR = 20;
 
 const PLANNING_LINE =
     /^(?:we\s+(?:need|should|must|have)\b|i\s+(?:need|should|will|must)\b|i'll\b|let'?s\b|let us\b|make sure\b|ensure\b|keep (?:it|every|replies)\b|under ~?\d+ words\b|use markdown\b|use \d|\d-\d emojis?\b|emojis? count\b|word count\b|recount\b|check words\b|exceeding\b|must reduce\b|already prepared\b|we have that\b|no preamble\b|the user\b|user says\b|according to\b|provide (?:the )?final answer\b|respond concisely\b)[^\n]*$/i;
@@ -256,10 +258,8 @@ const AIChatWidget = () => {
     const [loading, setLoading] = useState(false);
     const [teaserVisible, setTeaserVisible] = useState(false);
 
-    // Streaming state: statusIdx cycles while waiting for the first token,
-    // streamText holds the progressively revealed answer.
+    // Status notifier index, cycled while waiting for the first token.
     const [statusIdx, setStatusIdx] = useState(0);
-    const [streamText, setStreamText] = useState<string | null>(null);
 
     const scrollRef = useRef<HTMLDivElement>(null);
     const abortRef = useRef<AbortController | null>(null);
@@ -273,18 +273,28 @@ const AIChatWidget = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    // Auto-scroll only when it makes sense: always follow a brand-new user
+    // message, otherwise stick to the streaming reply only while the reader
+    // is already near the bottom (never yank them out of history).
+    const lastRole = messages[messages.length - 1]?.role;
     useEffect(() => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        const el = scrollRef.current;
+        if (!el) return;
+        const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+        if (lastRole === 'user' || distanceFromBottom < 140) {
+            el.scrollTop = el.scrollHeight;
         }
-    }, [messages, loading, streamText]);
+    }, [messages, loading, lastRole]);
 
     // Cycle the animated status notifier until the first token arrives.
+    const lastMessage = messages[messages.length - 1];
+    const waitingForReply = loading && lastMessage?.role === 'assistant' && lastMessage.content === '';
+
     useEffect(() => {
-        if (!loading || streamText !== null) return;
+        if (!waitingForReply) return;
         const id = setInterval(() => setStatusIdx(i => i + 1), 900);
         return () => clearInterval(id);
-    }, [loading, streamText]);
+    }, [waitingForReply]);
 
     // Abort any in-flight stream when the widget closes or unmounts.
     useEffect(() => () => abortRef.current?.abort(), []);
@@ -338,11 +348,16 @@ const AIChatWidget = () => {
         abortRef.current = controller;
 
         const history: ChatMessage[] = [...messages, { role: 'user', content: clean }];
-        setMessages(history);
+        /*
+         * The reply is appended as an empty placeholder message and then
+         * updated IN PLACE while typing. Keeping a single mounted bubble for
+         * the whole lifecycle avoids the remount flicker / size reflow that
+         * happened when swapping the streaming bubble for a final one.
+         */
+        setMessages([...history, { role: 'assistant', content: '' }]);
         setInput('');
         setLoading(true);
         setStatusIdx(0);
-        setStreamText(null);
 
         /*
          * Typewriter engine: network chunks land in `received`, a steady
@@ -361,35 +376,38 @@ const AIChatWidget = () => {
                     ? (stripMeta(received).trim() || received.trim())
                     : '';
 
-            setStreamText(null);
             setLoading(false);
 
             if (!finalText && failed) {
                 console.error('[ai-chat]', errorMessage || 'stream failed');
-                setMessages(prev => [
-                    ...prev,
-                    { role: 'assistant', content: 'Hmm, I guess our AI service are Snoozed Zzzz!' },
-                ]);
-                return;
             }
 
-            setMessages(prev => [
-                ...prev,
-                {
+            setMessages(prev => {
+                const next = [...prev];
+                next[next.length - 1] = {
                     role: 'assistant',
                     content:
                         finalText ||
                         'Hmm, I guess our AI service are Snoozed Zzzz!',
-                },
-            ]);
+                };
+                return next;
+            });
+        };
+
+        const updateLastAssistant = (content: string) => {
+            setMessages(prev => {
+                const next = [...prev];
+                next[next.length - 1] = { role: 'assistant', content };
+                return next;
+            });
         };
 
         const typer = setInterval(() => {
             const backlog = received.length - revealCount;
             if (backlog > 0) {
-                revealCount += Math.max(3, Math.ceil(backlog / 12));
+                revealCount += Math.max(TYPE_MIN_CHARS_PER_TICK, Math.ceil(backlog / TYPE_CATCH_UP_DIVISOR));
                 if (revealCount > received.length) revealCount = received.length;
-                setStreamText(received.slice(0, revealCount));
+                updateLastAssistant(received.slice(0, revealCount));
             } else if (inferenceDone || failed) {
                 clearInterval(typer);
                 finishTyping();
@@ -440,7 +458,6 @@ const AIChatWidget = () => {
         } finally {
             if (cancelledRef.current) {
                 clearInterval(typer);
-                setStreamText(null);
                 setLoading(false);
             } else {
                 inferenceDone = true;
@@ -527,12 +544,12 @@ const AIChatWidget = () => {
                             key="orb-open"
                             onClick={closeChat}
                             aria-label="Close chat"
-                            initial={{ top: (typeof window !== 'undefined' ? window.innerHeight : 800) - 96, right: 32 }}
-                            animate={{ top: 24, right: 32 }}
+                            initial={{ top: (typeof window !== 'undefined' ? window.innerHeight : 800) - 76, right: 36 }}
+                            animate={{ top: 20, right: 32 }}
                             exit={{ opacity: 0, scale: 0.6 }}
                             transition={{ type: 'spring', stiffness: 130, damping: 19 }}
                             onAnimationComplete={() => setArrived(true)}
-                            className="fixed z-[110] flex items-center justify-center w-16 h-16 bg-white rounded-full shadow-2xl cursor-pointer"
+                            className="fixed z-[110] flex items-center justify-center w-11 h-11 bg-white rounded-full shadow-2xl cursor-pointer"
                         >
                             <span className="absolute inset-0 rounded-full bg-primary/20 animate-ping" />
                             <div className="relative w-full h-full flex items-center justify-center">
@@ -542,10 +559,10 @@ const AIChatWidget = () => {
                                     initial={{ rotate: 0 }}
                                     animate={{ rotate: 180, opacity: arrived ? 0 : 1 }}
                                     transition={{ rotate: { type: 'spring', stiffness: 130, damping: 19 }, opacity: { duration: 0.25 } }}
-                                    className="absolute w-9 h-9 object-contain"
+                                    className="absolute w-6 h-6 object-contain"
                                 />
                                 <X className={cn(
-                                    'absolute w-7 h-7 text-black transition-all duration-300',
+                                    'absolute w-[18px] h-[18px] text-black transition-all duration-300',
                                     arrived ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-50 -rotate-90'
                                 )} />
                             </div>
@@ -560,10 +577,10 @@ const AIChatWidget = () => {
                             transition={{ delay: 0.35, duration: 0.45, ease: 'easeOut' }}
                             className="fixed inset-0 z-[106] pt-28 flex justify-center pointer-events-none [padding-bottom:calc(1.5rem+env(safe-area-inset-bottom))]"
                         >
-                            <span className="absolute top-10 left-8 text-[10px] font-black uppercase tracking-[0.3em] text-white/40 select-none">
+                            <span className="absolute top-8 left-8 text-[10px] font-black uppercase tracking-[0.3em] text-white/40 select-none">
                                 Delvare · AI Assistant
                             </span>
-                            <div className="pointer-events-auto w-full max-w-2xl h-full min-h-0 flex flex-col px-4">
+                            <div className="pointer-events-auto w-full max-w-2xl lg:max-w-3xl h-full min-h-0 flex flex-col px-4">
                                 {/* Scrollable chat bubbles */}
                                 <div
                                     ref={scrollRef}
@@ -593,7 +610,31 @@ const AIChatWidget = () => {
                                                     )}
                                                 >
                                                     {msg.role === 'assistant' ? (
-                                                        <MarkdownContent content={msg.content} />
+                                                        i === messages.length - 1 && waitingForReply ? (
+                                                            <AnimatePresence mode="wait">
+                                                                <motion.span
+                                                                    key={currentStatus}
+                                                                    initial={{ opacity: 0, y: 4 }}
+                                                                    animate={{ opacity: 1, y: 0 }}
+                                                                    exit={{ opacity: 0, y: -4 }}
+                                                                    transition={{ duration: 0.25 }}
+                                                                    className="flex items-center gap-2 text-[13px] font-bold whitespace-nowrap"
+                                                                >
+                                                                    {currentStatus}
+                                                                    <span className="flex items-center gap-1">
+                                                                        {[0, 1, 2].map(d => (
+                                                                            <span
+                                                                                key={d}
+                                                                                className="w-1.5 h-1.5 rounded-full bg-white/90 animate-bounce"
+                                                                                style={{ animationDelay: `${d * 150}ms` }}
+                                                                            />
+                                                                        ))}
+                                                                    </span>
+                                                                </motion.span>
+                                                            </AnimatePresence>
+                                                        ) : (
+                                                            <MarkdownContent content={i === messages.length - 1 && loading ? `${msg.content}▍` : msg.content} />
+                                                        )
                                                     ) : (
                                                         msg.content
                                                     )}
@@ -601,49 +642,6 @@ const AIChatWidget = () => {
                                             </motion.div>
                                         ))}
                                     </AnimatePresence>
-
-                                    {/* Streaming bubble: animated status -> typed-out reply */}
-                                    {loading && (
-                                        <motion.div
-                                            initial={{ opacity: 0, y: 12 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{ duration: 0.3, ease: 'easeOut' }}
-                                            className="flex justify-start"
-                                        >
-                                            <span className="w-8 h-8 rounded-full bg-white border border-black/10 shadow-md flex items-center justify-center shrink-0 mr-3 mt-1 self-start overflow-hidden">
-                                                <img src="/assets/arrow.png" alt="" className="w-[18px] h-[18px] object-contain" />
-                                            </span>
-                                            <div className="max-w-[85%] bg-primary text-white rounded-3xl rounded-tl-md px-5 py-3.5 shadow-lg">
-                                                {streamText === null ? (
-                                                    <AnimatePresence mode="wait">
-                                                        <motion.span
-                                                            key={currentStatus}
-                                                            initial={{ opacity: 0, y: 4 }}
-                                                            animate={{ opacity: 1, y: 0 }}
-                                                            exit={{ opacity: 0, y: -4 }}
-                                                            transition={{ duration: 0.25 }}
-                                                            className="flex items-center gap-2 text-[13px] font-bold whitespace-nowrap"
-                                                        >
-                                                            {currentStatus}
-                                                            <span className="flex items-center gap-1">
-                                                                {[0, 1, 2].map(d => (
-                                                                    <span
-                                                                        key={d}
-                                                                        className="w-1.5 h-1.5 rounded-full bg-white/90 animate-bounce"
-                                                                        style={{ animationDelay: `${d * 150}ms` }}
-                                                                    />
-                                                                ))}
-                                                            </span>
-                                                        </motion.span>
-                                                    </AnimatePresence>
-                                                ) : (
-                                                    <>
-                                                        <MarkdownContent content={`${streamText}▍`} />
-                                                    </>
-                                                )}
-                                            </div>
-                                        </motion.div>
-                                    )}
                                 </div>
 
                                 {/* Suggestion prompts */}
