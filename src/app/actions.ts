@@ -5,7 +5,7 @@ import { db, app } from '@/lib/firebase';
 import { collection, addDoc, getDocs, query, orderBy, serverTimestamp, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import type { Timestamp } from 'firebase/firestore';
 import { revalidatePath } from "next/cache";
-import { sendEnquiryEmail } from '@/lib/mailer';
+import { callEdgeFunction } from '@/lib/supabase-edge';
 
 // --- START of New Cost Calculation Logic ---
 
@@ -186,22 +186,19 @@ export async function saveContactInfoAction(formData: ContactFormData): Promise<
       read: false, // Default to unread
     });
 
-    // Fire-and-forget: a mail delivery failure must not fail the submission
+    // Fire-and-forget: email delivery failure must not fail the submission
     // (the lead is already safely stored in Firestore).
-    let emailed = false;
     try {
-      emailed = await sendEnquiryEmail({
-        name: formData.name,
-        email: formData.email,
+      const kind = formData.type === 'career' ? 'Career Application' : 'Website Enquiry';
+      await callEdgeFunction('email-server', {
+        full_name: formData.name,
         phone: formData.phone,
-        message: formData.message,
-        type: formData.type || 'contact',
+        email: formData.email,
+        title: kind,
+        subject: formData.message,
       });
     } catch (mailError) {
-      console.error("Unexpected error while sending enquiry email:", mailError);
-    }
-    if (!emailed) {
-      console.warn(`[enquiry] Email NOT delivered to admin for "${formData.name}". Check SMTP configuration (SMTP_USER / SMTP_PASS).`);
+      console.error("[enquiry] Edge function email failed:", mailError);
     }
 
     return { success: true };

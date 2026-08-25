@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALFAS B - Resume</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #fff;
+            color: #1a1a1a;
+            line-height: 1.4;
+            font-size: 10px;
+        }
+        .resume {
+            width: 210mm;
+            min-height: 297mm;
+            max-height: 297mm;
+            padding: 15mm 18mm;
+            overflow: hidden;
+            position: relative;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2.5px solid #1a1a1a;
+        }
+        .photo {
+            width: 72px;
+            height: 93px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: top;
+            border: 2px solid #1a1a1a;
+            flex-shrink: 0;
+        }
+        .header-text {
+            flex: 1;
+            text-align: center;
+        }
+        .name {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #111;
+            text-transform: uppercase;
+        }
+        .title {
+            font-size: 11px;
+            color: #444;
+            margin-top: 3px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        .contact {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 6px 18px;
+            margin-top: 7px;
+            font-size: 9px;
+            color: #333;
+        }
+        .contact span {
+            white-space: nowrap;
+        }
+        .section {
+            margin-bottom: 9px;
+        }
+        .section-title {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1.5px solid #ccc;
+            padding-bottom: 3px;
+            margin-bottom: 7px;
+            color: #111;
+        }
+        .summary {
+            font-size: 9.5px;
+            color: #333;
+            text-align: justify;
+        }
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .exp-item {
+            margin-bottom: 7px;
+        }
+        .exp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        .exp-role {
+            font-size: 10px;
+            font-weight: 700;
+            color: #111;
+        }
+        .exp-date {
+            font-size: 8.5px;
+            color: #666;
+            font-style: italic;
+        }
+        .exp-company {
+            font-size: 9px;
+            color: #444;
+            font-weight: 500;
+        }
+        .exp-desc {
+            font-size: 9px;
+            color: #444;
+            margin-top: 2px;
+        }
+        .exp-desc li {
+            margin-left: 12px;
+            margin-bottom: 1px;
+        }
+        .edu-item {
+            margin-bottom: 5px;
+        }
+        .edu-degree {
+            font-size: 10px;
+            font-weight: 700;
+            color: #111;
+        }
+        .edu-year {
+            font-size: 8.5px;
+            color: #666;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3px 15px;
+        }
+        .skill-category {
+            font-size: 9px;
+        }
+        .skill-label {
+            font-weight: 700;
+            color: #111;
+        }
+        .skill-value {
+            color: #444;
+        }
+        .achievements {
+            font-size: 9px;
+        }
+        .achievements li {
+            margin-left: 14px;
+            margin-bottom: 2px;
+            color: #333;
+        }
+        .achievements strong {
+            color: #111;
+        }
+        .projects-list {
+            font-size: 9px;
+        }
+        .projects-list li {
+            margin-left: 14px;
+            margin-bottom: 2px;
+            color: #333;
+        }
+        .projects-list strong {
+            color: #111;
+        }
+    </style>
+</head>
+<body>
+    <div class="resume">
+        <!-- HEADER -->
+        <div class="header">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAECCAYAAAC7XJj4AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAP+lSURBVHhelL0FdBXJ9j383huBwTXE3d0T4iEBgrvD4O7u7u4BgoQEd3edYXwYNxicAUJCEhxivP2tc7qru7oT3v/3Za1aube7Wm733nW0Tv0rJyen47t371JzcnJSHz9+rLas1KysLMN3blnq5yxlv7FPGU30N2z7H8fkPE7NMW2j+9Kb1E98fm9fvX/OY+W30XdD07ZJx6jb6L7FvYg+ZZ5DvY5oubnUxLYc/mxseh9ufIy5j9JyDMeU3q+03NS8PKXl5knH0nnFPan3ZbhP9fcrvzNLv3dtn7JNacr7N26Tzi1fy3QdQzO8K/V82rXVZ6ZiTX83+j0oTZyjDHzyufR3Lz6bccKNcCjhOOvhQ/XzQw2jxcWFqf/KycnJBICSkhJuxcXFKC4qVv4XF6n/aVsRioqKtP/KZ9FP7yM+F9E+0a+4GCXF6rl5n+lY0Ue9B+pbon5/R+3dO/6v7Tc37k993yl93ymf5T58Hqlp26nvO9FXuoeSYryTvivHKNuU7cX477sSpf33nfrZtO2/ymfQ//+WAHgHiO30/b/0XXzW99N/5Xil8Xb8V23K8co28z5lP/fR7ke9J74X5fs78b+kSGt6X6W/3kfpVyL1o32iyb+v9DmU84imPEs6F31X9/Nn5Tsfo17L2E+9D95P77oIJcWF/J8xyvihbdRPXJfOp2CB36uKNeW/ekxRIYoKC1AoWoHyv6iokPvS378eP85JpRvPyclBTnY2sqk9pvYY2dnU1M+PH+OxqXE/9Rj6npWVpe5TjuE+dA7+rm5T+yrHi3Mo16Hr5+Qo/8V5c7Jz8ITuje9Pbep3sV3rK21/Qufh7+o5tSZvU68rzpMjrqns1z+XdZ5sPHmSwy1Xbcr3bOV7bg6eUON+tC2bt3Hj/tnIy32iNtr+hPfR99zcXO270ujzE+Tmqf+pH3/W99N3eRtfk66do15buzflfvj5ZD/Gk5zHyn91m7hf7Z6fiN+u9NX6vae//l3tr/bJVq9D5zE/R+VZKs+T+4h+Eh605629bwVbjx9n6fgxvSdxbTqfhmXts8B0Fh5nPWLsZj3KUjFM58zmQZckiEoQIzDlpgBd//yYb0yQx9hP7vt/b8qP1sFYNhHkbbz9yRM8yXli2Ca2G47THpyxH52Pr1vqhcn9jQ9cbFOAoJPCACqJCAYSaeRQPmsEycvllsv/dRIYm9JXP45IohBFbubj5HtT7k8hpwJeBYga8OV+uaKVPofWBAGk3y4+a+fVriOeoyCJuLZ8TvG830ck/V0KwhHQ9fdjfF9y07GmEEofBHWSPCZyZGVpwoG0nH+Rfs4EKQVatUkEEN81ycDflYuVOk5tCqjL2KZ9J5Aq3w0EKauVRRAzGUznYGnCRJK+q025vulFSBJEeegyGZSXIF5m2QQxA1sduSXSUNNArZFEEEUQxAh2Wdpo5JAkh9guX0O+pnLvQiqYR3sjyA0kz5V+l6mvOGdpgknE05qyz0gOZbtOWAFy4zvRBzpxvCIVcrKz+F3p55abfg7xnvWmYkTFIA/sTA6VJESYx1mshikqVnGJBGBZHEnb/qd00NUcuZnBqmwTI3dpwCvgNG2T95m3ldmUfgoJdPIIMIvvOiGUBym26fvopZcmgKHRCCuDSqhWGthKk4XJYZAeZpKoRNFUL5kgOjmERNHPIc5rklbadZX7ke+ftin9JbC/97cY/2tNgF0cL4AvpIjp3KIp+yTyaMcq74D+K+9Dafq7FeRQiWYe4AxNkEBgmtRoGatCzVckh0wOamQr/0ux1oslSaEeJE5ikiAGMKrf5Ytq28xgl/drqo26TwWu8dxlbFObALx5m3G/on4pAFckjTzqi4fI32VSaS9a72t+ufxixSirjqzyqCuApACy" alt="Alfas B" class="photo" />
+            <div class="header-text">
+                <div class="name">Alfas B</div>
+                <div class="title">Software Engineer</div>
+                <div class="contact">
+                    <span>Alleppey, Kerala, India - 688001</span>
+                    <span>admin@delvare.in</span>
+                    <span>linkedin.com/in/alfas-b-717054222</span>
+                    <span>github.com/living-tuna</span>
+                    <span>delvare.in/founder</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROFESSIONAL SUMMARY -->
+        <div class="section">
+            <div class="section-title">Professional Summary</div>
+            <div class="summary">
+                Full-stack developer with hands-on experience building scalable web and mobile applications, SaaS/PaaS platforms, and enterprise solutions across diverse frameworks including React, Next.js, Flutter, Vite.js, and Gatsby. Proficient in leveraging AI tools to fast-track development and deliver high-quality solutions. Founder & CEO of Delvare, delivering custom software, cloud infrastructure, AI automation, and cybersecurity solutions to international clients. Proven track record in end-to-end product development, modular architecture, and cross-functional team leadership.
+            </div>
+        </div>
+
+        <!-- EDUCATION & ACHIEVEMENTS - Two Column -->
+        <div class="two-col">
+            <div class="section">
+                <div class="section-title">Education</div>
+                <div class="edu-item">
+                    <div class="edu-degree">B.Tech in Computer Science & Engineering</div>
+                    <div class="edu-year">2022 - 2025</div>
+                </div>
+                <div class="edu-item">
+                    <div class="edu-degree">Diploma in Computer Engineering</div>
+                    <div class="edu-year">2019 - 2022</div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title">Achievements</div>
+                <ul class="achievements">
+                    <li><strong>Published Author</strong> - "Nature of the Divine: How to Align with the Divine" (Amazon, Flipkart &amp; natureofthedivine.com)</li>
+                    <li><strong>CERD Funded Project</strong> - Smart Kisan IoT + AI Farming Platform</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- PROFESSIONAL EXPERIENCE -->
+        <div class="section">
+            <div class="section-title">Professional Experience</div>
+            <div class="exp-item">
+                <div class="exp-header">
+                    <span class="exp-role">Founder & CEO</span>
+                    <span class="exp-date">Jan 2025 - Present</span>
+                </div>
+                <div class="exp-company">Delvare (delvare.in)</div>
+                <ul class="exp-desc">
+                    <li>Founded and leading an XAAS company delivering SaaS, AI automation, cloud computing &amp; cybersecurity solutions for international clients.</li>
+                    <li>Built and deployed proprietary platforms: ECBills.in (PaaS), Blendly.sbs (community platform), Dvenue (venue booking app).</li>
+                    <li>Overseeing A-Z operations from strategic planning to hands-on development, client relations, and team leadership.</li>
+                </ul>
+            </div>
+            <div class="exp-item">
+                <div class="exp-header">
+                    <span class="exp-role">Founder & Developer</span>
+                    <span class="exp-date">2023</span>
+                </div>
+                <div class="exp-company">ECBills.in</div>
+                <ul class="exp-desc">
+                    <li>Founded a PaaS platform for retail &amp; enterprise: intelligent billing, live stock tracking, multi-store management, accounting &amp; team collaboration.</li>
+                </ul>
+            </div>
+            <div class="exp-item">
+                <div class="exp-header">
+                    <span class="exp-role">Next.js Full-Stack Developer</span>
+                    <span class="exp-date">2026</span>
+                </div>
+                <div class="exp-company">Masdar-al-Riyadh (masdaralriyadh.com)</div>
+                <ul class="exp-desc">
+                    <li>Leading full-stack development for a Riyadh-based furniture &amp; home decor e-commerce startup. Mentoring interns through the complete development lifecycle.</li>
+                </ul>
+            </div>
+            <div class="exp-item">
+                <div class="exp-header">
+                    <span class="exp-role">Flutter Developer</span>
+                    <span class="exp-date">2026</span>
+                </div>
+                <div class="exp-company">Dvenue</div>
+                <ul class="exp-desc">
+                    <li>Developed a last-minute venue booking application for events using Flutter with Node.js, Express.js, MongoDB, Firebase &amp; Supabase backend.</li>
+                </ul>
+            </div>
+            <div class="exp-item">
+                <div class="exp-header">
+                    <span class="exp-role">Full-Stack Developer</span>
+                    <span class="exp-date">2025</span>
+                </div>
+                <div class="exp-company">Laynered (laynered.com)</div>
+                <ul class="exp-desc">
+                    <li>Built a premium T-shirts &amp; apparel e-commerce platform delivering trendy, comfortable, and affordable fashion for all styles.</li>
+                </ul>
+            </div>
+            <div class="exp-item">
+                <div class="exp-header">
+                    <span class="exp-role">Full-Stack Developer</span>
+                    <span class="exp-date">2025</span>
+                </div>
+                <div class="exp-company">Spectra School of Design (spectraschool.in)</div>
+                <ul class="exp-desc">
+                    <li>Developed website for a premier interior, graphic &amp; digital design academy.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- PRODUCTS & CLIENTS -->
+        <div class="two-col">
+            <div class="section">
+                <div class="section-title">Products &amp; Platforms</div>
+                <ul class="projects-list">
+                    <li><strong>ECBills.in</strong> - Intelligent PaaS for retail/enterprise operations</li>
+                    <li><strong>Natureofthedivine.com</strong> - Author platform for "Nature of the Divine"</li>
+                    <li><strong>Blendly.sbs</strong> - Social network for literature lovers</li>
+                </ul>
+            </div>
+            <div class="section">
+                <div class="section-title">Client Projects</div>
+                <ul class="projects-list">
+                    <li><strong>Masdar-al-Riyadh</strong> - Furniture &amp; home decor e-commerce (Saudi Arabia)</li>
+                    <li><strong>Dvenue</strong> - Last-minute venue booking app</li>
+                    <li><strong>Laynered</strong> - Premium apparel e-commerce</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- KEY STRENGTHS & TECHNICAL SKILLS -->
+        <div class="two-col">
+            <div class="section">
+                <div class="section-title">Key Strengths</div>
+                <ul class="achievements">
+                    <li><strong>Modular Programming</strong> across diverse frameworks (React, Next.js, Flutter, Vite.js, Gatsby)</li>
+                    <li><strong>AI-Leveraged Development</strong> to fast-track delivery and boost productivity</li>
+                    <li><strong>Entrepreneurial Mindset</strong> - Founded and scaled multiple technology ventures</li>
+                    <li><strong>End-to-End Ownership</strong> - From architecture design to production deployment</li>
+                </ul>
+            </div>
+            <div class="section">
+                <div class="section-title">Technical Skills</div>
+                <div class="skills-grid">
+                    <div class="skill-category"><span class="skill-label">Frontend:</span> <span class="skill-value">Flutter, React, Next.js, Vite, Gatsby</span></div>
+                    <div class="skill-category"><span class="skill-label">Backend:</span> <span class="skill-value">Node.js, Express.js, REST APIs</span></div>
+                    <div class="skill-category"><span class="skill-label">Database:</span> <span class="skill-value">SQL, Supabase, MongoDB, Firebase</span></div>
+                    <div class="skill-category"><span class="skill-label">Other:</span> <span class="skill-value">Cybersecurity, AI/ML, Cloud, TypeScript</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

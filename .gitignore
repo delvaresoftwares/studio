@@ -20,6 +20,8 @@
 
 # production
 /build
+/docs
+/reports
 
 # misc
 .DS_Store
