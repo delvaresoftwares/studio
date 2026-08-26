@@ -128,12 +128,10 @@ const LogoChip = ({ client }: { client: ShowcaseClient }) =>
       src={client.logo}
       alt=""
       loading="lazy"
-      className="relative z-10 max-h-full max-w-full object-contain drop-shadow-[0_6px_12px_rgba(0,0,0,0.5)]"
+      className="relative z-10 h-full w-full object-cover drop-shadow-[0_6px_12px_rgba(0,0,0,0.5)]"
     />
   ) : (
-    <span className="relative z-10 font-headline text-sm font-black uppercase tracking-tight text-white/95">
-      {firstLetterOf(client.name)}
-    </span>
+    <div className={`absolute inset-0 bg-gradient-to-br ${client.gradient}`} />
   );
 
 const ClientCard = ({ client, index }: { client: ShowcaseClient; index: number }) => {
@@ -146,7 +144,7 @@ const ClientCard = ({ client, index }: { client: ShowcaseClient; index: number }
     const px = (e.clientX - rect.left) / rect.width - 0.5;
     const py = (e.clientY - rect.top) / rect.height - 0.5;
     el.style.transition = 'transform 120ms ease-out';
-    el.style.transform = `perspective(1000px) rotateX(${(-py * 7).toFixed(2)}deg) rotateY(${(px * 9).toFixed(2)}deg) translateY(-8px) scale(1.015)`;
+    el.style.transform = `perspective(1000px) rotateX(${(-py * 4).toFixed(2)}deg) rotateY(${(px * 5).toFixed(2)}deg) translateY(-4px) scale(1.008)`;
   };
 
   const handleLeave = () => {
@@ -172,7 +170,7 @@ const ClientCard = ({ client, index }: { client: ShowcaseClient; index: number }
         ref={tiltRef}
         onMouseMove={handleMove}
         onMouseLeave={handleLeave}
-        className="relative aspect-[4/5] w-full cursor-pointer overflow-hidden rounded-[2rem] border border-white/15 bg-black shadow-[0_40px_80px_-32px_rgba(0,0,0,0.5)] will-change-transform"
+        className="relative aspect-[4/5] w-full cursor-pointer overflow-hidden rounded-[2rem] border border-white/15 bg-black shadow-[0_40px_80px_-32px_rgba(0,0,0,0.5)]"
       >
         {client.bg ? (
           <img
@@ -212,7 +210,7 @@ const ClientCard = ({ client, index }: { client: ShowcaseClient; index: number }
 
         <div className="absolute inset-x-4 bottom-4 rounded-[1.4rem] border border-white/15 bg-white/[0.09] p-4 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl">
           <div className="flex items-center gap-3">
-            <div className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/20 bg-white/10 p-1.5">
+            <div className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/20 bg-white/10">
               <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.25),transparent_72%)]" />
               <LogoChip client={client} />
             </div>
@@ -271,7 +269,7 @@ const ClientWideCard = ({ client, index }: { client: ShowcaseClient; index: numb
       </div>
     </div>
 
-    <div className="absolute right-3 top-1/2 flex h-16 w-16 -translate-y-1/2 items-center justify-center overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-2 backdrop-blur-md">
+    <div className="absolute right-3 top-1/2 flex h-16 w-16 -translate-y-1/2 items-center justify-center overflow-hidden rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md">
       <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.25),transparent_70%)]" />
       <div className="grid h-full w-full place-items-center">
         <LogoChip client={client} />
@@ -354,9 +352,9 @@ const ClientsSection = () => {
           >
             <div className="relative">
               <div className="overflow-hidden py-4" ref={emblaRef}>
-                <div className="-ml-6 flex">
+                <div className="flex gap-6">
                   {showcaseClients.map((client, idx) => (
-                    <div key={client.domain} className="min-w-0 shrink-0 grow-0 basis-1/2 pl-6 lg:basis-1/3">
+                    <div key={client.domain} className="min-w-0 shrink-0 grow-0 basis-1/2 lg:basis-1/3">
                       <ClientCard client={client} index={idx} />
                     </div>
                   ))}

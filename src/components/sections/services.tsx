@@ -151,15 +151,15 @@ const ServicesSection = () => {
           <FadeIn delay={0.2} className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-6 sm:p-8 rounded-[2rem] border border-border/60 shadow-sm">
               <div>
-                <h3 className="text-lg font-black text-foreground mb-2">Vision</h3>
+                <h3 className="text-lg font-black text-foreground mb-2"># Vision</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed font-medium">
-                  To be the most trusted and innovative technology partner, empowering AI and automation as our signature for businesses worldwide.
+                  To be the most <span className="font-black text-foreground">trusted</span> and <span className="font-black text-foreground">innovative</span> technology partner, empowering <span className="font-black text-foreground">#AI</span> and <span className="font-black text-foreground">#Automation</span> as our signature for businesses worldwide.
                 </p>
               </div>
               <div className="md:border-l md:border-border/60 md:pl-6">
-                <h3 className="text-lg font-black text-foreground mb-2">Mission</h3>
+                <h3 className="text-lg font-black text-foreground mb-2"># Mission</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed font-medium">
-                  To empower business and start-ups with radiant technology solutions that drive innovation, efficiency, and growth in the digital age.
+                  To empower <span className="font-black text-foreground">business</span> and <span className="font-black text-foreground">start-ups</span> with radiant <span className="font-black text-foreground">#Technology</span> solutions that drive <span className="font-black text-foreground">innovation</span>, <span className="font-black text-foreground">efficiency</span>, and <span className="font-black text-foreground">growth</span> in the digital age.
                 </p>
               </div>
             </div>
