@@ -20,5 +20,11 @@ service cloud.firestore {
       allow create, read: if true;
       allow update, delete: if false;
     }
+
+    // Button-click tracking (read by the admin dashboard).
+    match /clicks/{clickId} {
+      allow create, read: if true;
+      allow update, delete: if false;
+    }
   }
 }

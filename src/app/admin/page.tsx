@@ -260,7 +260,14 @@ export default function AdminPage() {
           </Tabs>
           )}
 
-          {mainTab === 'analytics' && <AnalyticsPanel />}
+          {mainTab === 'analytics' && (
+            <AnalyticsPanel
+              contactsCount={contacts.length}
+              estimationsCount={estimations.length}
+              contactsReadCount={contacts.filter(c => c.read).length}
+              estimationsReadCount={estimations.filter(e => e.read).length}
+            />
+          )}
 
         </div>
       </div>

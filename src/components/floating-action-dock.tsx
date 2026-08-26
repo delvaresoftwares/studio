@@ -12,10 +12,13 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { generatePDF } from '@/lib/pdf-generator';
+import { useTrackClick } from '@/hooks/use-track-click';
 
 const FloatingActionDock = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const trackFabSupport = useTrackClick('fab-support');
+    const trackFabEstimator = useTrackClick('fab-estimator');
 
     useEffect(() => {
         const handleScroll = () => {
@@ -31,7 +34,7 @@ const FloatingActionDock = () => {
             icon: <Mail className="w-6 h-6" />,
             label: 'Executive Support',
             color: 'bg-primary',
-            onClick: () => window.dispatchEvent(new CustomEvent('open-contact-form', { detail: { type: 'contact' } }))
+            onClick: () => { trackFabSupport(); window.dispatchEvent(new CustomEvent('open-contact-form', { detail: { type: 'contact' } })); }
         },
         {
             id: 'learning',
@@ -45,7 +48,7 @@ const FloatingActionDock = () => {
             icon: <Calculator className="w-6 h-6" />,
             label: 'Core Estimator',
             color: 'bg-primary',
-            onClick: () => window.dispatchEvent(new CustomEvent('open-estimator'))
+            onClick: () => { trackFabEstimator(); window.dispatchEvent(new CustomEvent('open-estimator')); }
         },
         {
             id: 'catalog',

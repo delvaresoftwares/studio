@@ -6,8 +6,12 @@ import { Badge } from '@/components/ui/badge';
 import { Download, FileText, ArrowRight, Sparkles, BookOpen, Layers } from 'lucide-react';
 import { generatePDF } from '@/lib/pdf-generator';
 import { smoothScrollTo } from '@/lib/smooth-scroll';
+import { useTrackClick } from '@/hooks/use-track-click';
 
 const CatalogSection = () => {
+    const trackCatalogDownload = useTrackClick('catalog-download');
+    const trackCatalogEstimator = useTrackClick('catalog-estimator');
+
     return (
         <section id="catalog" className="w-full py-32 sm:py-48 relative overflow-hidden bg-primary text-white">
             {/* Background elements */}
@@ -37,7 +41,7 @@ const CatalogSection = () => {
                             <Button
                                 size="xl"
                                 className="h-16 px-10 text-[10px] uppercase tracking-[0.2em] font-black bg-white text-primary shadow-2xl hover:shadow-white/20 hover:-translate-y-1 transition-all group rounded-xl"
-                                onClick={() => window.open('/manifesto.pdf', '_blank')}
+                                onClick={() => { trackCatalogDownload(); window.open('/manifesto.pdf', '_blank'); }}
                             >
                                 <Download className="mr-3 w-5 h-5 group-hover:translate-y-1 transition-transform" />
                                 Download Guide
@@ -92,6 +96,7 @@ const CatalogSection = () => {
                                     size="lg"
                                     className="h-16 px-10 font-bold bg-primary text-white rounded-xl shadow-xl hover:shadow-2xl transition-all"
                                     onClick={() => {
+                                        trackCatalogEstimator();
                                         const target = document.getElementById('estimator');
                                         if (target) smoothScrollTo(target);
                                     }}

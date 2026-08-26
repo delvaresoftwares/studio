@@ -15,6 +15,7 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { smoothScrollTo } from '@/lib/smooth-scroll';
+import { useTrackClick } from '@/hooks/use-track-click';
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]\d{3}[)])?[\s-]?\d{3}[\s-]?\d{4}$/
@@ -33,6 +34,7 @@ const ContactSection = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const trackContactSubmit = useTrackClick('contact-execute');
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -53,6 +55,7 @@ const ContactSection = () => {
   }, [form]);
 
   const onSubmit = async (data: FormValues) => {
+    trackContactSubmit();
     setIsLoading(true);
     try {
       const result = await saveContactInfoAction({ ...data, type: 'contact' });

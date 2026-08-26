@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { LegalModals, type PolicyType } from '@/components/legal-modals';
 import { siteConfig } from '@/lib/site-config';
 import { specialties } from '@/lib/specialties-data';
+import { useTrackClick } from '@/hooks/use-track-click';
 
 const PRODUCT_SLUGS = ['ecbills', 'blendly'];
 
@@ -18,6 +19,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
   const [activePolicy, setActivePolicy] = useState<PolicyType | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const trackFooterSchedule = useTrackClick('footer-schedule');
 
   const openPolicy = (type: PolicyType) => {
     setActivePolicy(type);
@@ -129,7 +131,7 @@ const Footer = () => {
               </li>
               <li>
                 <button
-                  onClick={() => window.dispatchEvent(new CustomEvent('open-contact-form', { detail: { type: 'contact' } }))}
+                  onClick={() => { trackFooterSchedule(); window.dispatchEvent(new CustomEvent('open-contact-form', { detail: { type: 'contact' } })); }}
                   className="group inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-primary text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-lg hover:-translate-y-0.5 hover:shadow-xl transition-all"
                 >
                   <CalendarCheck className="w-4 h-4" />

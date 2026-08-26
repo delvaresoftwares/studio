@@ -2,10 +2,13 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useTrackClick } from '@/hooks/use-track-click';
 import { Badge } from '@/components/ui/badge';
 import { GraduationCap, Users, Cpu, Trophy, ArrowRight } from 'lucide-react';
 
 const CareerSection = () => {
+    const trackCareersApply = useTrackClick('careers-apply');
+
     return (
         <section id="careers" className="w-full py-40 overflow-hidden bg-primary relative">
             {/* Minimal Background Decor */}
@@ -45,6 +48,7 @@ const CareerSection = () => {
                             size="xl"
                             className="h-16 px-10 text-[10px] uppercase tracking-[0.2em] font-black bg-white text-primary rounded-xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all"
                             onClick={() => {
+                                trackCareersApply();
                                 window.dispatchEvent(new CustomEvent('open-contact-form', { detail: { type: 'career' } }));
                             }}>
                             Apply for Academy Protocol

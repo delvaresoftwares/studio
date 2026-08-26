@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles, Terminal, Cloud, ShieldCheck, Cpu } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useTrackClick } from '@/hooks/use-track-click';
 
 const keywords = [
   "24/7 IT Support", "System Maintenance", "Cloud Management", "Security Audits", "Data Backup", "Technical Consulting", "Network Monitoring", "IT Infrastructure", "Software Updates", "Troubleshooting", "System Optimization"
@@ -13,6 +14,7 @@ const keywords = [
 const HeroSection = () => {
   const [keywordIndex, setKeywordIndex] = useState(0);
   const [fade, setFade] = useState(true);
+  const trackHeroEnquire = useTrackClick('hero-enquire');
   const heroRef = useRef<HTMLElement>(null);
   const arrowRef = useRef<HTMLDivElement>(null);
   const arrowImgRef = useRef<HTMLImageElement>(null);
@@ -104,7 +106,7 @@ const HeroSection = () => {
               <Button
                 size="xl"
                 className="h-16 px-12 text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl transition-all duration-300 group"
-                onClick={() => window.dispatchEvent(new CustomEvent('open-contact-form', { detail: { type: 'contact' } }))}
+                onClick={() => { trackHeroEnquire(); window.dispatchEvent(new CustomEvent('open-contact-form', { detail: { type: 'contact' } })); }}
               >
                 Enquire
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />

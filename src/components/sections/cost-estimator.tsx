@@ -8,6 +8,7 @@ import { Bot, User, Send, Download, Share2, Cloud, Brain, Code, Hammer, RefreshC
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { generatePDF } from '@/lib/pdf-generator';
+import { useTrackClick } from '@/hooks/use-track-click';
 import { saveContactInfoAction } from '@/app/actions';
 import { smoothScrollTo } from '@/lib/smooth-scroll';
 
@@ -33,6 +34,7 @@ const regionMultipliers = { global: 1.2, regional: 1, local: 0.8 };
 
 const CostEstimatorSection = ({ onQuoteGenerated }: { onQuoteGenerated?: (data: any) => void }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const trackEstimatorConfirm = useTrackClick('estimator-confirm');
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -214,7 +216,7 @@ const CostEstimatorSection = ({ onQuoteGenerated }: { onQuoteGenerated?: (data: 
             <Button
               className="w-full h-16 text-lg font-black bg-primary text-white rounded-2xl shadow-xl hover:shadow-[0_0_30px_-5px_hsl(var(--primary))] transition-all disabled:opacity-70"
               disabled={quoteStatus !== 'idle'}
-              onClick={() => handleConfirmBlueprint(finalSelections, finalAmount, pricingBase[domain].label)}
+              onClick={() => { trackEstimatorConfirm(); handleConfirmBlueprint(finalSelections, finalAmount, pricingBase[domain].label); }}
             >
               {quoteStatus === 'sent' ? (
                 <span className="flex items-center gap-3"><CheckCircle className="w-6 h-6" /> Blueprint Received</span>

@@ -13,7 +13,7 @@ export default function Loading() {
                     unoptimized
                 />
                 <h2 className="text-xl font-bold font-headline tracking-wider text-primary animate-pulse">
-                    INITIALIZING...
+                    Thinking ...
                 </h2>
             </div>
         </div>

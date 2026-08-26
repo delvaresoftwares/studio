@@ -10,6 +10,7 @@ import { saveContactInfoAction, type ContactFormData } from '@/app/actions';
 import { smoothScrollTo } from '@/lib/smooth-scroll';
 import { useToast } from '@/hooks/use-toast';
 import { useScrollLock } from '@/hooks/use-scroll-lock';
+import { useTrackClick } from '@/hooks/use-track-click';
 
 const navLinks = [
   { name: 'Services', href: '#services' },
@@ -40,6 +41,10 @@ const Header = () => {
   });
 
   useScrollLock(formOpen);
+
+  const trackStartNow = useTrackClick('header-start-now');
+  const trackStartProject = useTrackClick('header-start-project');
+  const trackFormSubmit = useTrackClick('header-form-submit');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -110,6 +115,7 @@ const Header = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    trackFormSubmit();
     setIsLoading(true);
 
     try {
@@ -198,7 +204,7 @@ const Header = () => {
             <div className="flex items-center gap-4">
               {!isDark && (
                 <Button
-                  onClick={() => toggleForm('contact')}
+                  onClick={() => { trackStartNow(); toggleForm('contact'); }}
                   variant={formOpen ? "ghost" : "default"}
                   className={cn(
                     "h-10 px-6 rounded-lg font-black text-[10px] uppercase tracking-[0.1em] transition-all duration-500",
@@ -390,7 +396,7 @@ const Header = () => {
           </nav>
           {!isDark && (
             <div className="mt-auto pb-8">
-              <Button size="xl" className={cn("w-full h-16 text-[11px] font-black bg-primary rounded-2xl uppercase tracking-[0.2em] shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all", isDark ? "text-black" : "text-white")} onClick={() => { toggleForm('contact'); setMenuOpen(false); }}>
+              <Button size="xl" className={cn("w-full h-16 text-[11px] font-black bg-primary rounded-2xl uppercase tracking-[0.2em] shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all", isDark ? "text-black" : "text-white")} onClick={() => { trackStartProject(); toggleForm('contact'); setMenuOpen(false); }}>
                 Start Project
               </Button>
             </div>

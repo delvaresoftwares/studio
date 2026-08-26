@@ -31,7 +31,7 @@ const FounderHighlight = () => {
                         The Mind Behind Delvare
                     </Badge>
                     <h2 className="font-headline text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter mb-4 leading-[1.05] text-white">
-                        The Founder | {' '}
+                        The Founder & {' '}
                         <span className="text-primary italic font-light">CEO.</span>
                     </h2>
                 </FadeIn>

@@ -30,7 +30,6 @@ export default function HomeClient() {
         <ServicesSection />
         <ProductsSection />
         <ClientsSection />
-
         <Footer />
       </main>
     </div>

@@ -391,6 +391,68 @@ export async function trackVisitAction(path: string, sessionId: string): Promise
   }
 }
 
+// --- Button-click analytics ---
+
+export type ClickEntry = {
+  id: string;
+  buttonId: string;
+  page: string;
+  sessionId: string;
+  createdAt: number; // epoch ms
+}
+
+// Records a button click (called from the client-side click tracker).
+export async function trackClickAction(buttonId: string, page: string, sessionId: string): Promise<{ success: boolean }> {
+  if (!app.options.projectId || !buttonId) {
+    return { success: false };
+  }
+  try {
+    await addDoc(collection(db, 'clicks'), {
+      buttonId,
+      page,
+      sessionId: sessionId || 'anonymous',
+      createdAt: serverTimestamp(),
+    });
+    return { success: true };
+  } catch (error) {
+    console.error("Error tracking click:", error);
+    return { success: false };
+  }
+}
+
+// Returns raw click entries used to compute analytics on the client.
+export async function getClicksAction(): Promise<{ clicks?: ClickEntry[]; error?: string }> {
+  if (!app.options.projectId) {
+    return { error: "Firebase is not configured on the server." };
+  }
+
+  try {
+    const clicksCollection = collection(db, 'clicks');
+    const q = query(clicksCollection, orderBy('createdAt', 'desc'));
+    const querySnapshot = await getDocs(q);
+
+    const clicks = querySnapshot.docs
+      .map(docSnap => {
+        const data = docSnap.data();
+        const createdAt = data.createdAt as Timestamp | undefined;
+        return {
+          id: docSnap.id,
+          buttonId: data.buttonId || '',
+          page: data.page || '',
+          sessionId: data.sessionId || '',
+          createdAt: createdAt ? createdAt.seconds * 1000 : 0,
+        };
+      })
+      .filter(c => c.createdAt > 0);
+
+    return { clicks };
+  } catch (error: unknown) {
+    console.error("Error fetching clicks:", error);
+    const err = error as { code?: string; message?: string };
+    return { error: `Failed to fetch click analytics: ${err?.message ?? 'Unknown error'}` };
+  }
+}
+
 // Returns raw visit entries used to compute analytics on the client.
 export async function getVisitsAction(): Promise<{ visits?: VisitEntry[]; error?: string }> {
   if (!app.options.projectId) {
