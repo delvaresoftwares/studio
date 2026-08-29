@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import Link from 'next/link';
@@ -20,7 +19,6 @@ interface SpecialtyDetailContentProps {
 }
 
 export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentProps) {
-    const router = useRouter();
     const lenis = useLenis();
     const Icon = iconMap[data.icon] || Zap;
 
@@ -59,12 +57,13 @@ export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentP
                         <div className="max-w-4xl mx-auto flex flex-col items-center text-center">
                             {/* Heading line with Back Button */}
                             <div className="flex items-center justify-center gap-4 sm:gap-6 w-full animate-fade-in-up">
-                                <button
-                                    onClick={() => router.back()}
+                                <Link
+                                    href="/"
+                                    aria-label="Go back"
                                     className="w-12 h-12 sm:w-16 sm:h-16 shrink-0 rounded-2xl bg-primary text-white flex items-center justify-center hover:bg-primary/90 hover:-translate-x-1 transition-all shadow-lg"
                                 >
                                     <ArrowLeft className="w-6 h-6 sm:w-8 sm:h-8" />
-                                </button>
+                                </Link>
                                 <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] text-foreground text-left sm:text-center">
                                     {data.title.split(' ')[0]}{' '}
                                     <span className="text-primary italic font-light tracking-tight">{data.title.split(' ').slice(1).join(' ')}</span>
@@ -139,14 +138,15 @@ export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentP
                                 >
                                     Schedule Meeting <Calendar className="ml-2 w-4 h-4" />
                                 </Button>
-                                <Button
-                                    variant="outline"
-                                    size="lg"
-                                    className="w-full sm:w-auto px-10 border-border border-2 hover:bg-secondary rounded-xl transition-all font-black uppercase tracking-[0.15em] text-[11px] h-14"
-                                    onClick={() => router.push('/#services')}
-                                >
-                                    See Other Services <ArrowRight className="ml-2 w-4 h-4" />
-                                </Button>
+                                <Link href="/#services" className="w-full sm:w-auto">
+                                    <Button
+                                        variant="outline"
+                                        size="lg"
+                                        className="w-full sm:w-auto px-10 border-border border-2 hover:bg-secondary rounded-xl transition-all font-black uppercase tracking-[0.15em] text-[11px] h-14"
+                                    >
+                                        See Other Services <ArrowRight className="ml-2 w-4 h-4" />
+                                    </Button>
+                                </Link>
                             </div>
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { Button } from '@/components/ui/button';
@@ -44,7 +44,6 @@ interface ProductDetailContentProps {
 }
 
 const ProductDetailContent = ({ data }: ProductDetailContentProps) => {
-    const router = useRouter();
     const lenis = useLenis();
     const product = products.find(p => p.id === data?.slug);
     const Icon = productIconMap[data?.slug];
@@ -88,13 +87,13 @@ const ProductDetailContent = ({ data }: ProductDetailContentProps) => {
                         }}
                     />
 
-                    <button
-                        onClick={() => router.back()}
+                    <Link
+                        href="/"
                         aria-label="Go back"
                         className="absolute top-28 left-4 sm:left-8 z-20 w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-primary hover:border-primary transition-all shadow-lg"
                     >
                         <ArrowLeft className="w-5 h-5" />
-                    </button>
+                    </Link>
 
                     <div className="container mx-auto px-4 relative z-10 pb-16 sm:pb-24 pt-44">
                         <div className="max-w-3xl">

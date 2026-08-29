@@ -91,7 +91,6 @@ const CommitActivity = ({ className, animated }: { className?: string; animated?
 };
 
 export default function FounderPortfolioPage() {
-    const [profileActive, setProfileActive] = useState(false);
     const [expandedRoadmap, setExpandedRoadmap] = useState<number | null>(null);
     const glowRef = useRef<HTMLDivElement>(null);
     const mouseXRef = useRef(0);
@@ -141,7 +140,7 @@ export default function FounderPortfolioPage() {
 
             <main className="relative z-10 pt-32 pb-20">
                 {/* Hero Section */}
-                <section className={cn("relative min-h-[90vh] flex flex-col items-center justify-center px-4", profileActive && "pb-72 md:pb-56")}>
+                <section className="relative min-h-[90vh] flex flex-col items-center justify-center px-4">
                     {/* Background Gradients */}
                     <div className="absolute top-1/4 -left-1/4 w-[800px] h-[800px] bg-primary/20 blur-[200px] rounded-full mix-blend-screen opacity-50 animate-[pulse_10s_ease-in-out_infinite]" />
                     <div className="absolute bottom-1/4 -right-1/4 w-[600px] h-[600px] bg-emerald-600/10 blur-[150px] rounded-full mix-blend-screen opacity-50" />
@@ -223,39 +222,18 @@ export default function FounderPortfolioPage() {
                                 <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full p-2 bg-gradient-to-br from-primary/40 via-primary/10 to-transparent shadow-[0_0_100px_-20px_rgba(16,185,129,0.3)] group">
                                     <div className="absolute inset-0 bg-[#050505] rounded-full z-0 group-hover:scale-[0.98] transition-transform duration-500" />
                                     
-                                    <div className="absolute inset-2 rounded-full overflow-hidden bg-zinc-900 border border-white/10 z-10 cursor-pointer [transform:translateZ(0)]">
+                                    <div className="absolute inset-2 rounded-full overflow-hidden bg-zinc-900 border border-white/10 z-10 [transform:translateZ(0)]">
                                         <div className="absolute inset-0 bg-primary/20 mix-blend-overlay z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                                         <img
                                             src="/assets/avatar.png"
                                             alt={FOUNDER_DATA.name}
-                                            onClick={() => setProfileActive(active => !active)}
-                                            className={cn(
-                                                "w-full h-full object-cover object-center rounded-full transition-all duration-700 group-hover:scale-110",
-                                                profileActive ? "grayscale-0" : "grayscale group-hover:grayscale-0"
-                                            )}
+                                            className="w-full h-full object-cover object-center rounded-full transition-all duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
                                         />
                                     </div>
                                     
                                     {/* Orbiting Elements */}
                                     <div className="absolute inset-0 rounded-full border border-primary/20 animate-[spin_10s_linear_infinite]" />
                                     <div className="absolute inset-[-1rem] rounded-full border border-dashed border-white/10 animate-[spin_20s_linear_infinite_reverse]" />
-
-                                    {/* Message Bubbles on Profile Click */}
-                                    {profileActive && (
-                                        <>
-                                            <div className="absolute z-30 left-1/2 -translate-x-1/2 top-full mt-5 w-max max-w-[280px] animate-bubble-pop">
-                                                <div className="bg-primary text-black rounded-2xl rounded-tl-md px-5 py-3 text-[13px] font-black leading-snug shadow-[0_0_40px_-10px_rgba(16,185,129,0.6)]">
-                                                    At Delvare, I'm raising <span className="underline decoration-black/30">delvare.in</span> from runway.
-                                                </div>
-                                            </div>
-                                            <div className="absolute z-30 left-1/2 -translate-x-1/2 top-[calc(100%+6.5rem)] w-max max-w-[300px] animate-bubble-pop [animation-delay:180ms]">
-                                                <div className="bg-primary/90 backdrop-blur border border-black/10 text-black rounded-2xl rounded-tl-md px-5 py-3">
-                                                    <span className="block text-[9px] font-black uppercase tracking-widest mb-1 text-black/60">Active Projects</span>
-                                                    <span className="text-[12px] font-black leading-snug">Dvenue.space · flufflwaks_backend · Blendly.sbs · Masdaralriyadh.com · laynered.com</span>
-                                                </div>
-                                            </div>
-                                        </>
-                                    )}
                                 </div>
                             </div>
                         </div>

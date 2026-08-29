@@ -35,8 +35,8 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
 
                     {/* Back Button */}
                     <div className="no-print flex justify-between items-center mb-12">
-                        <Link href="/#blog" className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">
-                            <ArrowLeft className="w-4 h-4" /> Back to Articles
+                        <Link href="/" className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">
+                            <ArrowLeft className="w-4 h-4" /> Back to Home
                         </Link>
                         <button
                             onClick={() => window.print()}

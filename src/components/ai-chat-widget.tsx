@@ -29,8 +29,6 @@ const SUGGESTIONS = [
     'How do I contact you?',
 ];
 
-// Ten hook openers — one is picked at random per session as the first
-// message, each written to invite a tap and continue the conversation.
 const HOOK_MESSAGES: string[] = [
     "Hey! I'm Delvare's AI assistant. Ask me anything — services, products like ECBills.in or Blendly.sbs, pricing, or the team.",
     "Hi there! 👋 Want to know what we can build for your business? Just ask.",
@@ -44,8 +42,6 @@ const HOOK_MESSAGES: string[] = [
     "Hey! From billing systems to AI ecosystems — ask me what fits your business best.",
 ];
 
-// Animated status notifiers shown inside the streaming bubble while the
-// model warms up; replaced by the typed-out answer as soon as tokens flow.
 const THINKING_STATUSES = [
     'Thinking …',
     'Processing …',
@@ -82,14 +78,12 @@ const stripMeta = (text: string): string => {
         .replace(/<think>[\s\S]*?<\/think>/gi, '')
         .replace(/^\s*(?:analysis|reasoning|thinking)\s*[:\-]\s*/i, '');
 
-    // Cut everything up to and including the last "hand-off" cue near the top
     const cues = Array.from(out.matchAll(HANDOFF_CUE)).filter(c => (c.index ?? 0) <= 800);
     const last = cues[cues.length - 1];
     if (last && typeof last.index === 'number') {
         out = out.slice(last.index + last[0].length);
     }
 
-    // Drop word-counter artifact lines, e.g. "📚 Lend(21) &(22)"
     out = out
         .split('\n')
         .filter(line => !/[A-Za-z&]\(\d{1,4}\)/.test(line))
@@ -130,18 +124,12 @@ const extractReply = (raw: string): string => {
     }
 };
 
-/**
- * Reads the edge function's SSE protocol:
- *   {"type":"start"} | {"type":"delta","text"} | {"type":"done"} | {"type":"error","error"}
- * Falls back to plain-JSON parsing when a non-streaming body is returned.
- */
 const consumeStream = async (
     res: Response,
     onDelta: (text: string) => void
 ): Promise<{ ok: boolean; error?: string }> => {
     const contentType = res.headers.get('content-type') ?? '';
 
-    // Legacy non-streaming JSON response (or an error payload).
     if (!res.body || contentType.includes('application/json')) {
         const raw = await res.text();
         if (!res.ok) {
@@ -251,14 +239,11 @@ const AIChatWidget = () => {
     const [mounted, setMounted] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [open, setOpen] = useState(false);
-    const [arrived, setArrived] = useState(false);
     const [hook] = useState(pickHook);
     const [messages, setMessages] = useState<ChatMessage[]>(() => [{ role: 'assistant', content: hook }]);
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
     const [teaserVisible, setTeaserVisible] = useState(false);
-
-    // Status notifier index, cycled while waiting for the first token.
     const [statusIdx, setStatusIdx] = useState(0);
 
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -273,9 +258,6 @@ const AIChatWidget = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Auto-scroll only when it makes sense: always follow a brand-new user
-    // message, otherwise stick to the streaming reply only while the reader
-    // is already near the bottom (never yank them out of history).
     const lastRole = messages[messages.length - 1]?.role;
     useEffect(() => {
         const el = scrollRef.current;
@@ -286,7 +268,6 @@ const AIChatWidget = () => {
         }
     }, [messages, loading, lastRole]);
 
-    // Cycle the animated status notifier until the first token arrives.
     const lastMessage = messages[messages.length - 1];
     const waitingForReply = loading && lastMessage?.role === 'assistant' && lastMessage.content === '';
 
@@ -296,10 +277,8 @@ const AIChatWidget = () => {
         return () => clearInterval(id);
     }, [waitingForReply]);
 
-    // Abort any in-flight stream when the widget closes or unmounts.
     useEffect(() => () => abortRef.current?.abort(), []);
 
-    // Pop the hook teaser bubble once per session, shortly after load.
     useEffect(() => {
         let dismissed = false;
         try {
@@ -327,7 +306,6 @@ const AIChatWidget = () => {
     const closeChat = useCallback(() => {
         cancelledRef.current = true;
         abortRef.current?.abort();
-        setArrived(false);
         setOpen(false);
     }, []);
 
@@ -348,22 +326,11 @@ const AIChatWidget = () => {
         abortRef.current = controller;
 
         const history: ChatMessage[] = [...messages, { role: 'user', content: clean }];
-        /*
-         * The reply is appended as an empty placeholder message and then
-         * updated IN PLACE while typing. Keeping a single mounted bubble for
-         * the whole lifecycle avoids the remount flicker / size reflow that
-         * happened when swapping the streaming bubble for a final one.
-         */
         setMessages([...history, { role: 'assistant', content: '' }]);
         setInput('');
         setLoading(true);
         setStatusIdx(0);
 
-        /*
-         * Typewriter engine: network chunks land in `received`, a steady
-         * interval reveals characters at typing speed (accelerating when
-         * the backlog grows so it always catches up before finishing).
-         */
         let received = '';
         let revealCount = 0;
         let inferenceDone = false;
@@ -474,7 +441,6 @@ const AIChatWidget = () => {
             {/* Floating orb (closed) */}
             {!open && (
                 <>
-                    {/* Hook teaser — random opener inviting the first click */}
                     <AnimatePresence>
                         {teaserVisible && scrolled && (
                             <motion.div
@@ -525,127 +491,100 @@ const AIChatWidget = () => {
                 </>
             )}
 
+            {/* Fullscreen chat — orb expands to fill viewport */}
             <AnimatePresence>
                 {open && (
-                    <>
-                        {/* Darkened + blurred backdrop */}
-                        <motion.div
-                            key="backdrop"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.4 }}
-                            onClick={closeChat}
-                            className="fixed inset-0 z-[105] bg-black/70 backdrop-blur-xl"
-                        />
-
-                        {/* Flying orb -> X at top */}
-                        <motion.button
-                            key="orb-open"
-                            onClick={closeChat}
-                            aria-label="Close chat"
-                            initial={{ top: (typeof window !== 'undefined' ? window.innerHeight : 800) - 76, right: 36 }}
-                            animate={{ top: 20, right: 32 }}
-                            exit={{ opacity: 0, scale: 0.6 }}
-                            transition={{ type: 'spring', stiffness: 130, damping: 19 }}
-                            onAnimationComplete={() => setArrived(true)}
-                            className="fixed z-[110] flex items-center justify-center w-11 h-11 bg-white rounded-full shadow-2xl cursor-pointer"
-                        >
-                            <span className="absolute inset-0 rounded-full bg-primary/20 animate-ping" />
-                            <div className="relative w-full h-full flex items-center justify-center">
-                                <motion.img
-                                    src="/assets/arrow.png"
-                                    alt=""
-                                    initial={{ rotate: 0 }}
-                                    animate={{ rotate: 180, opacity: arrived ? 0 : 1 }}
-                                    transition={{ rotate: { type: 'spring', stiffness: 130, damping: 19 }, opacity: { duration: 0.25 } }}
-                                    className="absolute w-6 h-6 object-contain"
-                                />
-                                <X className={cn(
-                                    'absolute w-[18px] h-[18px] text-black transition-all duration-300',
-                                    arrived ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-50 -rotate-90'
-                                )} />
-                            </div>
-                        </motion.button>
-
-                        {/* Fullscreen chat interface */}
-                        <motion.div
-                            key="panel"
-                            initial={{ opacity: 0, y: 48 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 24 }}
-                            transition={{ delay: 0.35, duration: 0.45, ease: 'easeOut' }}
-                            className="fixed inset-0 z-[106] pt-28 flex justify-center pointer-events-none [padding-bottom:calc(1.5rem+env(safe-area-inset-bottom))]"
-                        >
-                            <span className="absolute top-8 left-8 text-[10px] font-black uppercase tracking-[0.3em] text-white/40 select-none">
+                    <motion.div
+                        key="chat-fullscreen"
+                        initial={{ borderRadius: '50%', width: 64, height: 64, bottom: 32, right: 32, top: 'auto', left: 'auto', opacity: 1 }}
+                        animate={{ borderRadius: 0, width: '100vw', height: '100vh', bottom: 0, right: 0, top: 0, left: 0, opacity: 1 }}
+                        exit={{ borderRadius: '50%', width: 64, height: 64, bottom: 32, right: 32, top: 'auto', left: 'auto', opacity: 0 }}
+                        transition={{ type: 'spring', stiffness: 120, damping: 22, mass: 0.8 }}
+                        className="fixed z-[200] bg-[#0a0a0a] overflow-hidden flex flex-col"
+                    >
+                        {/* Header */}
+                        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 shrink-0">
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 select-none">
                                 Delvare · AI Assistant
                             </span>
-                            <div className="pointer-events-auto w-full max-w-2xl lg:max-w-3xl h-full min-h-0 flex flex-col px-4">
-                                {/* Scrollable chat bubbles */}
-                                <div
-                                    ref={scrollRef}
-                                    data-lenis-prevent
-                                    className="flex-1 min-h-0 overflow-y-auto overscroll-contain space-y-4 px-1 pb-4 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-white/15 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent"
-                                >
-                                    <AnimatePresence initial={false}>
-                                        {messages.map((msg, i) => (
-                                            <motion.div
-                                                key={i}
-                                                initial={{ opacity: 0, y: 12 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                transition={{ duration: 0.3, ease: 'easeOut' }}
-                                                className={cn('flex', msg.role === 'user' ? 'justify-end' : 'justify-start')}
-                                            >
-                                                {msg.role === 'assistant' && (
-                                                    <span className="w-8 h-8 rounded-full bg-white border border-black/10 shadow-md flex items-center justify-center shrink-0 mr-3 mt-1 self-start overflow-hidden">
-                                                        <img src="/assets/arrow.png" alt="" className="w-[18px] h-[18px] object-contain" />
-                                                    </span>
-                                                )}
-                                                <div
-                                                    className={cn(
-                                                        'max-w-[85%] px-5 py-3.5 text-sm leading-relaxed font-medium shadow-lg break-words',
-                                                        msg.role === 'assistant'
-                                                            ? 'bg-primary text-white rounded-3xl rounded-tl-md'
-                                                            : 'bg-white text-black rounded-3xl rounded-tr-md whitespace-pre-wrap'
-                                                    )}
-                                                >
-                                                    {msg.role === 'assistant' ? (
-                                                        i === messages.length - 1 && waitingForReply ? (
-                                                            <AnimatePresence mode="wait">
-                                                                <motion.span
-                                                                    key={currentStatus}
-                                                                    initial={{ opacity: 0, y: 4 }}
-                                                                    animate={{ opacity: 1, y: 0 }}
-                                                                    exit={{ opacity: 0, y: -4 }}
-                                                                    transition={{ duration: 0.25 }}
-                                                                    className="flex items-center gap-2 text-[13px] font-bold whitespace-nowrap"
-                                                                >
-                                                                    {currentStatus}
-                                                                    <span className="flex items-center gap-1">
-                                                                        {[0, 1, 2].map(d => (
-                                                                            <span
-                                                                                key={d}
-                                                                                className="w-1.5 h-1.5 rounded-full bg-white/90 animate-bounce"
-                                                                                style={{ animationDelay: `${d * 150}ms` }}
-                                                                            />
-                                                                        ))}
-                                                                    </span>
-                                                                </motion.span>
-                                                            </AnimatePresence>
-                                                        ) : (
-                                                            <MarkdownContent content={i === messages.length - 1 && loading ? `${msg.content}▍` : msg.content} />
-                                                        )
-                                                    ) : (
-                                                        msg.content
-                                                    )}
-                                                </div>
-                                            </motion.div>
-                                        ))}
-                                    </AnimatePresence>
-                                </div>
+                            <button
+                                onClick={closeChat}
+                                aria-label="Close chat"
+                                className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
 
-                                {/* Suggestion prompts */}
-                                <div data-lenis-prevent className="flex gap-2 overflow-x-auto overscroll-x-contain pb-3 pt-1 no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                        {/* Chat bubbles */}
+                        <div
+                            ref={scrollRef}
+                            data-lenis-prevent
+                            className="flex-1 min-h-0 overflow-y-auto overscroll-contain space-y-4 px-4 sm:px-6 py-6 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-white/15 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent"
+                        >
+                            <div className="max-w-2xl lg:max-w-3xl mx-auto space-y-4">
+                                <AnimatePresence initial={false}>
+                                    {messages.map((msg, i) => (
+                                        <motion.div
+                                            key={i}
+                                            initial={{ opacity: 0, y: 12 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.3, ease: 'easeOut' }}
+                                            className={cn('flex', msg.role === 'user' ? 'justify-end' : 'justify-start')}
+                                        >
+                                            {msg.role === 'assistant' && (
+                                                <span className="w-8 h-8 rounded-full bg-white border border-black/10 shadow-md flex items-center justify-center shrink-0 mr-3 mt-1 self-start overflow-hidden">
+                                                    <img src="/assets/arrow.png" alt="" className="w-[18px] h-[18px] object-contain" />
+                                                </span>
+                                            )}
+                                            <div
+                                                className={cn(
+                                                    'max-w-[85%] px-5 py-3.5 text-sm leading-relaxed font-medium shadow-lg break-words',
+                                                    msg.role === 'assistant'
+                                                        ? 'bg-primary text-white rounded-3xl rounded-tl-md'
+                                                        : 'bg-white text-black rounded-3xl rounded-tr-md whitespace-pre-wrap'
+                                                )}
+                                            >
+                                                {msg.role === 'assistant' ? (
+                                                    i === messages.length - 1 && waitingForReply ? (
+                                                        <AnimatePresence mode="wait">
+                                                            <motion.span
+                                                                key={currentStatus}
+                                                                initial={{ opacity: 0, y: 4 }}
+                                                                animate={{ opacity: 1, y: 0 }}
+                                                                exit={{ opacity: 0, y: -4 }}
+                                                                transition={{ duration: 0.25 }}
+                                                                className="flex items-center gap-2 text-[13px] font-bold whitespace-nowrap"
+                                                            >
+                                                                {currentStatus}
+                                                                <span className="flex items-center gap-1">
+                                                                    {[0, 1, 2].map(d => (
+                                                                        <span
+                                                                            key={d}
+                                                                            className="w-1.5 h-1.5 rounded-full bg-white/90 animate-bounce"
+                                                                            style={{ animationDelay: `${d * 150}ms` }}
+                                                                        />
+                                                                    ))}
+                                                                </span>
+                                                            </motion.span>
+                                                        </AnimatePresence>
+                                                    ) : (
+                                                        <MarkdownContent content={i === messages.length - 1 && loading ? `${msg.content}▍` : msg.content} />
+                                                    )
+                                                ) : (
+                                                    msg.content
+                                                )}
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </AnimatePresence>
+                            </div>
+                        </div>
+
+                        {/* Suggestions */}
+                        <div data-lenis-prevent className="px-4 sm:px-6">
+                            <div className="max-w-2xl lg:max-w-3xl mx-auto">
+                                <div className="flex gap-2 overflow-x-auto overscroll-x-contain pb-3 pt-1 no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                                     {SUGGESTIONS.map(s => (
                                         <button
                                             key={s}
@@ -657,8 +596,12 @@ const AIChatWidget = () => {
                                         </button>
                                     ))}
                                 </div>
+                            </div>
+                        </div>
 
-                                {/* Input + send */}
+                        {/* Input */}
+                        <div className="px-4 sm:px-6 pb-6 pt-2 shrink-0">
+                            <div className="max-w-2xl lg:max-w-3xl mx-auto">
                                 <form
                                     onSubmit={(e) => { e.preventDefault(); send(input); }}
                                     className="flex items-center gap-3 bg-white/10 border border-white/15 backdrop-blur-md rounded-full pl-6 pr-2 py-2 focus-within:border-primary/60 transition-colors"
@@ -680,8 +623,8 @@ const AIChatWidget = () => {
                                     </button>
                                 </form>
                             </div>
-                        </motion.div>
-                    </>
+                        </div>
+                    </motion.div>
                 )}
             </AnimatePresence>
         </>

@@ -8,7 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const routes = [
     '',
-    '/portfolio/founder',
+    '/founder',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
