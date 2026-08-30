@@ -222,7 +222,7 @@ const ServicesSection = () => {
                 title: 'Innovations',
                 description:
                   'Researching on utilising the software-hardware evolution for the future AI systems that automates almost everything digitally possible.',
-                stat: 'Research Funded by Our Client Projects',
+                stat: 'Currently Raising Funding for Research',
                 cta: 'Schedule Meeting',
                 target: 'contact',
                 schedule: true,
