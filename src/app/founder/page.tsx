@@ -94,6 +94,7 @@ export default function FounderPortfolioPage() {
     const [expandedRoadmap, setExpandedRoadmap] = useState<number | null>(null);
     const [roadmapOpen, setRoadmapOpen] = useState(false);
     const roadmapRef = useRef<HTMLDivElement>(null);
+    const roadmapBtnRef = useRef<HTMLButtonElement>(null);
     const glowRef = useRef<HTMLDivElement>(null);
     const mouseXRef = useRef(0);
     const mouseYRef = useRef(0);
@@ -407,7 +408,7 @@ Piloting Delvare from Zero to a structured enterprise, I oversee all operations,
                             {roadmap.slice(0, 3).map((item, idx) => renderRoadmapItem(item, idx))}
 
                             <div className={cn(
-                                "grid transition-all duration-500 ease-out",
+                                "grid",
                                 roadmapOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
                             )}>
                                 <div className="overflow-hidden min-h-0">
@@ -416,19 +417,37 @@ Piloting Delvare from Zero to a structured enterprise, I oversee all operations,
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        {roadmap.length > 3 && (
-                            <div className="mt-14 text-center">
-                                <Button
-                                    onClick={() => setRoadmapOpen(prev => !prev)}
-                                    className="h-12 px-8 rounded-full text-[10px] font-black uppercase tracking-widest bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 transition-all inline-flex items-center gap-2"
-                                >
-                                    {roadmapOpen ? 'Collapse' : 'Expand'}
-                                    <ChevronDown className={cn("w-4 h-4 transition-transform duration-300", roadmapOpen && "rotate-180")} />
-                                </Button>
-                            </div>
-                        )}
+                            {roadmap.length > 3 && (
+                                <div className="pt-2 text-center">
+                                    <Button
+                                        ref={roadmapBtnRef}
+                                        onClick={() => {
+                                            const btn = roadmapBtnRef.current;
+                                            const beforeTop = btn ? btn.getBoundingClientRect().top : 0;
+                                            const willOpen = !roadmapOpen;
+                                            setRoadmapOpen(willOpen);
+                                            if (!willOpen) {
+                                                requestAnimationFrame(() => {
+                                                    const btn2 = roadmapBtnRef.current;
+                                                    if (btn2) {
+                                                        const afterTop = btn2.getBoundingClientRect().top;
+                                                        const delta = afterTop - beforeTop;
+                                                        const target = (lenis ? lenis.scroll : window.scrollY) + delta;
+                                                        if (lenis) lenis.scrollTo(target, { immediate: true });
+                                                        else window.scrollTo({ top: target, behavior: 'auto' });
+                                                    }
+                                                });
+                                            }
+                                        }}
+                                        className="h-12 px-8 rounded-full text-[10px] font-black uppercase tracking-widest bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 transition-all inline-flex items-center gap-2"
+                                    >
+                                        {roadmapOpen ? 'Collapse' : 'Expand'}
+                                        <ChevronDown className={cn("w-4 h-4 transition-transform duration-300", roadmapOpen && "rotate-180")} />
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </section>
 
