@@ -10,11 +10,11 @@
     --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
-    --primary: 161 72% 43%;
+    --primary: 161 72% 45%;
     /* Brand Green (Emerald 500 equivalent) */
     --primary-foreground: 230 80% 98%;
-    --secondary: 161 72% 98%;
-    /* Very light tint of brand green */
+    --secondary: 161 62% 88%;
+    /* Green tint (darker) */
     --secondary-foreground: 222 47% 11%;
     --muted: 210 40% 96%;
     --muted-foreground: 215.4 16.3% 46.9%;

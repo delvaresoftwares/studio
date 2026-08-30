@@ -202,6 +202,7 @@ const ServicesSection = () => {
                 title: 'E-Solutions',
                 description:
                   'Delivering solutions to businesses and startups internationally.',
+                stat: '9+ Global Clients Served',
                 cta: 'Explore Our Clients',
                 target: 'clients',
               },
@@ -211,6 +212,7 @@ const ServicesSection = () => {
                 title: 'Delvare systems',
                 description:
                   'Helping global workflows using our seamless systems and interesting apps by Delvare.',
+                stat: '10+ Delvare Projects',
                 cta: 'See ECBills & Blendly',
                 target: 'products',
               },
@@ -220,8 +222,10 @@ const ServicesSection = () => {
                 title: 'Innovations',
                 description:
                   'Researching on utilising the software-hardware evolution for the future AI systems that automates almost everything digitally possible.',
-                cta: 'Our Vision',
-                target: 'vision',
+                stat: 'Research Funded by Our Client Projects',
+                cta: 'Schedule Meeting',
+                target: 'contact',
+                schedule: true,
               },
             ].map((pillar) => {
               const Icon = pillar.icon;
@@ -243,8 +247,23 @@ const ServicesSection = () => {
                       {pillar.description}
                     </p>
 
+                    {pillar.stat && (
+                      <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                        <span className="text-[10px] font-black uppercase tracking-widest text-primary">
+                          {pillar.stat}
+                        </span>
+                      </div>
+                    )}
+
                     <Button
-                      onClick={() => smoothScrollTo(pillar.target)}
+                      onClick={() => {
+                        if (pillar.schedule) {
+                          window.dispatchEvent(new CustomEvent('open-contact-form', { detail: { type: 'contact' } }));
+                        } else {
+                          smoothScrollTo('#' + pillar.target);
+                        }
+                      }}
                       className="mt-8 h-11 px-6 rounded-full text-[10px] font-black uppercase tracking-widest bg-primary text-primary-foreground shadow-lg hover:shadow-xl hover:gap-3 transition-all"
                     >
                       {pillar.cta}

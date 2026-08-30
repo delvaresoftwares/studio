@@ -92,6 +92,8 @@ const CommitActivity = ({ className, animated }: { className?: string; animated?
 
 export default function FounderPortfolioPage() {
     const [expandedRoadmap, setExpandedRoadmap] = useState<number | null>(null);
+    const [roadmapOpen, setRoadmapOpen] = useState(false);
+    const roadmapRef = useRef<HTMLDivElement>(null);
     const glowRef = useRef<HTMLDivElement>(null);
     const mouseXRef = useRef(0);
     const mouseYRef = useRef(0);
@@ -124,6 +126,64 @@ export default function FounderPortfolioPage() {
             window.removeEventListener('mousemove', handleMouseMove);
         };
     }, [lenis]);
+
+    const renderRoadmapItem = (item: (typeof roadmap)[number], idx: number) => {
+        const Icon = iconMap[item.logo] || Award;
+        const isOpen = expandedRoadmap === idx;
+        return (
+            <div key={idx} className="relative flex items-center justify-between md:justify-normal md:even:flex-row-reverse group">
+                <div className="flex items-center absolute left-[1.4375rem] md:left-1/2 -translate-x-1/2 w-12 h-12 rounded-full border-4 border-[#030303] bg-primary/20 text-primary justify-center z-10 transition-transform group-hover:scale-110">
+                    <Icon className="w-5 h-5" />
+                </div>
+                <div
+                    onClick={() => setExpandedRoadmap(prev => prev === idx ? null : idx)}
+                    aria-expanded={isOpen}
+                    className={cn(
+                        "w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] ml-auto md:ml-0 p-8 rounded-3xl cursor-pointer select-none transition-all duration-300",
+                        isOpen
+                            ? "bg-white/[0.05] border border-primary/30"
+                            : "bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] hover:border-white/10"
+                    )}
+                >
+                    <div className="flex items-center gap-3 mb-4">
+                        <span className="text-[10px] font-black tracking-widest uppercase text-white/40 bg-white/5 px-3 py-1.5 rounded-full border border-white/5">
+                            {item.fromMonth} {item.fromYear} - {item.toMonth ? `${item.toMonth} ${item.toYear}` : item.toYear}
+                        </span>
+                    </div>
+                    <h3 className="text-2xl font-black text-white tracking-tight mb-3">{item.heading}</h3>
+                    <p className={cn(
+                        "text-sm text-white/50 leading-relaxed font-medium",
+                        !isOpen && "line-clamp-2 mb-6"
+                    )}>
+                        {item.description}
+                    </p>
+                    <AnimatePresence initial={false}>
+                        {isOpen && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                                className="overflow-hidden"
+                            >
+                                <div className="flex flex-wrap gap-2 pt-1 pb-6">
+                                    {item.hashtags.map(tag => (
+                                        <span key={tag} className="text-[9px] font-black tracking-widest uppercase text-primary/70 bg-primary/5 px-2 py-1 rounded-md">
+                                            #{tag}
+                                        </span>
+                                    ))}
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-primary hover:text-white transition-colors">
+                        {isOpen ? 'Show Less' : 'Read More'}
+                        <ChevronDown className={cn("w-3 h-3 transition-transform duration-300", isOpen && "rotate-180")} />
+                    </span>
+                </div>
+            </div>
+        );
+    };
 
     return (
         <div className="min-h-screen bg-[#030303] text-white selection:bg-primary/30 selection:text-white font-sans overflow-hidden">
@@ -196,10 +256,19 @@ export default function FounderPortfolioPage() {
                                                 <Linkedin className="w-6 h-6" />
                                             </Button>
                                         </a>
+                                        <a href="/" className="group" aria-label="Visit Delvare">
+                                            <Button variant="outline" size="icon" className="h-16 w-16 rounded-2xl border-white/10 bg-white/5 hover:bg-primary hover:border-primary text-white transition-all p-3.5">
+                                                <img
+                                                    src="/assets/arrow-transparent.png"
+                                                    alt="Delvare"
+                                                    className="w-full h-full object-contain brightness-0 invert opacity-90 group-hover:opacity-100 transition-all"
+                                                />
+                                            </Button>
+                                        </a>
                                     </div>
                                 </div>
 
-                                <div className="flex flex-wrap justify-center md:justify-start gap-3 animate-fade-in-up [animation-delay:500ms]">
+                                <div className="flex flex-wrap justify-center md:justify-start gap-2.5 animate-fade-in-up [animation-delay:500ms]">
                                     {[
                                         { title: "Flutter", sub: "Android, iOS, Web" },
                                         { title: "React framework", sub: "Next.js, Vite.js, Gatsby" },
@@ -209,9 +278,9 @@ export default function FounderPortfolioPage() {
                                         { title: "AI & Machine Learning", sub: "Intelligent Systems" },
 
                                     ].map((cat) => (
-                                        <div key={cat.title} className="flex flex-col px-4 py-2 rounded-2xl border border-white/10 bg-white/5 hover:bg-primary/10 hover:border-primary/40 transition-all cursor-default">
-                                            <span className="text-[11px] font-black uppercase tracking-widest text-primary">{cat.title}</span>
-                                            <span className="text-[9px] font-bold text-white/40 uppercase tracking-wider">{cat.sub}</span>
+                                        <div key={cat.title} className="inline-flex items-baseline gap-2 px-4 py-2.5 rounded-xl border border-white/10 bg-white/5 hover:bg-primary/10 hover:border-primary/40 transition-all cursor-default">
+                                            <span className="text-[11px] font-black uppercase tracking-widest text-primary whitespace-nowrap">{cat.title}</span>
+                                            <span className="text-[9px] font-bold text-white/40 uppercase tracking-wider hidden sm:inline">{cat.sub}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -323,7 +392,7 @@ Piloting Delvare from Zero to a structured enterprise, I oversee all operations,
                 </section>
 
                 {/* Career Roadmap / Experience */}
-                <section className="py-24 relative border-b border-white/5">
+                <section ref={roadmapRef} className="scroll-mt-24 py-24 relative border-b border-white/5">
                     <div className="container max-w-5xl mx-auto px-4">
                         <div className="mb-20 text-center">
                             <Badge variant="outline" className="mb-6 border-primary/30 py-1.5 px-6 text-[10px] font-black tracking-[0.3em] uppercase text-primary bg-primary/10">
@@ -335,64 +404,31 @@ Piloting Delvare from Zero to a structured enterprise, I oversee all operations,
                         </div>
 
                         <div className="space-y-8 relative before:absolute before:inset-0 before:ml-[1.375rem] md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-white/10 before:to-transparent">
-                            {roadmap.map((item, idx) => {
-                                const Icon = iconMap[item.logo] || Award;
-                                const isOpen = expandedRoadmap === idx;
-                                return (
-                                    <div key={idx} className="relative flex items-center justify-between md:justify-normal md:even:flex-row-reverse group">
-                                        <div className="flex items-center absolute left-[1.4375rem] md:left-1/2 -translate-x-1/2 w-12 h-12 rounded-full border-4 border-[#030303] bg-primary/20 text-primary justify-center z-10 transition-transform group-hover:scale-110">
-                                            <Icon className="w-5 h-5" />
-                                        </div>
-                                        <div
-                                            onClick={() => setExpandedRoadmap(prev => prev === idx ? null : idx)}
-                                            aria-expanded={isOpen}
-                                            className={cn(
-                                                "w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] ml-auto md:ml-0 p-8 rounded-3xl cursor-pointer select-none transition-all duration-300",
-                                                isOpen
-                                                    ? "bg-white/[0.05] border border-primary/30"
-                                                    : "bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] hover:border-white/10"
-                                            )}
-                                        >
-                                            <div className="flex items-center gap-3 mb-4">
-                                                <span className="text-[10px] font-black tracking-widest uppercase text-white/40 bg-white/5 px-3 py-1.5 rounded-full border border-white/5">
-                                                    {item.fromMonth} {item.fromYear} - {item.toMonth ? `${item.toMonth} ${item.toYear}` : item.toYear}
-                                                </span>
-                                            </div>
-                                            <h3 className="text-2xl font-black text-white tracking-tight mb-3">{item.heading}</h3>
-                                            <p className={cn(
-                                                "text-sm text-white/50 leading-relaxed font-medium",
-                                                !isOpen && "line-clamp-2 mb-6"
-                                            )}>
-                                                {item.description}
-                                            </p>
-                                            <AnimatePresence initial={false}>
-                                                {isOpen && (
-                                                    <motion.div
-                                                        initial={{ height: 0, opacity: 0 }}
-                                                        animate={{ height: 'auto', opacity: 1 }}
-                                                        exit={{ height: 0, opacity: 0 }}
-                                                        transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-                                                        className="overflow-hidden"
-                                                    >
-                                                        <div className="flex flex-wrap gap-2 pt-1 pb-6">
-                                                            {item.hashtags.map(tag => (
-                                                                <span key={tag} className="text-[9px] font-black tracking-widest uppercase text-primary/70 bg-primary/5 px-2 py-1 rounded-md">
-                                                                    #{tag}
-                                                                </span>
-                                                            ))}
-                                                        </div>
-                                                    </motion.div>
-                                                )}
-                                            </AnimatePresence>
-                                            <span className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-primary hover:text-white transition-colors">
-                                                {isOpen ? 'Show Less' : 'Read More'}
-                                                <ChevronDown className={cn("w-3 h-3 transition-transform duration-300", isOpen && "rotate-180")} />
-                                            </span>
-                                        </div>
+                            {roadmap.slice(0, 3).map((item, idx) => renderRoadmapItem(item, idx))}
+
+                            <div className={cn(
+                                "grid transition-all duration-500 ease-out",
+                                roadmapOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                            )}>
+                                <div className="overflow-hidden min-h-0">
+                                    <div className="space-y-8">
+                                        {roadmap.slice(3).map((item, idx) => renderRoadmapItem(item, idx + 3))}
                                     </div>
-                                );
-                            })}
+                                </div>
+                            </div>
                         </div>
+
+                        {roadmap.length > 3 && (
+                            <div className="mt-14 text-center">
+                                <Button
+                                    onClick={() => setRoadmapOpen(prev => !prev)}
+                                    className="h-12 px-8 rounded-full text-[10px] font-black uppercase tracking-widest bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 transition-all inline-flex items-center gap-2"
+                                >
+                                    {roadmapOpen ? 'Collapse' : 'Expand'}
+                                    <ChevronDown className={cn("w-4 h-4 transition-transform duration-300", roadmapOpen && "rotate-180")} />
+                                </Button>
+                            </div>
+                        )}
                     </div>
                 </section>
 

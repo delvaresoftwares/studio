@@ -160,7 +160,7 @@ const Header = () => {
             <a href="#hero" className="flex items-center gap-3 group" onClick={() => { if (formOpen) setFormOpen(false); }}>
               <Logo 
                 compact={scrolled}
-                glow={!scrolled && !formOpen}
+                glow={!isDark && !scrolled && !formOpen}
                 light={isDark ? true : (!scrolled && !formOpen)} 
                 simple 
                 variant="header" 

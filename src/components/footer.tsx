@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Mail, MapPin, CalendarCheck, ArrowUpRight, ArrowLeft, Package, ArrowRight } from 'lucide-react';
+import { Mail, MapPin, CalendarCheck, ArrowUpRight, Package, ArrowRight } from 'lucide-react';
 import Logo from '@/components/logo';
 import { cn } from '@/lib/utils';
 import { LegalModals, type PolicyType } from '@/components/legal-modals';
@@ -152,8 +152,13 @@ const Footer = () => {
           </div>
           <div className={cn('flex flex-wrap justify-center items-center gap-x-8 gap-y-3 text-[10px] font-black uppercase tracking-[0.25em]', isDark ? 'text-white/50' : 'text-muted-foreground')}>
             {pathname !== '/' && (
-              <Link href="/" className="flex items-center gap-1.5 hover:text-primary transition-colors">
-                <ArrowLeft className="w-3 h-3" /> Back to Main Page
+              <Link href="/" className="group flex items-center gap-2 hover:text-primary transition-colors">
+                <img
+                  src="/assets/arrow-transparent.png"
+                  alt="Delvare"
+                  className={cn("h-5 w-auto object-contain brightness-0", isDark ? "invert opacity-80 group-hover:opacity-100" : "opacity-70 group-hover:opacity-100")}
+                />
+                Visit Delvare
               </Link>
             )}
             <button onClick={() => openPolicy('privacy')} className="hover:text-primary transition-colors">Privacy</button>
