@@ -201,8 +201,13 @@ const ClientCard = ({ client, index }: { client: ShowcaseClient; index: number }
 
         <div className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 bg-white/10 opacity-0 transition-all duration-1000 ease-out group-hover:left-[130%] group-hover:opacity-100" />
 
-        <span className="absolute left-5 top-5 rounded-full border border-white/15 bg-black/35 px-3.5 py-1.5 text-[9px] font-black tracking-[0.28em] text-white/75 backdrop-blur-md">
-          {String(index + 1).padStart(2, '0')}
+        <span className="absolute left-5 top-5 flex items-center gap-2">
+          <span className="rounded-full border border-white/15 bg-black/35 px-3.5 py-1.5 text-[9px] font-black tracking-[0.28em] text-white/75 backdrop-blur-md">
+            {String(index + 1).padStart(2, '0')}
+          </span>
+          <span className="rounded-full border border-primary/40 bg-primary/20 px-3.5 py-1.5 text-[8px] font-black uppercase tracking-[0.22em] text-primary backdrop-blur-md">
+            Developed by Delvare
+          </span>
         </span>
         <span className="absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/10 opacity-0 backdrop-blur-md transition-all duration-500 group-hover:opacity-100">
           <ExternalLink className="h-3.5 w-3.5 text-white" />
@@ -256,8 +261,13 @@ const ClientWideCard = ({ client, index }: { client: ShowcaseClient; index: numb
     </span>
 
     <div className="relative flex h-full flex-col justify-between p-4 pr-24">
-      <span className="w-fit rounded-full border border-white/15 bg-black/35 px-3 py-1 text-[8px] font-black uppercase tracking-[0.24em] text-primary/90 backdrop-blur-md">
-        {client.eyebrow}
+      <span className="flex items-center gap-2">
+        <span className="w-fit rounded-full border border-white/15 bg-black/35 px-3 py-1 text-[8px] font-black uppercase tracking-[0.24em] text-primary/90 backdrop-blur-md">
+          {client.eyebrow}
+        </span>
+        <span className="w-fit rounded-full border border-primary/40 bg-primary/20 px-2.5 py-1 text-[7px] font-black uppercase tracking-[0.2em] text-primary backdrop-blur-md">
+          By Delvare
+        </span>
       </span>
       <div>
         <h3 className="font-headline text-lg font-black leading-tight tracking-tight text-white">{client.name}</h3>
@@ -318,15 +328,15 @@ const ClientsSection = () => {
       <div className="container mx-auto px-4 relative z-10 text-center">
         <FadeIn delay={0.1} className="mb-14 md:mb-16">
           <Badge variant="outline" className="mb-5 border-primary/20 py-1.5 px-5 text-[10px] font-black tracking-[0.3em] uppercase text-primary/70 bg-primary/5">
-            Our Clients
+            Developed by Delvare
           </Badge>
           <h2 className="font-headline text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter text-foreground leading-none mb-4">
-            <TypingText text="Delvare's Own &..." delay={0.3} />{' '}
+            <TypingText text="Developed by" delay={0.3} />{' '}
             <br />
-            <span className="text-primary/60 font-light italic tracking-tight">Third party-clients.</span>
+            <span className="text-primary/60 font-light italic tracking-tight">Delvare.</span>
           </h2>
           <p className="max-w-xl mx-auto text-sm sm:text-base text-muted-foreground leading-relaxed font-medium">
-            From billing platforms to literature networks &mdash; real products we build, run and grow, live for their communities every day.
+            Our own platforms and the websites we build, run and grow for international clients &mdash; every product here was designed, developed and managed by Delvare.
           </p>
         </FadeIn>
 

@@ -147,7 +147,7 @@ const Footer = () => {
           <div className="flex items-center gap-3">
             <Logo simple light={isDark} variant="header" className="w-14 grayscale opacity-70 scale-90" />
             <p className={cn('text-[10px] font-black uppercase tracking-widest', isDark ? 'text-white/50' : 'text-muted-foreground')}>
-              &copy; {currentYear} XAAS by Delvare.in. All rights reserved.
+              &copy; {currentYear} Delvare.in — Software Development Company. All rights reserved.
             </p>
           </div>
           <div className={cn('flex flex-wrap justify-center items-center gap-x-8 gap-y-3 text-[10px] font-black uppercase tracking-[0.25em]', isDark ? 'text-white/50' : 'text-muted-foreground')}>

@@ -6,7 +6,7 @@ export const roadmap = [
     toYear: "Present",
     toMonth: "",
     heading: "Founder & CEO, Delvare",
-    description: "Founded Delvare to provide elite XAAS solutions. Piloting the vision from ground zero to a highly structured enterprise, overseeing A-Z operations, client relations, and lead development.",
+    description: "Founded Delvare as a software development company delivering elite custom software, SaaS and AI solutions. As Founder & CEO, I pilot end-to-end operations of development procedures along with business executive operations — overseeing client relations, and lead development.",
     hashtags: ["Founder", "CEO", "Delvare", "SaaS", "Business Operations"]
   },
   {

@@ -10,7 +10,7 @@ const FOUNDER_DATA = {
     name: 'Alfas B',
     role: 'Founder & CEO',
     company: 'DELVARE',
-    bio: 'Shipping solutions for international clients. What started as an outburst of freelance services has now evolved into a structured enterprise.',
+    bio: 'Shipping solutions for international clients. As Founder & CEO, I manage end-to-end operations — from development procedures to business executive operations.',
     avatar: '/assets/avatar.png',
 };
 

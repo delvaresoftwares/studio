@@ -81,7 +81,7 @@ const CareerSection = () => {
                                         </div>
                                         <div className="flex gap-6 pl-12">
                                             <span className="text-slate-400/30">04</span>
-                                            <span>this.<span className="text-blue-300">stack</span>.push(<span className="text-emerald-400">"Delvare_XAAS"</span>);</span>
+                                            <span>this.<span className="text-blue-300">stack</span>.push(<span className="text-emerald-400">"Delvare_Software"</span>);</span>
                                         </div>
                                         <div className="flex gap-6 pl-6">
                                             <span className="text-slate-400/30">05</span>

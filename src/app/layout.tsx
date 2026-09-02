@@ -29,12 +29,13 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
     default: siteConfig.title,
-    template: `%s | ${siteConfig.name}`,
+    template: `%s | ${siteConfig.name} — ${siteConfig.companyTagline}`,
   },
   description: siteConfig.description,
   keywords: siteConfig.keywords as unknown as string[],
-  authors: [{ name: "Delvare.in" }],
+  authors: [{ name: "Delvare" }, { name: "Alfas B" }],
   creator: "Delvare.in",
+  applicationName: "Delvare",
 
   icons: {
     icon: siteConfig.icon,
@@ -52,7 +53,7 @@ export const metadata: Metadata = {
         url: siteConfig.ogImage,
         width: 500,
         height: 500,
-        alt: 'XAAS by Delvare'
+        alt: 'Delvare — Software Development Company'
       }
     ],
     locale: 'en_US',

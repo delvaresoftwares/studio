@@ -383,7 +383,7 @@ export default function FounderPortfolioPage() {
                                 
                     
                                                   <p className="text-white/50 p-4 leading-relaxed font-medium">
-Piloting Delvare from Zero to a structured enterprise, I oversee all operations, from strategic planning to hands-on development. 
+As Founder & CEO, I manage end-to-end operations of development procedures along with business executive operations — from strategic planning to hands-on development. 
                                 </p>
                             </div>
                             

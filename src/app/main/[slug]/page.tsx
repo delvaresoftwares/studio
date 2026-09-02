@@ -12,22 +12,28 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const data = specialties.find(s => s.slug === slug);
     if (!data) return {};
 
+    const isProduct = PRODUCT_SLUGS.includes(data.slug);
+
     return {
-        title: `${data.title} | Delvare`,
-        description: data.description,
-        keywords: ['who is alfas', 'alfas delvare', 'delvare', 'delvare.in', 'delvare softwares', 'best software startups', data.title.toLowerCase(), 'delvare clients', 'delvare vision', 'delvare pillars', 'services'],
+        title: isProduct
+            ? `${data.title} — Developed by Delvare`
+            : `${data.title} — Delvare Software Development Company`,
+        description: `${data.detailedDescription || data.description} Built, run and grown by Delvare.`,
+        keywords: ['software development company', 'custom software development', 'delvare', 'delvare.in',
+            data.title.toLowerCase(), `${data.title} by Delvare`, 'ecbills.in', 'blendly.sbs', 'SaaS development',
+            'PaaS development', 'AI automation', 'cloud infrastructure', 'cybersecurity services', 'delvare clients'],
         openGraph: {
-            title: `${data.title} | Delvare`,
-            description: data.description,
+            title: `${data.title} — Delvare`,
+            description: `${data.detailedDescription || data.description} Built, run and grown by Delvare.`,
             url: `${siteConfig.url}/main/${data.slug}`,
-            images: [{ url: siteConfig.ogImage, width: 500, height: 500, alt: `${data.title} — Delvare` }],
+            images: [{ url: siteConfig.ogImage, width: 500, height: 500, alt: `${data.title} — Developed by Delvare` }],
             locale: 'en_US',
             type: 'website',
         },
         twitter: {
             card: 'summary_large_image',
-            title: `${data.title} | Delvare`,
-            description: data.description,
+            title: `${data.title} — Delvare`,
+            description: `${data.detailedDescription || data.description} Built, run and grown by Delvare.`,
             images: [siteConfig.ogImage],
         },
     };
@@ -41,9 +47,67 @@ export default async function SpecialtyPortfolioPage({ params }: { params: Promi
         notFound();
     }
 
-    return PRODUCT_SLUGS.includes(slug) ? (
-        <ProductDetailContent data={data} />
-    ) : (
-        <SpecialtyDetailContent data={data} />
+    const isProduct = PRODUCT_SLUGS.includes(data.slug);
+
+    const productJsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+            isProduct
+                ? {
+                      '@type': 'SoftwareApplication',
+                      name: data.title,
+                      applicationCategory: 'BusinessApplication',
+                      operatingSystem: 'Web',
+                      description: data.detailedDescription || data.description,
+                      url: `${siteConfig.url}/main/${data.slug}`,
+                      publisher: {
+                          '@type': 'Organization',
+                          name: 'Delvare',
+                          url: siteConfig.url,
+                      },
+                  }
+                : {
+                      '@type': 'Service',
+                      name: `${data.title} — Delvare`,
+                      serviceType: data.title,
+                      description: data.detailedDescription || data.description,
+                      provider: {
+                          '@type': 'Organization',
+                          name: 'Delvare',
+                          url: siteConfig.url,
+                          email: 'admin@delvare.in',
+                      },
+                      areaServed: 'Worldwide',
+                  },
+            {
+                '@type': 'FAQPage',
+                mainEntity: (data.faqs ?? []).map((faq: { question: string; answer: string }) => ({
+                    '@type': 'Question',
+                    name: faq.question,
+                    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+                })),
+            },
+            {
+                '@type': 'Organization',
+                name: 'Delvare',
+                url: siteConfig.url,
+                logo: siteConfig.icon,
+                knowsAbout: data.title,
+            },
+        ],
+    };
+
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+            />
+            {isProduct ? (
+                <ProductDetailContent data={data} />
+            ) : (
+                <SpecialtyDetailContent data={data} />
+            )}
+        </>
     );
 }

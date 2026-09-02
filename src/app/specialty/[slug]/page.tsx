@@ -10,21 +10,21 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     if (!data) return {};
 
     return {
-        title: `${data.title} | Delvare Specialty`,
-        description: data.description,
-        keywords: ['who is alfas', 'alfas delvare', 'delvare', 'delvare.in', 'delvare softwares', 'best software startups', data.title.toLowerCase(), 'delvare clients', 'delvare vision', 'delvare pillars', 'specialty'],
+        title: `${data.title} — Delvare Software Development Company`,
+        description: `${data.description} A ${data.title.toLowerCase()} service by Delvare, the software development company behind ECBills.in, Blendly.sbs and more.`,
+        keywords: ['software development company', 'custom software development', 'delvare', 'delvare.in', data.title.toLowerCase(), `${data.title} by Delvare`, 'SaaS development', 'AI automation', 'cloud infrastructure', 'cybersecurity services', 'delvare clients'],
         openGraph: {
-            title: `${data.title} | Delvare Specialty`,
-            description: data.description,
+            title: `${data.title} — Delvare`,
+            description: `${data.description} Built and delivered by Delvare for clients worldwide.`,
             url: `${siteConfig.url}/specialty/${data.slug}`,
-            images: [{ url: siteConfig.ogImage, width: 500, height: 500, alt: `${data.title} — Delvare Specialty` }],
+            images: [{ url: siteConfig.ogImage, width: 500, height: 500, alt: `${data.title} — Delvare Software Development Company` }],
             locale: 'en_US',
             type: 'website',
         },
         twitter: {
             card: 'summary_large_image',
-            title: `${data.title} | Delvare Specialty`,
-            description: data.description,
+            title: `${data.title} — Delvare`,
+            description: `${data.description} Built and delivered by Delvare for clients worldwide.`,
             images: [siteConfig.ogImage],
         },
     };
@@ -38,5 +38,44 @@ export default async function SpecialtyPage({ params }: { params: Promise<{ slug
         notFound();
     }
 
-    return <SpecialtyDetailContent data={data} />;
+    const serviceJsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+            {
+                '@type': 'Service',
+                name: `${data.title} — Delvare`,
+                serviceType: data.title,
+                description: data.detailedDescription || data.description,
+                provider: {
+                    '@type': 'Organization',
+                    name: 'Delvare',
+                    url: siteConfig.url,
+                    email: 'admin@delvare.in',
+                },
+                areaServed: 'Worldwide',
+            },
+            {
+                '@type': 'FAQPage',
+                mainEntity: (data.faqs ?? []).map((faq: { question: string; answer: string }) => ({
+                    '@type': 'Question',
+                    name: faq.question,
+                    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+                })),
+            },
+            {
+                '@type': 'Organization',
+                name: 'Delvare',
+                url: siteConfig.url,
+                logo: siteConfig.icon,
+                knowsAbout: data.title,
+            },
+        ],
+    };
+
+    return (
+        <>
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }} />
+            <SpecialtyDetailContent data={data} />
+        </>
+    );
 }

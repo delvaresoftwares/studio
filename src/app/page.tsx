@@ -3,26 +3,31 @@ import HomeClient from './home-client';
 import { siteConfig } from '@/lib/site-config';
 
 export const metadata: Metadata = {
-    title: 'Trinity of Delvare | Vision, Mission & Our Three Pillars',
+    title: 'Delvare — Software Development Company | Custom Software, SaaS & AI Solutions',
     description:
-        'The Trinity of Delvare — our vision to pioneer technological evolution with software-hardware that acts as an entire company, our mission to power business and start-ups with radiant technology, and our three pillars: delivering solutions internationally, powering global workflows with our apps, and researching the software-hardware evolution for future AI systems.',
+        'Delvare is a software development company building custom software, SaaS & PaaS platforms (ECBills.in, Blendly.sbs, Dvenue), AI automation, cloud infrastructure and cybersecurity for businesses worldwide — managed end-to-end by our founder. See our vision, mission and the three pillars behind everything we ship.',
     keywords: [
-        'delvare', 'delvare.in', 'delvare trinity', 'trinity of delvare', 'delvare pillars', 'our three pillars',
-        'delvare vision', 'delvare mission', 'alfas delvare', 'ecbills', 'ecbills.in', 'blendly', 'blendly.sbs',
-        'dvenue', 'masdar al riyadh', 'laynered', 'spectra school', 'nature of the divine', 'alien hills',
-        'software hardware evolution', 'future AI systems', 'AI automation', 'business automation',
+        'delvare', 'delvare.in', 'software development company', 'custom software development',
+        'software development company kerala', 'web development company', 'app development company',
+        'SaaS development', 'SaaS platform development', 'PaaS development', 'AI automation',
+        'AI integration services', 'cloud infrastructure', 'cybersecurity services', 'UI UX design',
+        'digital transformation', 'business automation', 'delvare trinity', 'trinity of delvare',
+        'delvare pillars', 'delvare vision', 'delvare mission', 'alfas delvare', 'ecbills',
+        'ecbills.in', 'blendly', 'blendly.sbs', 'dvenue', 'masdar al riyadh', 'laynered',
+        'spectra school', 'nature of the divine', 'alien hills', 'software hardware evolution',
+        'future AI systems',
     ],
     openGraph: {
-        title: 'Trinity of Delvare | Vision, Mission & Our Three Pillars',
+        title: 'Delvare — Software Development Company | Custom Software, SaaS & AI Solutions',
         description:
-            'The Trinity of Delvare — our vision to pioneer technological evolution with software-hardware that acts as an entire company, our mission to power business and start-ups with radiant technology, and our three pillars.',
+            'Custom software, SaaS & PaaS platforms, AI automation, cloud and cybersecurity — built, run and grown by Delvare for clients worldwide. Founder & CEO: Alfas B.',
         url: siteConfig.url,
         images: [
             {
                 url: siteConfig.ogImage,
                 width: 500,
                 height: 500,
-                alt: 'Trinity of Delvare — Vision, Mission & Pillars',
+                alt: 'Delvare — Software Development Company',
             },
         ],
         locale: 'en_US',
@@ -30,8 +35,9 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Trinity of Delvare | Vision, Mission & Our Three Pillars',
-        description: 'The Trinity of Delvare — our vision, mission and the three pillars that define everything we build.',
+        title: 'Delvare — Software Development Company',
+        description:
+            'Custom software, SaaS & AI solutions developed by Delvare. Platforms: ECBills.in, Blendly.sbs, Dvenue and more.',
         images: [siteConfig.ogImage],
         creator: '@delvare',
     },
@@ -54,14 +60,26 @@ const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
         {
+            '@type': 'WebSite',
+            name: 'Delvare',
+            url: siteConfig.url,
+            description: siteConfig.description,
+        },
+        {
             '@type': 'Organization',
             name: 'Delvare',
             url: siteConfig.url,
             logo: siteConfig.icon,
             image: siteConfig.ogImage,
             email: 'admin@delvare.in',
+            founder: {
+                '@type': 'Person',
+                name: 'Alfas B',
+                jobTitle: 'Founder & CEO',
+                url: `${siteConfig.url}/founder`,
+            },
             description:
-                'Delvare is an XAAS company delivering high-performance business solutions — custom software, cloud & infrastructure, AI automation and cybersecurity.',
+                'Delvare is a software development company delivering high-performance business solutions — custom software, SaaS & PaaS platforms, AI automation, cloud & infrastructure, and cybersecurity — for businesses worldwide.',
             address: {
                 '@type': 'PostalAddress',
                 streetAddress: 'CO-Space | VSV Building, 4th Floor, Spectra School of Designs | East of Iron Bridge, CCNB Road',
@@ -73,7 +91,7 @@ const jsonLd = {
         },
         {
             '@type': 'AboutPage',
-            name: 'Trinity of Delvare — Vision, Mission & Our Three Pillars',
+            name: 'Delvare — Software Development Company | Vision, Mission & Our Three Pillars',
             url: siteConfig.url,
             mainEntity: {
                 '@type': 'Thing',
@@ -85,12 +103,13 @@ const jsonLd = {
                 {
                     '@type': 'CreativeWork',
                     name: 'Pillar 1 — Delivering Solutions',
-                    description: 'Delivering solutions to businesses and startups internationally.',
+                    description: 'Delivering custom software and digital solutions to businesses and startups internationally.',
                 },
                 {
                     '@type': 'CreativeWork',
-                    name: 'Pillar 2 — Seamless Systems & Apps',
-                    description: 'Helping global workflows using our seamless systems and interesting apps by Delvare.',
+                    name: 'Pillar 2 — Seamless Systems & Apps by Delvare',
+                    description:
+                        'Helping global workflows using our seamless systems and apps built by Delvare — ECBills.in, Blendly.sbs, Dvenue and more.',
                 },
                 {
                     '@type': 'CreativeWork',
@@ -102,9 +121,9 @@ const jsonLd = {
         },
         {
             '@type': 'ItemList',
-            name: 'Clients of Delvare',
+            name: 'Platforms Developed by Delvare',
             description:
-                'Products built, run and grown by Delvare — from billing platforms to literature networks and global third-party clients.',
+                'Every website and platform below was designed, developed, run and grown by Delvare — our own products (ECBills, Blendly, Dvenue) and the websites we have built and manage for international clients.',
             itemListElement: clientsSeo.map((client, index) => ({
                 '@type': 'ListItem',
                 position: index + 1,

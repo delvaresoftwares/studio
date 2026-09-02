@@ -13,7 +13,7 @@ export const FOUNDER_DATA = {
     },
     role: "Founder & CEO",
     company: "DELVARE",
-    bio: "Shipping Business Solutions for past years for International Clients. What started as an outburst of freelance services fueled by strong networking and commitments has now evolved into a structured enterprise.",
+    bio: "Shipping Business Solutions for past years for International Clients. As Founder & CEO, I manage end-to-end operations of development procedures along with business executive operations — steering product, engineering, and strategy from the ground up.",
     profileUrl: "/assets/placeholder-founder.jpg", // Placeholder until we have a real image
     socials: {
         github: "https://github.com/living-tuna",
