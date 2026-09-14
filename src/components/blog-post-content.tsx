@@ -66,7 +66,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
 
                     {/* Featured Image */}
                     <div className="relative h-[500px] w-full rounded-[3rem] overflow-hidden mb-16 shadow-2xl print:h-[300px] print:rounded-2xl">
-                        <img src={post.image} alt={post.title} className="w-full h-full object-cover" />
+                        <img src={post.image} alt={post.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                     </div>
 
                     {/* Content */}

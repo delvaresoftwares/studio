@@ -14,7 +14,8 @@ export const metadata: Metadata = {
         'digital transformation', 'business automation', 'delvare trinity', 'trinity of delvare',
         'delvare pillars', 'delvare vision', 'delvare mission', 'alfas delvare', 'ecbills',
         'ecbills.in', 'blendly', 'blendly.sbs', 'dvenue', 'masdar al riyadh', 'laynered',
-        'spectra school', 'nature of the divine', 'alien hills', 'software hardware evolution',
+        'spectra school', 'nature of the divine', 'alien hills', 'riza hijabs', 'rizahijabs',
+        'software hardware evolution',
         'future AI systems',
     ],
     openGraph: {
@@ -53,7 +54,7 @@ const clientsSeo = [
     { name: 'Spectra School', url: 'https://spectraschool.in' },
     { name: 'Nature of the Divine', url: 'https://natureofthedivine.com' },
     { name: 'Alien Hills', url: 'https://alienhills.shop' },
-    { name: 'Delvare', url: 'https://delvare.in' },
+    { name: 'RiZa Hijabs', url: 'https://rizahijabs.com' },
 ];
 
 const jsonLd = {

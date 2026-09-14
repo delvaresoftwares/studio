@@ -11,6 +11,9 @@ import { smoothScrollTo } from '@/lib/smooth-scroll';
 import { useToast } from '@/hooks/use-toast';
 import { useScrollLock } from '@/hooks/use-scroll-lock';
 import { useTrackClick } from '@/hooks/use-track-click';
+import { AuthControls } from '@/components/auth/auth-controls';
+import { useAuth } from '@/components/auth/auth-provider';
+import { trackEvent } from '@/lib/gtag';
 
 const navLinks = [
   { name: 'Services', href: '#services' },
@@ -45,6 +48,7 @@ const Header = () => {
   const trackStartNow = useTrackClick('header-start-now');
   const trackStartProject = useTrackClick('header-start-project');
   const trackFormSubmit = useTrackClick('header-form-submit');
+  const { requireAuth, openAuth } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -113,9 +117,7 @@ const Header = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    trackFormSubmit();
+  const submit = async () => {
     setIsLoading(true);
 
     try {
@@ -125,11 +127,17 @@ const Header = () => {
       });
 
       if (result.success) {
+        trackEvent('generate_lead', {
+          event_category: 'enquiry',
+          event_label: formType === 'career' ? 'career_form' : 'header_form',
+        });
         setIsSubmitted(true);
         setTimeout(() => {
           setFormOpen(false);
           setIsSubmitted(false);
         }, 3000);
+      } else if (result.requiresAuth) {
+        openAuth({ onSuccess: submit });
       } else {
         toast({ variant: 'destructive', title: 'Submission Failed', description: result.error ?? 'Connection lost. Please try again.' });
       }
@@ -139,6 +147,12 @@ const Header = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    trackFormSubmit();
+    void requireAuth(submit);
   };
 
   return (
@@ -202,6 +216,10 @@ const Header = () => {
             </nav>
 
             <div className="flex items-center gap-4">
+              <AuthControls
+                tone={isDark || (!scrolled && !formOpen) ? 'dark' : 'light'}
+                size="sm"
+              />
               {!isDark && (
                 <Button
                   onClick={() => { trackStartNow(); toggleForm('contact'); }}
@@ -394,13 +412,16 @@ const Header = () => {
               </a>
             ))}
           </nav>
-          {!isDark && (
-            <div className="mt-auto pb-8">
+          <div className="mt-auto pb-8 space-y-4">
+            <div className="flex justify-center">
+              <AuthControls tone={isDark ? 'dark' : 'light'} size="sm" />
+            </div>
+            {!isDark && (
               <Button size="xl" className={cn("w-full h-16 text-[11px] font-black bg-primary rounded-2xl uppercase tracking-[0.2em] shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all", isDark ? "text-black" : "text-white")} onClick={() => { trackStartProject(); toggleForm('contact'); setMenuOpen(false); }}>
                 Start Project
               </Button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </>

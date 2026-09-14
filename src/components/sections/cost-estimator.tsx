@@ -11,6 +11,7 @@ import { generatePDF } from '@/lib/pdf-generator';
 import { useTrackClick } from '@/hooks/use-track-click';
 import { saveContactInfoAction } from '@/app/actions';
 import { smoothScrollTo } from '@/lib/smooth-scroll';
+import { useAuth } from '@/components/auth/auth-provider';
 
 type Message = {
   id: string;
@@ -35,6 +36,7 @@ const regionMultipliers = { global: 1.2, regional: 1, local: 0.8 };
 const CostEstimatorSection = ({ onQuoteGenerated }: { onQuoteGenerated?: (data: any) => void }) => {
   const [isOpen, setIsOpen] = useState(false);
   const trackEstimatorConfirm = useTrackClick('estimator-confirm');
+  const { requireAuth, openAuth } = useAuth();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -62,21 +64,32 @@ const CostEstimatorSection = ({ onQuoteGenerated }: { onQuoteGenerated?: (data: 
   const [quoteStatus, setQuoteStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  const handleConfirmBlueprint = async (finalSelections: any, finalAmount: string, domainLabel: string) => {
-    if (quoteStatus !== 'idle') return;
+  const submitBlueprint = async (finalSelections: any, finalAmount: string, domainLabel: string) => {
     setQuoteStatus('sending');
     try {
-      await saveContactInfoAction({
+      const result = await saveContactInfoAction({
         name: String(finalSelections.clientName || 'Cost Estimator Lead'),
         email: String(finalSelections.clientEmail || ''),
         phone: String(finalSelections.clientPhone || ''),
         message: `AI CORE INQUIRY\nDomain: ${domainLabel}\nComplexity: ${finalSelections.complexity}\nEstimate: ${finalAmount}`,
         type: 'contact',
       });
+      if (result.requiresAuth) {
+        setQuoteStatus('idle');
+        openAuth({
+          onSuccess: () => submitBlueprint(finalSelections, finalAmount, domainLabel),
+        });
+        return;
+      }
       setQuoteStatus('sent');
     } catch {
       setQuoteStatus('idle');
     }
+  };
+
+  const handleConfirmBlueprint = (finalSelections: any, finalAmount: string, domainLabel: string) => {
+    if (quoteStatus !== 'idle') return;
+    void requireAuth(() => submitBlueprint(finalSelections, finalAmount, domainLabel));
   };
 
   useEffect(() => {

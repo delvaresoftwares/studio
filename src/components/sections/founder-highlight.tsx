@@ -11,7 +11,7 @@ const FOUNDER_DATA = {
     role: 'Founder & CEO',
     company: 'DELVARE',
     bio: 'Shipping solutions for international clients. As Founder & CEO, I manage end-to-end operations — from development procedures to business executive operations.',
-    avatar: '/assets/avatar.png',
+    avatar: '/assets/avatar.webp',
 };
 
 const quickSkills = ['Software Engineering', 'System Architecture', 'Cyber Security', 'AI & Automation'];
@@ -47,6 +47,7 @@ const FounderHighlight = () => {
                                         src={FOUNDER_DATA.avatar}
                                         alt={`${FOUNDER_DATA.name} — ${FOUNDER_DATA.role}, ${FOUNDER_DATA.company}`}
                                         loading="lazy"
+                                        decoding="async"
                                         className="w-full h-full object-cover object-center rounded-full transition-transform duration-700 group-hover/max-w:scale-105"
                                     />
                                 </div>

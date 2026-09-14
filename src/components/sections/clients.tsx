@@ -26,8 +26,8 @@ const showcaseClients: ShowcaseClient[] = [
     domain: 'ecbills.in',
     eyebrow: 'SaaS · Billing Suite',
     tagline: 'Modern inventory management & billing for businesses of all sizes.',
-    logo: '/assets/clients/ecbills-logo.png',
-    bg: '/assets/clients/ecbills-bg.png',
+    logo: '/assets/clients/ecbills-logo.webp',
+    bg: '/assets/clients/ecbills-bg.webp',
     gradient: 'from-emerald-400 via-teal-600 to-slate-950',
   },
   {
@@ -36,7 +36,7 @@ const showcaseClients: ShowcaseClient[] = [
     domain: 'blendly.sbs',
     eyebrow: 'Web App · Books',
     tagline: 'Lend books nearby & read poetry online.',
-    logo: '/assets/clients/blendly.png',
+    logo: '/assets/clients/blendly.webp',
     gradient: 'from-amber-300 via-rose-500 to-purple-950',
   },
   {
@@ -45,8 +45,8 @@ const showcaseClients: ShowcaseClient[] = [
     domain: 'dvenue.space',
     eyebrow: 'Marketplace · Venues',
     tagline: 'Last-minute booking for curated high-end venues & luxury banquet halls.',
-    logo: '/assets/clients/dvenue-logo.png',
-    bg: '/assets/clients/dvenue-bg.png',
+    logo: '/assets/clients/dvenue-logo.webp',
+    bg: '/assets/clients/dvenue-bg.webp',
     gradient: 'from-violet-400 via-fuchsia-600 to-indigo-950',
   },
   {
@@ -55,7 +55,7 @@ const showcaseClients: ShowcaseClient[] = [
     domain: 'masdaralriyadh.com',
     eyebrow: 'Commerce · Furniture',
     tagline: 'Premium home & office furniture outlet — balanced environments for balanced lives.',
-    logo: '/assets/clients/masdar.png',
+    logo: '/assets/clients/masdar.webp',
     gradient: 'from-amber-400 via-orange-600 to-stone-950',
   },
   {
@@ -64,8 +64,8 @@ const showcaseClients: ShowcaseClient[] = [
     domain: 'laynered.com',
     eyebrow: 'Store · Apparel',
     tagline: 'Premium T-shirts & apparel — trendy, comfortable, affordable for all styles.',
-    logo: '/assets/clients/laynered-logo.png',
-    bg: '/assets/clients/laynered.png',
+    logo: '/assets/clients/laynered-logo.webp',
+    bg: '/assets/clients/laynered.webp',
     gradient: 'from-rose-400 via-red-600 to-zinc-950',
   },
   {
@@ -74,8 +74,8 @@ const showcaseClients: ShowcaseClient[] = [
     domain: 'spectraschool.in',
     eyebrow: 'Academy · Design',
     tagline: 'Create. Communicate. Inspire — premier interior, graphic & digital academy.',
-    logo: '/assets/clients/spectra.png',
-    bg: '/assets/clients/spectra-bg.png',
+    logo: '/assets/clients/spectra.webp',
+    bg: '/assets/clients/spectra-bg.webp',
     gradient: 'from-sky-400 via-indigo-600 to-slate-950',
   },
   {
@@ -84,7 +84,7 @@ const showcaseClients: ShowcaseClient[] = [
     domain: 'natureofthedivine.com',
     eyebrow: 'Publishing · Spirituality',
     tagline: 'The science of transcendence — peak consciousness & divine intelligence.',
-    logo: '/assets/clients/natureofdivine.png',
+    logo: '/assets/clients/natureofdivine.webp',
     gradient: 'from-indigo-400 via-violet-700 to-black',
   },
   {
@@ -93,8 +93,18 @@ const showcaseClients: ShowcaseClient[] = [
     domain: 'alienhills.shop',
     eyebrow: 'Shop · Curated Goods',
     tagline: 'Otherworldly drops & curated finds from beyond the hills.',
-    bg: '/assets/clients/alienhill-bg.png',
+    bg: '/assets/clients/alienhill-bg.webp',
     gradient: 'from-lime-400 via-emerald-600 to-gray-950',
+  },
+  {
+    name: 'RiZa Hijabs',
+    url: 'https://rizahijabs.com',
+    domain: 'rizahijabs.com',
+    eyebrow: 'Commerce · Modest Fashion',
+    tagline: 'Elegant hijabs, chadors & modest fashion — designed to elevate everyday elegance.',
+    logo: '/assets/clients/riza-logo.webp',
+    bg: '/assets/clients/rizahijabs.webp',
+    gradient: 'from-teal-300 via-primary to-emerald-950',
   },
 ];
 
@@ -109,6 +119,7 @@ const allClients = [
   { name: 'Delvare', url: 'https://delvare.in' },
   { name: 'Nature of the Divine', url: 'https://natureofthedivine.com' },
   { name: 'Alien Hills', url: 'https://alienhills.shop' },
+  { name: 'RiZa Hijabs', url: 'https://rizahijabs.com' },
 ];
 
 const getFaviconUrl = (domain: string) => {
@@ -128,6 +139,7 @@ const LogoChip = ({ client }: { client: ShowcaseClient }) =>
       src={client.logo}
       alt=""
       loading="lazy"
+      decoding="async"
       className="relative z-10 h-full w-full object-cover drop-shadow-[0_6px_12px_rgba(0,0,0,0.5)]"
     />
   ) : (
@@ -177,6 +189,7 @@ const ClientCard = ({ client, index }: { client: ShowcaseClient; index: number }
             src={client.bg}
             alt=""
             loading={index < 3 ? 'eager' : 'lazy'}
+            decoding="async"
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1600ms] ease-out group-hover:scale-110"
           />
         ) : (
@@ -251,7 +264,7 @@ const ClientWideCard = ({ client, index }: { client: ShowcaseClient; index: numb
     className="group relative block h-44 w-[300px] shrink-0 snap-center overflow-hidden rounded-[1.75rem] bg-black shadow-xl ring-1 ring-black/10 transition-transform duration-300 active:scale-[0.98]"
   >
     {client.bg ? (
-      <img src={client.bg} alt="" loading={index < 3 ? 'eager' : 'lazy'} className="absolute inset-0 h-full w-full object-cover" />
+      <img src={client.bg} alt="" loading={index < 3 ? 'eager' : 'lazy'} decoding="async" className="absolute inset-0 h-full w-full object-cover" />
     ) : (
       <div className={`absolute inset-0 bg-gradient-to-br ${client.gradient}`} />
     )}
@@ -421,7 +434,7 @@ const ClientsSection = () => {
                 className="flex items-center gap-3 pl-4 pr-7 py-3 rounded-full bg-white border border-border/60 whitespace-nowrap hover:border-primary/40 hover:-translate-y-0.5 transition-all duration-300"
               >
                 <span className="w-8 h-8 rounded-full bg-secondary border border-border/60 flex items-center justify-center shrink-0 overflow-hidden">
-                  <img src={getFaviconUrl(client.url)} alt="" aria-hidden loading="lazy" className="w-5 h-5 object-contain" />
+                  <img src={getFaviconUrl(client.url)} alt="" aria-hidden loading="lazy" decoding="async" className="w-5 h-5 object-contain" />
                 </span>
                 <span className="text-xs font-black tracking-tight text-foreground">{client.name}</span>
                 <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/70">

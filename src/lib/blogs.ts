@@ -31,7 +31,7 @@ export const blogs: BlogPost[] = [
     `,
         date: 'March 4, 2026',
         author: 'Delvare Team',
-        image: '/assets/blog_ai_business_1772616812117.png',
+        image: '/assets/blog_ai_business_1772616812117.webp',
         tags: ['AI', 'Growth', 'Business']
     },
     {
@@ -55,7 +55,7 @@ export const blogs: BlogPost[] = [
     `,
         date: 'March 1, 2026',
         author: 'Tech Lead',
-        image: '/assets/nanotech_curved_2_1772615432367.png',
+        image: '/assets/nanotech_curved_2_1772615432367.webp',
         tags: ['Cloud', 'Performance', 'Tech']
     }
 ];

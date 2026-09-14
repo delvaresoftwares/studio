@@ -70,6 +70,8 @@ const ProductDetailContent = ({ data }: ProductDetailContentProps) => {
                         src={product.bgImage}
                         alt=""
                         aria-hidden
+                        loading="lazy"
+                        decoding="async"
                         className="absolute inset-0 w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30" />
@@ -248,7 +250,7 @@ const ProductDetailContent = ({ data }: ProductDetailContentProps) => {
 
                 {/* Closing CTA band */}
                 <section className="relative py-24 overflow-hidden">
-                    <img src={product.bgImage} alt="" aria-hidden loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+                    <img src={product.bgImage} alt="" aria-hidden loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-black/75" />
                     <div className={cn('absolute inset-0 mix-blend-overlay opacity-60', product.tintClasses)} />
                     <FadeIn className="container mx-auto px-4 relative z-10 text-center">

@@ -33,7 +33,7 @@ export const products: Product[] = [
         tagline: 'Billing & Inventory, Perfected.',
         description:
             'Our flagship PaaS platform that completely automates retail and enterprise operations. Built for infinite retail scale, precision inventory tracking and high-availability selling.',
-        bgImage: '/assets/products/ecbills-bg.jpg',
+        bgImage: '/assets/products/ecbills-bg.webp',
         tintClasses: 'bg-gradient-to-br from-emerald-500/50 to-cyan-600/40',
         badgeClasses: 'border-emerald-300/30 bg-emerald-400/15 text-emerald-100',
         chipIconClasses: 'text-emerald-300',
@@ -47,7 +47,7 @@ export const products: Product[] = [
         tagline: 'Where Readers Meet.',
         description:
             'A community-driven platform to lend books nearby and read poetry online. Connecting readers, fostering sharing and building a culture of knowledge exchange.',
-        bgImage: '/assets/products/blendly-bg.jpg',
+        bgImage: '/assets/products/blendly-bg.webp',
         tintClasses: 'bg-gradient-to-br from-violet-500/45 to-pink-500/35',
         badgeClasses: 'border-violet-300/30 bg-violet-400/15 text-violet-100',
         chipIconClasses: 'text-violet-300',
@@ -75,6 +75,7 @@ const ProductCard = ({ product }: { product: Product }) => (
                     alt=""
                     aria-hidden
                     loading="lazy"
+                    decoding="async"
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                 />
                 {/* Readability gradient */}

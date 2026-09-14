@@ -483,7 +483,7 @@ const AIChatWidget = () => {
                         )}
                     >
                         <span className="absolute inset-0 rounded-full bg-primary/20 animate-ping" />
-                        <img src="/assets/arrow.png" alt="" className="relative w-9 h-9 object-contain" />
+                        <img src="/assets/arrow.png" alt="" width={610} height={520} decoding="async" className="relative w-9 h-9 object-contain" />
                         <span className="absolute right-20 bg-white text-brand-dark text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-lg shadow-xl border border-border opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap">
                             Ask AI
                         </span>
@@ -534,7 +534,7 @@ const AIChatWidget = () => {
                                         >
                                             {msg.role === 'assistant' && (
                                                 <span className="w-8 h-8 rounded-full bg-white border border-black/10 shadow-md flex items-center justify-center shrink-0 mr-3 mt-1 self-start overflow-hidden">
-                                                    <img src="/assets/arrow.png" alt="" className="w-[18px] h-[18px] object-contain" />
+                                                    <img src="/assets/arrow.png" alt="" width={610} height={520} decoding="async" className="w-[18px] h-[18px] object-contain" />
                                                 </span>
                                             )}
                                             <div

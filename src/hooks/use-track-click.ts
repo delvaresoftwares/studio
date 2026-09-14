@@ -3,6 +3,7 @@
 import { useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import { trackClickAction } from '@/app/actions';
+import { trackEvent } from '@/lib/gtag';
 
 const SESSION_ID_KEY = 'delvare-visitor-id';
 
@@ -25,6 +26,11 @@ export function useTrackClick(buttonId: string) {
   const pathname = usePathname();
 
   const trackClick = useCallback(() => {
+    trackEvent('cta_click', {
+      event_category: 'engagement',
+      event_label: buttonId,
+      page_path: pathname || '/',
+    });
     trackClickAction(buttonId, pathname || '/', getSessionId()).catch(() => {
       /* analytics must never break the page */
     });

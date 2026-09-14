@@ -122,9 +122,9 @@ const HeroSection = () => {
             <div className="relative w-full h-full flex items-center justify-center transition-transform duration-700 ease-out">
               <div ref={arrowRef} className="absolute z-20 w-48 h-48 lg:w-64 lg:h-64 bg-white rounded-[2rem] lg:rounded-[3rem] flex flex-col items-center justify-center transition-transform duration-200 ease-out shadow-sm lg:shadow-none">
                 {/* Mobile static arrow (landing highlight) */}
-                <img src="/assets/arrow.png" alt="Our Expertise" className="w-66 h-66 object-contain lg:hidden" style={{ transform: 'rotate(0deg)' }} />
+                <img src="/assets/arrow.png" alt="Our Expertise" width={610} height={520} decoding="async" className="w-40 h-40 object-contain lg:hidden" style={{ transform: 'rotate(0deg)' }} />
                 {/* Desktop rotating arrow */}
-                <img ref={arrowImgRef} src="/assets/arrow.png" alt="Our Expertise" className="hidden lg:block w-32 h-32 object-contain will-change-transform" style={{ transform: 'rotate(90deg)' }} />
+                <img ref={arrowImgRef} src="/assets/arrow.png" alt="Our Expertise" width={610} height={520} decoding="async" className="hidden lg:block w-32 h-32 object-contain will-change-transform" style={{ transform: 'rotate(90deg)' }} />
               </div>
               <div className="hidden lg:flex absolute top-20 left-10 w-48 h-56 bg-white rounded-3xl p-6 flex-col justify-between transition-all cursor-default group/card shadow-lg">
                 <div className="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center text-primary group-hover/card:bg-primary group-hover/card:text-primary-foreground transition-colors duration-300">

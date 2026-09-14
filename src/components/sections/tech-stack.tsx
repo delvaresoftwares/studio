@@ -74,6 +74,8 @@ const TechIconCard = ({ tech }: { tech: typeof technologies[0] }) => (
             <img
                 src={tech.icon}
                 alt={tech.name}
+                loading="lazy"
+                decoding="async"
                 className="w-10 h-10 object-contain grayscale-0 opacity-100 group-hover/item:scale-110 transition-all duration-500"
             />
         </div>

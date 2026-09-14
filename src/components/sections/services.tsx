@@ -35,7 +35,7 @@ const services = [
     icon: <TrendingUp className="w-5 h-5" />,
     features: ["Keyword Strategy", "Content Marketing", "Technical SEO", "Performance Analysis", "Organic Search Growth", "Local SEO"],
     accent: "bg-orange-500 shadow-orange-500/20",
-    image: "/assets/services/seo.png"
+    image: "/assets/services/seo.webp"
   },
   {
     title: "Strategic Business Analysis",
@@ -45,7 +45,7 @@ const services = [
     icon: <BarChart3 className="w-5 h-5" />,
     features: ["Operational Efficiency", "Market Analysis", "Strategic Planning"],
     accent: "bg-yellow-500 shadow-yellow-500/20",
-    image: "/assets/services/support.png"
+    image: "/assets/services/support.webp"
   },
   {
     title: "Custom Software Solutions",
@@ -55,7 +55,7 @@ const services = [
     icon: <Database className="w-5 h-5" />,
     features: ["Enterprise Software", "Web Applications", "Scalable Systems"],
     accent: "bg-blue-600 shadow-blue-600/20",
-    image: "/assets/services/software.png"
+    image: "/assets/services/software.webp"
   },
   {
     title: "Business Intelligence Dashboards",
@@ -65,7 +65,7 @@ const services = [
     icon: <Globe className="w-5 h-5" />,
     features: ["Real-time Reporting", "Data Visualization", "Operational Oversight"],
     accent: "bg-indigo-600 shadow-indigo-600/20",
-    image: "/assets/projects/p2.png"
+    image: "/assets/projects/p2.webp"
   },
   {
     title: "Process Automation & AI",
@@ -75,7 +75,7 @@ const services = [
     icon: <Brain className="w-5 h-5" />,
     features: ["Workflow Automation", "AI Integration", "Process Optimization"],
     accent: "bg-purple-600 shadow-purple-600/20",
-    image: "/assets/services/ai.png"
+    image: "/assets/services/ai.webp"
   },
   {
     title: "UI/UX Design & Strategy",
@@ -85,7 +85,7 @@ const services = [
     icon: <Layout className="w-5 h-5" />,
     features: ["User Research", "Interface Design", "Usability Testing"],
     accent: "bg-emerald-500 shadow-emerald-500/20",
-    image: "/assets/services/design.png"
+    image: "/assets/services/design.webp"
   },
   {
     title: "Cloud Infrastructure",
@@ -95,7 +95,7 @@ const services = [
     icon: <Cloud className="w-5 h-5" />,
     features: ["Cloud Migration", "Hosting Solutions", "Architecture Design"],
     accent: "bg-cyan-500 shadow-cyan-500/20",
-    image: "/assets/services/cloud.png"
+    image: "/assets/services/cloud.webp"
   },
   {
     title: "Professional Cybersecurity",
@@ -105,7 +105,7 @@ const services = [
     icon: <ShieldCheck className="w-5 h-5" />,
     features: ["Security Audits", "Data Protection", "Threat Mitigation"],
     accent: "bg-red-600 shadow-red-600/20",
-    image: "/assets/services/security.png"
+    image: "/assets/services/security.webp"
   },
   {
     title: "Business Support & Consulting",
@@ -115,7 +115,7 @@ const services = [
     icon: <LifeBuoy className="w-5 h-5" />,
     features: ["Technical Consulting", "Maintenance Support", "Process Guidance"],
     accent: "bg-amber-500 shadow-amber-500/20",
-    image: "/assets/services/support.png"
+    image: "/assets/services/support.webp"
   },
 ];
 
@@ -346,6 +346,7 @@ const ServicesSection = () => {
                                 src={service.image}
                                 alt={service.title}
                                 loading="lazy"
+                                decoding="async"
                                 className="w-full h-36 object-cover rounded-xl border border-border/50 group-hover:opacity-90 transition-opacity"
                               />
                               <p className="text-sm text-muted-foreground leading-relaxed font-medium group-hover:text-foreground transition-colors">

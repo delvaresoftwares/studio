@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { Inter, Space_Grotesk, Syne } from 'next/font/google';
 import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -82,8 +83,10 @@ export const metadata: Metadata = {
 };
 
 import SmoothScroll from '@/components/smooth-scroll';
-import AIChatWidget from '@/components/ai-chat-widget';
+import LazyChatWidget from '@/components/lazy-chat-widget';
 import VisitorTracker from '@/components/visitor-tracker';
+import { AuthProvider } from '@/components/auth/auth-provider';
+import { AuthModal } from '@/components/auth/auth-modal';
 
 export default function RootLayout({
   children,
@@ -92,7 +95,26 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GA4_MEASUREMENT_ID || 'G-BTCP5SPVD0'}`}
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.GA4_MEASUREMENT_ID || 'G-BTCP5SPVD0'}', {
+              send_page_view: true,
+              anonymize_ip: true,
+            });
+          `}
+        </Script>
+      </head>
       <body className={`${inter.variable} ${spaceGrotesk.variable} ${syne.variable} font-body antialiased`}>
+        <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -101,8 +123,11 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SmoothScroll>
-            {children}
-            <AIChatWidget />
+            <AuthProvider>
+              {children}
+              <LazyChatWidget />
+              <AuthModal />
+            </AuthProvider>
           </SmoothScroll>
           <VisitorTracker />
           <Toaster />

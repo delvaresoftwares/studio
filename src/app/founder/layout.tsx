@@ -18,7 +18,7 @@ export const metadata: Metadata = {
         url: `${siteConfig.url}/founder`,
         images: [
             {
-                url: '/assets/avatar.png',
+                url: '/assets/avatar.webp',
                 width: 800,
                 height: 800,
                 alt: 'Alfas B — Founder & CEO of Delvare',

@@ -78,6 +78,7 @@ export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentP
                                         <img
                                             src={data.portfolioImages ? data.portfolioImages[0] : data.image}
                                             alt={data.title}
+                                            decoding="async"
                                             className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay"
                                         />
 
@@ -164,7 +165,7 @@ export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentP
                         <div className="flex flex-col md:flex-row items-center justify-between gap-10 max-w-6xl mx-auto">
                             <div className="flex items-center gap-6">
                                 <div className="h-16 w-16 rounded-2xl bg-white flex items-center justify-center font-black text-primary italic text-2xl">
-                                    <img src="/assets/arrow.png" alt="D" />
+                                    <img src="/assets/arrow.png" alt="D" width={610} height={520} decoding="async" />
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-[10px] font-black uppercase tracking-[0.4em] text-foreground">DELVARE.IN</p>

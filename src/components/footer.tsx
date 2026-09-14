@@ -47,7 +47,7 @@ const Footer = () => {
           {/* Brand */}
           <div className="col-span-2 lg:col-span-1 space-y-6">
             <div className={cn('inline-block p-3 rounded-2xl border shadow-sm', isDark ? 'bg-white border-white/10' : 'bg-white border-border')}>
-              <img src="/assets/logo.png" alt="Delvare" className="h-9 w-auto object-contain" onError={(e) => { e.currentTarget.src = 'https://res.cloudinary.com/dt4mweku7/image/upload/v1751266408/buissware_h6bmig.png'; }} />
+              <img src="/assets/logo.png" alt="Delvare" width={530} height={424} decoding="async" className="h-9 w-auto object-contain" onError={(e) => { e.currentTarget.src = 'https://res.cloudinary.com/dt4mweku7/image/upload/v1751266408/buissware_h6bmig.png'; }} />
             </div>
             <p className={cn('text-sm leading-relaxed max-w-xs font-medium italic', isDark ? 'text-white/60' : 'text-muted-foreground')}>
               Scalable &amp; secure solutions for your business — built with innovative approaches and emerging technologies.
@@ -156,6 +156,9 @@ const Footer = () => {
                 <img
                   src="/assets/arrow-transparent.png"
                   alt="Delvare"
+                  width={610}
+                  height={520}
+                  decoding="async"
                   className={cn("h-5 w-auto object-contain brightness-0", isDark ? "invert opacity-80 group-hover:opacity-100" : "opacity-70 group-hover:opacity-100")}
                 />
                 Visit Delvare

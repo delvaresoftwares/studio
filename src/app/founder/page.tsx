@@ -262,6 +262,9 @@ export default function FounderPortfolioPage() {
                                                 <img
                                                     src="/assets/arrow-transparent.png"
                                                     alt="Delvare"
+                                                    width={610}
+                                                    height={520}
+                                                    decoding="async"
                                                     className="w-full h-full object-contain brightness-0 invert opacity-90 group-hover:opacity-100 transition-all"
                                                 />
                                             </Button>
@@ -295,8 +298,10 @@ export default function FounderPortfolioPage() {
                                     <div className="absolute inset-2 rounded-full overflow-hidden bg-zinc-900 border border-white/10 z-10 [transform:translateZ(0)]">
                                         <div className="absolute inset-0 bg-primary/20 mix-blend-overlay z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                                         <img
-                                            src="/assets/avatar.png"
+                                            src="/assets/avatar.webp"
                                             alt={FOUNDER_DATA.name}
+                                            loading="lazy"
+                                            decoding="async"
                                             className="w-full h-full object-cover object-center rounded-full transition-all duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
                                         />
                                     </div>

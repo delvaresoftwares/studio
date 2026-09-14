@@ -34,6 +34,8 @@ const BlogSection = () => {
                                     <img
                                         src={post.image}
                                         alt={post.title}
+                                        loading="lazy"
+                                        decoding="async"
                                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                     />
                                     <div className="absolute top-6 left-6 flex gap-2">
@@ -82,7 +84,7 @@ const BlogSection = () => {
                                     </div>
                                 </div>
                                 <div className="w-24 h-24 shrink-0 overflow-hidden rounded-xl">
-                                    <img src={post.image} alt={post.title} className="w-full h-full object-cover" />
+                                    <img src={post.image} alt={post.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                                 </div>
                             </Card>
                         </Link>
