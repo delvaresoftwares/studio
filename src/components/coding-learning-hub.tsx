@@ -69,7 +69,7 @@ const CodingLearningHub = () => {
 
             {/* Fullscreen Interactive Hub */}
             <div className={cn(
-                "fixed inset-0 z-[9999] bg-black transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]",
+                "fixed inset-0 z-[9999] bg-black transition-all duration-500 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)]",
                 isOpen ? "translate-y-0" : "translate-y-full pointer-events-none"
             )}>
                 {/* Background Decor */}
@@ -184,7 +184,7 @@ const CodingLearningHub = () => {
                                     <div className="flex-grow w-1 h-32 lg:w-auto lg:h-1 bg-white/5 relative rounded-full overflow-visible">
                                         {showAttack && (
                                             <div className={cn(
-                                                "absolute rounded-full blur-sm transition-all duration-[1500ms] ease-linear",
+                                                "absolute rounded-full blur-sm transition-all [transition-duration:1500ms] ease-linear",
                                                 "w-full lg:w-12 h-12 lg:h-full",
                                                 isSecure ? "bg-primary shadow-[0_0_20px_hsl(var(--primary))]" : "bg-red-500 shadow-[0_0_20px_red]"
                                             )}

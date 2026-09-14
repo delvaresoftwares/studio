@@ -57,29 +57,6 @@ export async function sendEmail({ to, subject, html, replyTo }: SendEmailParams)
   }
 }
 
-export async function sendOtpEmail(email: string, otp: string): Promise<boolean> {
-  const html = `
-    <div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;">
-      <h2 style="color:#0f172a;margin:0 0 16px;">Your Delvare verification code</h2>
-      <p style="color:#334155;font-size:15px;line-height:1.6;margin:0 0 24px;">
-        Use the code below to sign in to Delvare. This code expires in <strong>10 minutes</strong>.
-      </p>
-      <div style="background:#f8fafc;border:1px dashed #cbd5e1;border-radius:12px;padding:24px;text-align:center;">
-        <span style="font-size:36px;font-weight:800;letter-spacing:10px;color:#0f172a;">${otp}</span>
-      </div>
-      <p style="color:#64748b;font-size:13px;line-height:1.6;margin:24px 0 0;">
-        If you did not request this code, you can safely ignore this email.
-      </p>
-    </div>
-  `;
-
-  return sendEmail({
-    to: email,
-    subject: 'Your Delvare login code',
-    html,
-  });
-}
-
 export type EnquiryEmailData = {
   name: string;
   email: string;

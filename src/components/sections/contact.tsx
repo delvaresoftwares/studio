@@ -16,7 +16,6 @@ import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { smoothScrollTo } from '@/lib/smooth-scroll';
 import { useTrackClick } from '@/hooks/use-track-click';
-import { useAuth } from '@/components/auth/auth-provider';
 import { trackEvent } from '@/lib/gtag';
 
 const phoneRegex = new RegExp(
@@ -37,7 +36,6 @@ const ContactSection = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const trackContactSubmit = useTrackClick('contact-execute');
-  const { requireAuth, openAuth } = useAuth();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -57,7 +55,8 @@ const ContactSection = () => {
     return () => window.removeEventListener('delvare:autofill', handleAutofill as EventListener);
   }, [form]);
 
-  const submit = async (data: FormValues) => {
+  const onSubmit = async (data: FormValues) => {
+    trackContactSubmit();
     setIsLoading(true);
     try {
       const result = await saveContactInfoAction({ ...data, type: 'contact' });
@@ -68,8 +67,6 @@ const ContactSection = () => {
           event_label: 'contact_form',
         });
         setIsSubmitted(true);
-      } else if (result.requiresAuth) {
-        openAuth({ onSuccess: () => submit(data) });
       } else {
         toast({
           variant: "destructive",
@@ -87,11 +84,6 @@ const ContactSection = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const onSubmit = (data: FormValues) => {
-    trackContactSubmit();
-    void requireAuth(() => submit(data));
   };
 
   const resetForm = () => {

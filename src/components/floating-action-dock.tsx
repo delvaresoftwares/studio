@@ -66,7 +66,7 @@ const FloatingActionDock = () => {
         )}>
             {/* Action Buttons Layer */}
             <div className={cn(
-                "flex flex-col gap-4 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]",
+                "flex flex-col gap-4 transition-all duration-500 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)]",
                 isOpen ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0 pointer-events-none"
             )}>
                 {actions.map((action, idx) => (

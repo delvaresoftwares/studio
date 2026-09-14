@@ -5,8 +5,6 @@ import { db, app } from '@/lib/firebase';
 import { collection, addDoc, getDocs, query, orderBy, serverTimestamp, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import type { Timestamp } from 'firebase/firestore';
 import { revalidatePath } from "next/cache";
-import { requireAuth } from '@/lib/auth';
-import { isAdminEmail } from '@/lib/admin';
 import { sendEnquiryEmails } from '@/lib/resend';
 
 // --- START of New Cost Calculation Logic ---
@@ -105,13 +103,8 @@ function calculateProjectCost(input: ProjectCostEstimatorInput): ProjectCostEsti
 }
 
 
-export async function getProjectCostEstimateAction(input: ProjectCostEstimatorInput): Promise<ProjectCostEstimatorOutput | { error: string; requiresAuth?: boolean }> {
+export async function getProjectCostEstimateAction(input: ProjectCostEstimatorInput): Promise<ProjectCostEstimatorOutput | { error: string }> {
   try {
-    const user = await requireAuth();
-    if (!user) {
-      return { error: 'You must be signed in to submit an enquiry.', requiresAuth: true };
-    }
-
     const result = calculateProjectCost(input);
 
     // Save the estimation to Firestore as well
@@ -169,19 +162,10 @@ const contactFormSchema = z.object({
 });
 
 // Action to save contact info to Firestore
-export async function saveContactInfoAction(formData: ContactFormData): Promise<{ success: boolean; error?: string; requiresAuth?: boolean }> {
+export async function saveContactInfoAction(formData: ContactFormData): Promise<{ success: boolean; error?: string }> {
   const parsed = contactFormSchema.safeParse(formData);
   if (!parsed.success) {
     return { success: false, error: parsed.error.errors[0]?.message ?? 'Invalid form data.' };
-  }
-
-  const user = await requireAuth();
-  if (!user) {
-    return {
-      success: false,
-      error: 'You must be signed in to submit an enquiry.',
-      requiresAuth: true,
-    };
   }
 
   if (!app.options.projectId) {
@@ -236,11 +220,6 @@ export async function saveContactInfoAction(formData: ContactFormData): Promise<
 
 // Action to get all contacts from Firestore
 export async function getContactsAction(): Promise<{ contacts?: Contact[]; error?: string }> {
-  const user = await requireAuth();
-  if (!user || !isAdminEmail(user.email)) {
-    return { error: "Unauthorized. You are not allowed to access this data." };
-  }
-
   if (!app.options.projectId) {
     return { error: "Firebase is not configured on the server." };
   }
@@ -278,10 +257,6 @@ export async function getContactsAction(): Promise<{ contacts?: Contact[]; error
 
 // Action to mark a contact as read
 export async function markAsReadAction(id: string): Promise<{ success: boolean; error?: string }> {
-  const user = await requireAuth();
-  if (!user || !isAdminEmail(user.email)) {
-    return { success: false, error: "Unauthorized. You are not allowed to perform this action." };
-  }
   try {
     const contactRef = doc(db, 'contacts', id);
     await updateDoc(contactRef, { read: true });
@@ -295,10 +270,6 @@ export async function markAsReadAction(id: string): Promise<{ success: boolean; 
 
 // Action to delete a contact
 export async function deleteContactAction(id: string): Promise<{ success: boolean; error?: string }> {
-  const user = await requireAuth();
-  if (!user || !isAdminEmail(user.email)) {
-    return { success: false, error: "Unauthorized. You are not allowed to perform this action." };
-  }
   try {
     const contactRef = doc(db, 'contacts', id);
     await deleteDoc(contactRef);
@@ -326,10 +297,6 @@ export type Estimation = {
 
 // Action to get all estimations from Firestore
 export async function getEstimationsAction(): Promise<{ estimations?: Estimation[]; error?: string }> {
-  const user = await requireAuth();
-  if (!user || !isAdminEmail(user.email)) {
-    return { error: "Unauthorized. You are not allowed to access this data." };
-  }
   if (!app.options.projectId) {
     return { error: "Firebase is not configured on the server." };
   }
@@ -366,10 +333,6 @@ export async function getEstimationsAction(): Promise<{ estimations?: Estimation
 
 // Action to mark an estimation as read
 export async function markEstimationAsReadAction(id: string): Promise<{ success: boolean; error?: string }> {
-  const user = await requireAuth();
-  if (!user || !isAdminEmail(user.email)) {
-    return { success: false, error: "Unauthorized. You are not allowed to perform this action." };
-  }
   try {
     const estimationRef = doc(db, 'estimations', id);
     await updateDoc(estimationRef, { read: true });
@@ -383,10 +346,6 @@ export async function markEstimationAsReadAction(id: string): Promise<{ success:
 
 // Action to delete an estimation
 export async function deleteEstimationAction(id: string): Promise<{ success: boolean; error?: string }> {
-  const user = await requireAuth();
-  if (!user || !isAdminEmail(user.email)) {
-    return { success: false, error: "Unauthorized. You are not allowed to perform this action." };
-  }
   try {
     const estimationRef = doc(db, 'estimations', id);
     await deleteDoc(estimationRef);
@@ -461,10 +420,6 @@ export async function trackClickAction(buttonId: string, page: string, sessionId
 
 // Returns raw click entries used to compute analytics on the client.
 export async function getClicksAction(): Promise<{ clicks?: ClickEntry[]; error?: string }> {
-  const user = await requireAuth();
-  if (!user || !isAdminEmail(user.email)) {
-    return { error: "Unauthorized. You are not allowed to access this data." };
-  }
   if (!app.options.projectId) {
     return { error: "Firebase is not configured on the server." };
   }
@@ -498,10 +453,6 @@ export async function getClicksAction(): Promise<{ clicks?: ClickEntry[]; error?
 
 // Returns raw visit entries used to compute analytics on the client.
 export async function getVisitsAction(): Promise<{ visits?: VisitEntry[]; error?: string }> {
-  const user = await requireAuth();
-  if (!user || !isAdminEmail(user.email)) {
-    return { error: "Unauthorized. You are not allowed to access this data." };
-  }
   if (!app.options.projectId) {
     return { error: "Firebase is not configured on the server." };
   }

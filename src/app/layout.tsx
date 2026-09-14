@@ -85,8 +85,6 @@ export const metadata: Metadata = {
 import SmoothScroll from '@/components/smooth-scroll';
 import LazyChatWidget from '@/components/lazy-chat-widget';
 import VisitorTracker from '@/components/visitor-tracker';
-import { AuthProvider } from '@/components/auth/auth-provider';
-import { AuthModal } from '@/components/auth/auth-modal';
 
 export default function RootLayout({
   children,
@@ -123,11 +121,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SmoothScroll>
-            <AuthProvider>
-              {children}
-              <LazyChatWidget />
-              <AuthModal />
-            </AuthProvider>
+            {children}
+            <LazyChatWidget />
           </SmoothScroll>
           <VisitorTracker />
           <Toaster />

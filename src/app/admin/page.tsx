@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, type FormEvent } from 'react';
 import { getContactsAction, deleteContactAction, markAsReadAction, getEstimationsAction, deleteEstimationAction, markEstimationAsReadAction, type Contact, type Estimation } from '@/app/actions';
-import { useAuth } from '@/components/auth/auth-provider';
-import { isAdminEmail } from '@/lib/admin';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -15,15 +14,15 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, ShieldCheck, ShieldOff, OctagonX, MoreHorizontal, Trash2, Eye, Copy, Download, User, Phone, Mail, Calculator, FileText, BarChart3, LogOut } from 'lucide-react';
+import { Loader2, ShieldCheck, ShieldOff, MoreHorizontal, Trash2, Eye, Copy, Download, User, Phone, Mail, Calculator, FileText, BarChart3 } from 'lucide-react';
 import Logo from '@/components/logo';
 import { Separator } from '@/components/ui/separator';
 import AnalyticsPanel from '@/app/admin/analytics';
 
 export default function AdminPage() {
-  const { user, status, signOut, openAuth } = useAuth();
-  const isAdmin = isAdminEmail(user?.email);
-  const isReady = status === 'authenticated' || status === 'unauthenticated';
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
+  const [authError, setAuthError] = useState('');
 
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [estimations, setEstimations] = useState<Estimation[]>([]);
@@ -38,6 +37,17 @@ export default function AdminPage() {
   const [itemToDelete, setItemToDelete] = useState<{ id: string, type: 'contacts' | 'estimations', name: string } | null>(null);
 
   const { toast } = useToast();
+
+  const handleLogin = (e: FormEvent) => {
+    e.preventDefault();
+    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+    if (adminPassword && password === adminPassword) {
+      setIsAuthenticated(true);
+      setAuthError('');
+    } else {
+      setAuthError('Incorrect password.');
+    }
+  };
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -62,10 +72,10 @@ export default function AdminPage() {
   };
 
   useEffect(() => {
-    if (isAdmin) {
+    if (isAuthenticated) {
       fetchData();
     }
-  }, [isAdmin]);
+  }, [isAuthenticated]);
 
   const handleViewContact = async (contact: Contact) => {
     setSelectedContact(contact);
@@ -149,62 +159,31 @@ export default function AdminPage() {
     toast({ title: "Exported to Clipboard", description: "Visible items have been copied as CSV." });
   };
 
-  if (status === 'loading') {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background p-4">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-10 w-10 animate-spin text-primary" />
-          <p className="text-sm text-muted-foreground">Checking authorization…</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!user) {
+  if (!isAuthenticated) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-w-sm">
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 flex items-center justify-center scale-125">
               <Logo />
             </div>
             <CardTitle>Admin Panel</CardTitle>
-            <CardDescription>Sign in to verify your access to this dashboard.</CardDescription>
+            <CardDescription>Enter password to access dashboard</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <Button type="button" className="w-full" onClick={() => openAuth()}>
-              <ShieldCheck className="mr-2 h-4 w-4" /> Sign in
-            </Button>
-            <p className="text-center text-xs text-muted-foreground">
-              Only authorized studio administrators can view customer data and analytics.
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  if (!isAdmin) {
-    return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <div className="mx-auto mb-4 flex items-center justify-center">
-              <UnauthorizedBadge />
-            </div>
-            <CardTitle className="text-destructive">Unauthorized</CardTitle>
-            <CardDescription>
-              Your account (<span className="font-medium text-foreground">{user.email}</span>) does not
-              have permission to access the admin dashboard.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Button type="button" className="w-full" onClick={() => signOut()}>
-              <LogOut className="mr-2 h-4 w-4" /> Sign out and switch account
-            </Button>
-            <p className="text-center text-xs text-muted-foreground">
-              If you believe this is a mistake, contact the studio administrator.
-            </p>
+          <CardContent>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <Input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              {authError && <p className="text-sm text-destructive">{authError}</p>}
+              <Button type="submit" className="w-full">
+                <ShieldCheck className="mr-2 h-4 w-4" /> Login
+              </Button>
+            </form>
           </CardContent>
         </Card>
       </div>
@@ -223,7 +202,7 @@ export default function AdminPage() {
                 <p className="text-muted-foreground">Manage your studio leads and inquiries.</p>
               </div>
             </div>
-            <Button variant="outline" onClick={() => signOut()}>
+            <Button variant="outline" onClick={() => setIsAuthenticated(false)}>
               <ShieldOff className="mr-2 h-4 w-4" /> Logout
             </Button>
           </div>
@@ -279,33 +258,6 @@ export default function AdminPage() {
               />
             </TabsContent>
           </Tabs>
-          )}
-
-          {mainTab === 'analytics' && (
-            <div className="mb-6">
-              <Card>
-                <CardContent className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-6">
-                  <div className="flex items-start gap-3">
-                    <div className="relative flex h-10 w-10 shrink-0 items-center justify-center">
-                      <div className="absolute inset-0 rotate-45 rounded-lg border-2 border-primary/40" />
-                      <BarChart3 className="relative h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold">Google Analytics 4</h3>
-                      <p className="text-sm text-muted-foreground">
-                        Uses the connected Google account. Reconnect any time to renew access or
-                        switch accounts.
-                      </p>
-                    </div>
-                  </div>
-                  <a href="/api/admin/auth/google?redirect=/admin">
-                    <Button>
-                      <BarChart3 className="mr-2 h-4 w-4" /> Connect Google Analytics
-                    </Button>
-                  </a>
-                </CardContent>
-              </Card>
-            </div>
           )}
 
           {mainTab === 'analytics' && (
@@ -415,19 +367,6 @@ export default function AdminPage() {
         </AlertDialogContent>
       </AlertDialog>
     </>
-  );
-}
-
-// Unauthorized Badge (do-not-cross style)
-function UnauthorizedBadge({ className }: { className?: string }) {
-  return (
-    <div className={cn("relative inline-flex h-24 w-24 items-center justify-center", className)}>
-      <div className="absolute inset-0 rounded-2xl border-2 border-destructive/50 bg-destructive/5" />
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="h-[7px] w-[150%] -rotate-12 rounded-full bg-destructive shadow-[0_0_12px_rgba(239,68,68,0.5)]" />
-      </div>
-      <OctagonX className="relative h-12 w-12 text-destructive" />
-    </div>
   );
 }
 

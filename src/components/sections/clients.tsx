@@ -190,7 +190,7 @@ const ClientCard = ({ client, index }: { client: ShowcaseClient; index: number }
             alt=""
             loading={index < 3 ? 'eager' : 'lazy'}
             decoding="async"
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1600ms] ease-out group-hover:scale-110"
+            className="absolute inset-0 h-full w-full object-cover transition-transform [transition-duration:1600ms] ease-out group-hover:scale-110"
           />
         ) : (
           <div className={`absolute inset-0 bg-gradient-to-br ${client.gradient}`}>

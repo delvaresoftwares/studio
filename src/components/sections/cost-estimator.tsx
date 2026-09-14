@@ -11,7 +11,6 @@ import { generatePDF } from '@/lib/pdf-generator';
 import { useTrackClick } from '@/hooks/use-track-click';
 import { saveContactInfoAction } from '@/app/actions';
 import { smoothScrollTo } from '@/lib/smooth-scroll';
-import { useAuth } from '@/components/auth/auth-provider';
 
 type Message = {
   id: string;
@@ -36,7 +35,6 @@ const regionMultipliers = { global: 1.2, regional: 1, local: 0.8 };
 const CostEstimatorSection = ({ onQuoteGenerated }: { onQuoteGenerated?: (data: any) => void }) => {
   const [isOpen, setIsOpen] = useState(false);
   const trackEstimatorConfirm = useTrackClick('estimator-confirm');
-  const { requireAuth, openAuth } = useAuth();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -64,32 +62,21 @@ const CostEstimatorSection = ({ onQuoteGenerated }: { onQuoteGenerated?: (data: 
   const [quoteStatus, setQuoteStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  const submitBlueprint = async (finalSelections: any, finalAmount: string, domainLabel: string) => {
+  const handleConfirmBlueprint = async (finalSelections: any, finalAmount: string, domainLabel: string) => {
+    if (quoteStatus !== 'idle') return;
     setQuoteStatus('sending');
     try {
-      const result = await saveContactInfoAction({
+      await saveContactInfoAction({
         name: String(finalSelections.clientName || 'Cost Estimator Lead'),
         email: String(finalSelections.clientEmail || ''),
         phone: String(finalSelections.clientPhone || ''),
         message: `AI CORE INQUIRY\nDomain: ${domainLabel}\nComplexity: ${finalSelections.complexity}\nEstimate: ${finalAmount}`,
         type: 'contact',
       });
-      if (result.requiresAuth) {
-        setQuoteStatus('idle');
-        openAuth({
-          onSuccess: () => submitBlueprint(finalSelections, finalAmount, domainLabel),
-        });
-        return;
-      }
       setQuoteStatus('sent');
     } catch {
       setQuoteStatus('idle');
     }
-  };
-
-  const handleConfirmBlueprint = (finalSelections: any, finalAmount: string, domainLabel: string) => {
-    if (quoteStatus !== 'idle') return;
-    void requireAuth(() => submitBlueprint(finalSelections, finalAmount, domainLabel));
   };
 
   useEffect(() => {
@@ -257,7 +244,7 @@ const CostEstimatorSection = ({ onQuoteGenerated }: { onQuoteGenerated?: (data: 
     <>
       {/* Fullscreen Modal Content */}
       <div className={cn(
-        "fixed inset-0 z-[10000] bg-black transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] overflow-y-auto",
+        "fixed inset-0 z-[10000] bg-black transition-all duration-700 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] overflow-y-auto",
         isOpen ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"
       )}>
         <section id="estimator" className="min-h-screen py-20 relative overflow-hidden bg-primary">

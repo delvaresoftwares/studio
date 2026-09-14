@@ -30,7 +30,7 @@ const Preloader = () => {
 
     return (
         <div className={cn(
-            "fixed inset-0 z-[100000] bg-black flex flex-col items-center justify-center transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)]",
+            "fixed inset-0 z-[100000] bg-black flex flex-col items-center justify-center transition-all duration-1000 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)]",
             fadeOut ? "opacity-0 scale-110 pointer-events-none" : "opacity-100 scale-100"
         )}>
             <div className="relative flex flex-col items-center gap-10">
