@@ -55,6 +55,8 @@ const clientsSeo = [
     { name: 'Nature of the Divine', url: 'https://natureofthedivine.com' },
     { name: 'Alien Hills', url: 'https://alienhills.shop' },
     { name: 'RiZa Hijabs', url: 'https://rizahijabs.com' },
+    { name: 'Pacha Mobiles', url: '' },
+    { name: 'Season Kids', url: '' },
 ];
 
 const jsonLd = {
@@ -129,7 +131,7 @@ const jsonLd = {
                 '@type': 'ListItem',
                 position: index + 1,
                 name: client.name,
-                url: client.url,
+                url: client.url || undefined,
             })),
         },
     ],

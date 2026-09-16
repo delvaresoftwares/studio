@@ -29,7 +29,7 @@ PRODUCTS (built by Delvare)
 - Dvenue (dvenue.space / dvenue.bublnet.in): last-minute venue booking app for events.
 
 CLIENTS
-ecbills.in, blendly.sbs, dvenue.space, dvenue.bublnet.in, masdaralriyadh.com, laynered.com, spectraschool.in, delvare.in, natureofthedivine.com, alienhills.shop.
+ecbills.in, blendly.sbs, dvenue.space, dvenue.bublnet.in, masdaralriyadh.com, laynered.com, spectraschool.in, delvare.in, natureofthedivine.com, alienhills.shop, pacha mobiles, season kids.
 
 FOUNDER
 Alfas B - Founder & CEO of Delvare. Skills across software engineering, system architecture, cybersecurity, business strategy, UI/UX, cloud computing and AI. Also author of the non-fiction book "Nature of the Divine" (available on Amazon, Flipkart and natureofthedivine.com).

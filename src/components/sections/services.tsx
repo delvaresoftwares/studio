@@ -19,6 +19,10 @@ import {
   TrendingUp,
   ChevronDown,
   MessageSquare,
+  Eye,
+  Target,
+  Quote,
+  Sparkles,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -133,14 +137,22 @@ const ServicesSection = () => {
 
   return (
     <>
-      <section id="vision" className="w-full relative py-20 lg:py-28 overflow-hidden bg-white">
-        <div className="container mx-auto px-4 relative z-10">
+      <section id="vision" className="w-full relative py-24 lg:py-32 overflow-hidden bg-white">
+        <div
+          className="absolute inset-0 opacity-[0.35] pointer-events-none"
+          style={{ backgroundImage: 'radial-gradient(circle, hsl(var(--border)) 1px, transparent 1px)', backgroundSize: '28px 28px' }}
+        />
+        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-primary/[0.07] blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-0 -right-32 w-[400px] h-[300px] bg-primary/[0.05] blur-[110px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-24 -left-32 w-[420px] h-[320px] bg-amber-500/[0.06] blur-[110px] rounded-full pointer-events-none" />
+
+        <div className="container mx-auto px-4 relative z-10 text-center">
           {/* Section Header */}
-          <FadeIn delay={0.1} className="text-center mb-12">
+          <FadeIn delay={0.1} className="mb-14 md:mb-16">
             <Badge variant="outline" className="mb-5 border-primary/20 py-1.5 px-5 text-[10px] font-black tracking-[0.3em] uppercase text-primary/70 bg-primary/5">
               Our MOTTO
             </Badge>
-            <h2 className="font-headline text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter mb-4">
+            <h2 className="font-headline text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter leading-none mb-4">
               Vision <span className="text-primary italic font-light">&amp; Mission.</span>
             </h2>
             <p className="max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground leading-relaxed font-medium">
@@ -148,21 +160,85 @@ const ServicesSection = () => {
             </p>
           </FadeIn>
 
-          {/* Condensed Vision & Mission */}
-          <FadeIn delay={0.2} className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-6 sm:p-8 rounded-[2rem] border border-border/60 shadow-sm">
-              <div>
-                <h3 className="text-lg font-black text-foreground mb-2"><span className="text-primary">#</span> Vision</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed font-medium">
-                  To be the <span className="font-black text-primary">#pioneer</span> of technological <span className="font-black text-foreground">evolution</span> utilising the computing <span className="font-black text-foreground">hardware-software</span> <span className="font-black text-primary">#evolution</span>.
+          {/* Vision & Mission Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto items-stretch">
+            <FadeIn delay={0.15} className="h-full">
+              <div className="group relative h-full overflow-hidden rounded-[2.5rem] border border-border/60 bg-white shadow-sm hover:shadow-xl hover:border-primary/40 hover:-translate-y-1 transition-all duration-500 p-8 sm:p-10 text-left">
+                <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-primary via-indigo-500 to-purple-500" />
+                <span className="pointer-events-none absolute -bottom-8 -right-4 select-none font-headline text-9xl font-black leading-none text-foreground/[0.04] group-hover:text-primary/[0.08] transition-colors duration-500">
+                  01
+                </span>
+
+                <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-6 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-500">
+                  <Eye className="w-7 h-7" />
+                </div>
+
+                <h3 className="font-headline text-2xl sm:text-3xl font-black tracking-tighter text-foreground mb-4">
+                  Our <span className="text-primary italic font-light">Vision</span>
+                </h3>
+                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed font-medium">
+                  To be the <span className="font-black text-primary">#pioneer</span> of technological{' '}
+                  <span className="font-black text-foreground">evolution</span> &mdash; engineering computing{' '}
+                  <span className="font-black text-foreground">hardware-software</span> that acts as an entire company, letting founders &amp; C-suites automate their pipeline, deployment and maintenance across every digital aspect.
                 </p>
+
+                <div className="mt-7 flex flex-wrap gap-2">
+                  {['Automation-first', 'End-to-end', 'Hardware + Software'].map((chip) => (
+                    <span key={chip} className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-[9px] font-black uppercase tracking-[0.16em] text-primary">
+                      <Sparkles className="w-3 h-3" />
+                      {chip}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <div className="md:border-l md:border-border/60 md:pl-6">
-                <h3 className="text-lg font-black text-foreground mb-2"><span className="text-primary">#</span> Mission</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed font-medium">
-                  To empower <span className="font-black text-foreground">business</span> and <span className="font-black text-foreground">start-ups</span> with radiant <span className="font-black text-primary">#Technology</span> solutions that drive <span className="font-black text-foreground">innovation</span>, <span className="font-black text-foreground">efficiency</span>, and <span className="font-black text-foreground">growth</span> in the digital age.
+            </FadeIn>
+
+            <FadeIn delay={0.2} className="h-full">
+              <div className="group relative h-full overflow-hidden rounded-[2.5rem] border border-border/60 bg-gradient-to-br from-primary/[0.04] to-transparent shadow-sm hover:shadow-xl hover:border-primary/40 hover:-translate-y-1 transition-all duration-500 p-8 sm:p-10 text-left">
+                <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500" />
+                <span className="pointer-events-none absolute -bottom-8 -right-4 select-none font-headline text-9xl font-black leading-none text-foreground/[0.04] group-hover:text-primary/[0.08] transition-colors duration-500">
+                  02
+                </span>
+
+                <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-600 mb-6 group-hover:bg-amber-500 group-hover:text-white group-hover:border-amber-500 transition-all duration-500">
+                  <Target className="w-7 h-7" />
+                </div>
+
+                <h3 className="font-headline text-2xl sm:text-3xl font-black tracking-tighter text-foreground mb-4">
+                  Our <span className="text-primary italic font-light">Mission</span>
+                </h3>
+                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed font-medium">
+                  To empower <span className="font-black text-foreground">business</span> and{' '}
+                  <span className="font-black text-foreground">start-ups</span> with radiant{' '}
+                  <span className="font-black text-primary">#Technology</span> solutions that drive{' '}
+                  <span className="font-black text-foreground">innovation</span>,{' '}
+                  <span className="font-black text-foreground">efficiency</span>, and{' '}
+                  <span className="font-black text-foreground">growth</span> in the digital age.
                 </p>
+
+                <div className="mt-7 flex flex-wrap gap-2">
+                  {['Innovation', 'Efficiency', 'Radiant Growth'].map((chip) => (
+                    <span key={chip} className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-[9px] font-black uppercase tracking-[0.16em] text-primary">
+                      <Sparkles className="w-3 h-3" />
+                      {chip}
+                    </span>
+                  ))}
+                </div>
               </div>
+            </FadeIn>
+          </div>
+
+          {/* Motto quote strip */}
+          <FadeIn delay={0.25} className="max-w-3xl mx-auto mt-10 md:mt-12">
+            <div className="relative overflow-hidden rounded-[2rem] border border-primary/15 bg-gradient-to-br from-primary/5 via-white to-amber-500/5 p-8 sm:p-10 text-center">
+              <Quote className="w-10 h-10 mx-auto mb-4 text-primary/30" />
+              <p className="font-headline text-2xl sm:text-3xl font-light italic leading-snug text-foreground">
+                &ldquo;The perfect &amp; optimal solution,{' '}
+                <span className="font-black not-italic text-primary">built to last a lifetime.</span>&rdquo;
+              </p>
+              <p className="mt-5 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/70">
+                Grow ahead of the curve — <span className="text-primary">Delvare.</span>
+              </p>
             </div>
           </FadeIn>
         </div>
