@@ -26,5 +26,11 @@ service cloud.firestore {
       allow create, read: if true;
       allow update, delete: if false;
     }
+
+    // Traffic-source tracking links (redirects like delvare.in/linked-in).
+    match /traffic_sources/{sourceId} {
+      allow create, read: if true;
+      allow update, delete: if false;
+    }
   }
 }

@@ -451,6 +451,68 @@ export async function getClicksAction(): Promise<{ clicks?: ClickEntry[]; error?
   }
 }
 
+// --- Traffic-source (tracking link) analytics ---
+
+export type TrafficSourceEntry = {
+  id: string;
+  source: string;
+  target: string;
+  referer: string;
+  createdAt: number; // epoch ms
+}
+
+// Records a tracking-link click (source shared via delvare.in/<source> style URLs).
+export async function trackSourceAction(source: string, target: string, referer: string): Promise<{ success: boolean }> {
+  if (!app.options.projectId || !source || !target) {
+    return { success: false };
+  }
+  try {
+    await addDoc(collection(db, 'traffic_sources'), {
+      source,
+      target: target || '/',
+      referer: referer || '',
+      createdAt: serverTimestamp(),
+    });
+    return { success: true };
+  } catch (error) {
+    console.error("Error tracking traffic source:", error);
+    return { success: false };
+  }
+}
+
+// Returns raw tracking-link entries used to compute source analytics on the client.
+export async function getTrafficSourcesAction(): Promise<{ sources?: TrafficSourceEntry[]; error?: string }> {
+  if (!app.options.projectId) {
+    return { error: "Firebase is not configured on the server." };
+  }
+
+  try {
+    const sourcesCollection = collection(db, 'traffic_sources');
+    const q = query(sourcesCollection, orderBy('createdAt', 'desc'));
+    const querySnapshot = await getDocs(q);
+
+    const sources = querySnapshot.docs
+      .map(docSnap => {
+        const data = docSnap.data();
+        const createdAt = data.createdAt as Timestamp | undefined;
+        return {
+          id: docSnap.id,
+          source: data.source || '',
+          target: data.target || '/',
+          referer: data.referer || '',
+          createdAt: createdAt ? createdAt.seconds * 1000 : 0,
+        };
+      })
+      .filter(s => s.createdAt > 0);
+
+    return { sources };
+  } catch (error: unknown) {
+    console.error("Error fetching traffic sources:", error);
+    const err = error as { code?: string; message?: string };
+    return { error: `Failed to fetch traffic source analytics: ${err?.message ?? 'Unknown error'}` };
+  }
+}
+
 // Returns raw visit entries used to compute analytics on the client.
 export async function getVisitsAction(): Promise<{ visits?: VisitEntry[]; error?: string }> {
   if (!app.options.projectId) {

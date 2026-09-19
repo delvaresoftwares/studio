@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { getVisitsAction, getClicksAction, type VisitEntry, type ClickEntry } from '@/app/actions';
+import { getVisitsAction, getClicksAction, getTrafficSourcesAction, type VisitEntry, type ClickEntry, type TrafficSourceEntry } from '@/app/actions';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, Eye, Users, Activity, CalendarDays, MousePointerClick, ArrowDown, BarChart3 } from 'lucide-react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Loader2, Eye, Users, Activity, CalendarDays, MousePointerClick, ArrowDown, BarChart3, Link2, Route, Share2, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { sourceLabel, TRACKING_SOURCES } from '@/lib/tracking-sources';
 import {
     ResponsiveContainer,
     AreaChart,
@@ -132,6 +134,7 @@ const AnalyticsPanel = ({
 }: AnalyticsPanelProps) => {
     const [visits, setVisits] = useState<VisitEntry[]>([]);
     const [clicks, setClicks] = useState<ClickEntry[]>([]);
+    const [sources, setSources] = useState<TrafficSourceEntry[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
     const [range, setRange] = useState<RangeKey>('week');
@@ -140,16 +143,18 @@ const AnalyticsPanel = ({
         let alive = true;
         (async () => {
             setIsLoading(true);
-            const [visitsRes, clicksRes] = await Promise.all([
+            const [visitsRes, clicksRes, sourcesRes] = await Promise.all([
                 getVisitsAction(),
                 getClicksAction(),
+                getTrafficSourcesAction(),
             ]);
             if (!alive) return;
-            if (visitsRes.error || clicksRes.error) {
-                setError(visitsRes.error || clicksRes.error || 'Failed to fetch analytics.');
+            if (visitsRes.error || clicksRes.error || sourcesRes.error) {
+                setError(visitsRes.error || clicksRes.error || sourcesRes.error || 'Failed to fetch analytics.');
             }
             setVisits(visitsRes.visits ?? []);
             setClicks(clicksRes.clicks ?? []);
+            setSources(sourcesRes.sources ?? []);
             setIsLoading(false);
         })();
         return () => { alive = false; };
@@ -206,6 +211,55 @@ const AnalyticsPanel = ({
     }, [visits, clicks, contactsCount, estimationsCount, contactsReadCount, estimationsReadCount]);
 
     const maxFunnelCount = Math.max(...funnelData.map(f => f.count), 1);
+
+    const pageAnalytics = useMemo(() => {
+        const visitsByPath = new Map<string, { views: number; visitors: Set<string> }>();
+        for (const v of visits) {
+            const key = v.path || '/';
+            const entry = visitsByPath.get(key) ?? { views: 0, visitors: new Set<string>() };
+            entry.views += 1;
+            entry.visitors.add(v.sessionId || v.id);
+            visitsByPath.set(key, entry);
+        }
+
+        const clicksByPage = new Map<string, number>();
+        for (const c of clicks) {
+            const key = c.page || '/';
+            clicksByPage.set(key, (clicksByPage.get(key) || 0) + 1);
+        }
+
+        const allPaths = new Set([...visitsByPath.keys(), ...clicksByPage.keys()]);
+        return [...allPaths]
+            .map(path => ({
+                path,
+                views: visitsByPath.get(path)?.views ?? 0,
+                visitors: visitsByPath.get(path)?.visitors.size ?? 0,
+                clicks: clicksByPage.get(path) ?? 0,
+            }))
+            .sort((a, b) => b.views - a.views || b.clicks - a.clicks || a.path.localeCompare(b.path));
+    }, [visits, clicks]);
+
+    const sourceAnalytics = useMemo(() => {
+        const bySource = new Map<string, { count: number; targets: Map<string, number> }>();
+        for (const s of sources) {
+            const key = s.source || 'unknown';
+            const entry = bySource.get(key) ?? { count: 0, targets: new Map<string, number>() };
+            entry.count += 1;
+            entry.targets.set(s.target, (entry.targets.get(s.target) || 0) + 1);
+            bySource.set(key, entry);
+        }
+        return [...bySource.entries()]
+            .map(([source, value]) => ({
+                source,
+                count: value.count,
+                targets: [...value.targets.entries()]
+                    .sort((a, b) => b[1] - a[1])
+                    .map(([target, n]) => ({ target, count: n })),
+            }))
+            .sort((a, b) => b.count - a.count);
+    }, [sources]);
+
+    const maxSourceCount = Math.max(...sourceAnalytics.map(s => s.count), 1);
 
     if (isLoading) {
         return (
@@ -402,6 +456,118 @@ const AnalyticsPanel = ({
                         </CardContent>
                     </Card>
                 </div>
+            </div>
+
+            {/* Pages & Routes + Traffic Sources */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Pages & Routes */}
+                <Card>
+                    <CardContent className="pt-6">
+                        <div className="flex items-center gap-2 mb-6">
+                            <Route className="h-4 w-4 text-primary" />
+                            <h3 className="font-bold">Pages & Routes</h3>
+                            <span className="ml-auto text-xs text-muted-foreground font-medium">{pageAnalytics.length} routes</span>
+                        </div>
+
+                        {pageAnalytics.length > 0 ? (
+                            <div className="overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>Route</TableHead>
+                                            <TableHead className="text-right">Visits</TableHead>
+                                            <TableHead className="text-right">Unique</TableHead>
+                                            <TableHead className="text-right">Clicks</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {pageAnalytics.map(row => (
+                                            <TableRow key={row.path}>
+                                                <TableCell className="font-mono text-xs font-medium">{row.path || '/'}</TableCell>
+                                                <TableCell className="text-right font-bold">{row.views.toLocaleString()}</TableCell>
+                                                <TableCell className="text-right text-muted-foreground">{row.visitors.toLocaleString()}</TableCell>
+                                                <TableCell className="text-right">{row.clicks.toLocaleString()}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center text-muted-foreground gap-2 py-12">
+                                <Route className="h-10 w-10 opacity-40" />
+                                <p className="text-sm font-medium">No page data recorded yet.</p>
+                                <p className="text-xs">Visits and CTA clicks land here once traffic starts flowing.</p>
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
+
+                {/* Traffic Sources */}
+                <Card className="h-full">
+                    <CardContent className="pt-6">
+                        <div className="flex items-center gap-2 mb-6">
+                            <Share2 className="h-4 w-4 text-primary" />
+                            <h3 className="font-bold">Traffic Sources</h3>
+                            <span className="ml-auto text-xs text-muted-foreground font-medium">{sources.length} total clicks</span>
+                        </div>
+
+                        {sourceAnalytics.length > 0 ? (
+                            <div className="space-y-4">
+                                {sourceAnalytics.map(s => (
+                                    <div key={s.source}>
+                                        <div className="flex items-center justify-between gap-3 mb-1">
+                                            <p className="text-xs font-bold">
+                                                {sourceLabel(s.source)}
+                                                <span className="ml-1.5 font-mono text-[10px] text-muted-foreground">/{s.source}</span>
+                                            </p>
+                                            <span className="text-xs font-medium text-muted-foreground shrink-0">
+                                                {s.count} ({Math.round((s.count / sources.length) * 100)}%)
+                                            </span>
+                                        </div>
+                                        <div className="h-2 rounded-full bg-secondary/50 overflow-hidden mb-1.5">
+                                            <div
+                                                className="h-full rounded-full bg-primary transition-all duration-500"
+                                                style={{ width: `${Math.max((s.count / maxSourceCount) * 100, 2)}%`, opacity: 0.8 }}
+                                            />
+                                        </div>
+                                        {s.targets.map(t => (
+                                            <div key={t.target} className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+                                                <ArrowRight className="h-3 w-3 shrink-0" />
+                                                <span className="font-mono">{t.target === '/' ? '/' : t.target}</span>
+                                                <span className="font-bold text-foreground/80 ml-auto">{t.count}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center text-muted-foreground gap-2 py-12">
+                                <Share2 className="h-10 w-10 opacity-40" />
+                                <p className="text-sm font-medium">No tracking-link clicks yet.</p>
+                                <p className="text-xs">Share links like delvare.in/linked-in to start collecting source data.</p>
+                            </div>
+                        )}
+
+                        <div className="mt-6 border-t border-border pt-4">
+                            <div className="flex items-center gap-2 mb-2">
+                                <Link2 className="h-3.5 w-3.5 text-muted-foreground" />
+                                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Tracking links</p>
+                            </div>
+                            <p className="text-[11px] text-muted-foreground mb-3 leading-relaxed">
+                                Append a source slug to any page URL — <span className="font-mono text-foreground">delvare.in/linked-in</span> goes
+                                to the homepage, <span className="font-mono text-foreground">delvare.in/founder/linked-in</span> goes to the
+                                founder page. Each click redirects and is counted here.
+                            </p>
+                            <div className="flex flex-wrap gap-1.5">
+                                {TRACKING_SOURCES.map(src => (
+                                    <span key={src} className="rounded-md border border-border px-2 py-1 font-mono text-[10px] text-muted-foreground">
+                                        /{src}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
         </div>
     );
