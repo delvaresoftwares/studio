@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     const target = segments.length === 1 ? '/' : `/${segments.slice(0, -1).join('/')}`;
 
     if (!KNOWN_SOURCES.has(source)) {
-        return NextResponse.next();
+        return new NextResponse(null, { status: 404 });
     }
 
     // Record the click (fire-and-forget). Tracking must never break the redirect.
