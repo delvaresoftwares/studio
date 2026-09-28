@@ -3,20 +3,22 @@
 import { Badge } from '@/components/ui/badge';
 import { FadeIn, TypingText } from '@/components/ui/motion';
 
-const allClients: { name: string; url: string }[] = [
-  { name: 'EC Bills', url: 'https://ecbills.in' },
-  { name: 'Blendly.sbs', url: 'https://blendly.sbs' },
-  { name: 'Dvenue', url: 'https://dvenue.space' },
-  { name: 'Dvenue Bublnet', url: 'https://dvenue.bublnet.in' },
-  { name: 'Masdar Al Riyadh', url: 'https://masdaralriyadh.com' },
-  { name: 'Laynered', url: 'https://laynered.com' },
-  { name: 'Spectra School', url: 'https://spectraschool.in' },
-  { name: 'Delvare', url: 'https://delvare.in' },
-  { name: 'Nature of the Divine', url: 'https://natureofthedivine.com' },
+type Client = { name: string; url: string; logo?: string };
+
+const allClients: Client[] = [
+  { name: 'EC Bills', url: 'https://ecbills.in', logo: '/assets/clients/ecbills-logo.webp' },
+  { name: 'Blendly.sbs', url: 'https://blendly.sbs', logo: '/assets/clients/blendly.webp' },
+  { name: 'Dvenue', url: 'https://dvenue.space', logo: '/assets/clients/dvenue-logo.webp' },
+  { name: 'Dvenue Bublnet', url: 'https://dvenue.bublnet.in', logo: '/assets/clients/dvenue-logo.webp' },
+  { name: 'Masdar Al Riyadh', url: 'https://masdaralriyadh.com', logo: '/assets/clients/masdar.webp' },
+  { name: 'Laynered', url: 'https://laynered.com', logo: '/assets/clients/laynered-logo.webp' },
+  { name: 'Spectra School', url: 'https://spectraschool.in', logo: '/assets/clients/spectra.webp' },
+  { name: 'Delvare', url: 'https://delvare.in', logo: '/assets/logo.png' },
+  { name: 'Nature of the Divine', url: 'https://natureofthedivine.com', logo: '/assets/clients/natureofdivine.webp' },
   { name: 'Alien Hills', url: 'https://alienhills.shop' },
-  { name: 'RiZa Hijabs', url: 'https://rizahijabs.com' },
+  { name: 'RiZa Hijabs', url: 'https://rizahijabs.com', logo: '/assets/clients/riza-logo.webp' },
   { name: 'Pacha Mobiles', url: '' },
-  { name: 'Season Kids', url: '' },
+  { name: 'Zufo', url: '' },
 ];
 
 const domainOf = (url: string) => {
@@ -27,17 +29,42 @@ const domainOf = (url: string) => {
   }
 };
 
-const ClientBadge = ({ name, url }: { name: string; url: string }) => {
+const LogoChip = ({ name, logo }: { name: string; logo?: string }) =>
+  logo ? (
+    <img
+      src={logo}
+      alt=""
+      loading="lazy"
+      decoding="async"
+      className="h-9 w-9 shrink-0 rounded-lg border border-border/60 bg-white object-contain p-0.5"
+    />
+  ) : (
+    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border/60 bg-secondary text-sm font-black text-primary">
+      {name.charAt(0).toUpperCase()}
+    </span>
+  );
+
+const ClientBadge = ({ name, url, logo }: Client) => {
   const pill =
-    'inline-flex h-full w-full items-center justify-center rounded-2xl border border-border/70 bg-white py-3 px-5';
+    'inline-flex h-full w-full items-center rounded-2xl border border-border/70 bg-white py-3 pl-3 pr-5';
   const domain = url ? domainOf(url) : '';
 
-  if (!url) {
-    return (
-      <span className={`${pill} cursor-default`}>
-        <span className="min-w-0 truncate text-sm font-black tracking-tight text-foreground">{name}</span>
+  const content = (
+    <span className="flex w-full min-w-0 items-center gap-3 text-left">
+      <LogoChip name={name} logo={logo} />
+      <span className="flex min-w-0 flex-col leading-snug">
+        <span className="truncate text-sm font-black tracking-tight text-foreground">{name}</span>
+        {domain && (
+          <span className="truncate text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground/60">
+            {domain}
+          </span>
+        )}
       </span>
-    );
+    </span>
+  );
+
+  if (!url) {
+    return <span className={`${pill} cursor-default`}>{content}</span>;
   }
 
   return (
@@ -48,12 +75,7 @@ const ClientBadge = ({ name, url }: { name: string; url: string }) => {
       aria-label={`${name} — ${domain}`}
       className={`${pill} transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10`}
     >
-      <span className="flex min-w-0 flex-col text-center leading-snug">
-        <span className="truncate text-sm font-black tracking-tight text-foreground">{name}</span>
-        <span className="truncate text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground/60">
-          {domain}
-        </span>
-      </span>
+      {content}
     </a>
   );
 };
@@ -89,7 +111,7 @@ const ClientsSection = () => {
           className="mx-auto grid w-full max-w-4xl grid-cols-1 items-stretch gap-3 sm:grid-cols-2 lg:grid-cols-3"
         >
           {allClients.map((client) => (
-            <ClientBadge key={client.name} name={client.name} url={client.url} />
+            <ClientBadge key={client.name} {...client} />
           ))}
         </FadeIn>
       </div>

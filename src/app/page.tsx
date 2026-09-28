@@ -56,7 +56,7 @@ const clientsSeo = [
     { name: 'Alien Hills', url: 'https://alienhills.shop' },
     { name: 'RiZa Hijabs', url: 'https://rizahijabs.com' },
     { name: 'Pacha Mobiles', url: '' },
-    { name: 'Season Kids', url: '' },
+    { name: 'Zufo', url: '' },
 ];
 
 const jsonLd = {
