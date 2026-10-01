@@ -1,6 +1,5 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import Header from '@/components/header';
 import HeroSection from '@/components/sections/hero';
 import KeywordMarquee from '@/components/sections/keywords';
@@ -9,11 +8,6 @@ import ProductsSection from '@/components/sections/products';
 
 import Footer from '@/components/footer';
 import BackgroundDecor from '@/components/background-decor';
-
-const ClientsSection = dynamic(() => import('@/components/sections/clients'), {
-  ssr: false,
-  loading: () => null,
-});
 
 import { useState } from 'react';
 
@@ -29,9 +23,8 @@ export default function HomeClient() {
         <KeywordMarquee />
         <ServicesSection />
         <ProductsSection />
-        <ClientsSection />
         <Footer />
       </main>
     </div>
   );
-  }
+}

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import HomeClient from './home-client';
 import { siteConfig } from '@/lib/site-config';
+import { clients } from '@/lib/clients';
 
 export const metadata: Metadata = {
     title: 'Delvare — Software Development Company | Custom Software, SaaS & AI Solutions',
@@ -43,21 +44,6 @@ export const metadata: Metadata = {
         creator: '@delvare',
     },
 };
-
-const clientsSeo = [
-    { name: 'EC Bills', url: 'https://ecbills.in' },
-    { name: 'Blendly', url: 'https://blendly.sbs' },
-    { name: 'Dvenue', url: 'https://dvenue.space' },
-    { name: 'Dvenue Bublnet', url: 'https://dvenue.bublnet.in' },
-    { name: 'Masdar Al Riyadh', url: 'https://masdaralriyadh.com' },
-    { name: 'Laynered', url: 'https://laynered.com' },
-    { name: 'Spectra School', url: 'https://spectraschool.in' },
-    { name: 'Nature of the Divine', url: 'https://natureofthedivine.com' },
-    { name: 'Alien Hills', url: 'https://alienhills.shop' },
-    { name: 'RiZa Hijabs', url: 'https://rizahijabs.com' },
-    { name: 'Pacha Mobiles', url: '' },
-    { name: 'Zufo', url: '' },
-];
 
 const jsonLd = {
     '@context': 'https://schema.org',
@@ -127,7 +113,7 @@ const jsonLd = {
             name: 'Platforms Developed by Delvare',
             description:
                 'Every website and platform below was designed, developed, run and grown by Delvare — our own products (ECBills, Blendly, Dvenue) and the websites we have built and manage for international clients.',
-            itemListElement: clientsSeo.map((client, index) => ({
+            itemListElement: clients.map((client, index) => ({
                 '@type': 'ListItem',
                 position: index + 1,
                 name: client.name,

@@ -235,6 +235,15 @@
     animation: marquee-scroll 30s linear infinite reverse;
   }
 
+  /* Same movement, slower cadence — used by the client scroller */
+  .animate-marquee-slow {
+    animation: marquee-scroll 55s linear infinite;
+  }
+
+  .animate-marquee-slow-reverse {
+    animation: marquee-scroll 55s linear infinite reverse;
+  }
+
   /* Preloader Animations */
   @keyframes loading-bar {
     0% {
@@ -293,6 +302,8 @@
 
   .animate-marquee-scroll,
   .animate-marquee-scroll-reverse,
+  .animate-marquee-slow,
+  .animate-marquee-slow-reverse,
   .animate-orbit,
   .animate-pulse-glow,
   .animate-data-flow,
