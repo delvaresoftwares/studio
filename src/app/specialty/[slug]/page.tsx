@@ -4,6 +4,14 @@ import { Metadata } from 'next';
 import { siteConfig } from '@/lib/site-config';
 import SpecialtyDetailContent from '@/components/specialty-detail-content';
 
+// `specialties` is a static in-memory array with no dynamic data, so every
+// specialty can be prerendered at build time instead of server-rendered on each
+// request. dynamicParams stays at its default of true, so unknown slugs are
+// still server-rendered and hit notFound() as before.
+export function generateStaticParams() {
+    return specialties.map((specialty) => ({ slug: specialty.slug }));
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params;
     const data = specialties.find(s => s.slug === slug);

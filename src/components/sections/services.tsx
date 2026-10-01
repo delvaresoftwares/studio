@@ -29,7 +29,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { smoothScrollTo } from '@/lib/smooth-scroll';
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/ui/motion';
 import FounderHighlight from '@/components/sections/founder-highlight';
-import ClientsMarquee from '@/components/sections/clients-marquee';
+import ClientsOrbit from '@/components/sections/clients-orbit';
 
 const services = [
   {
@@ -237,7 +237,7 @@ const ServicesSection = () => {
       </section>
 
       {/* Client scroller — reuses the keyword marquee movement, sits between Vision & Mission and Trinity */}
-      <ClientsMarquee />
+      <ClientsOrbit />
 
       {/* Trinity of Delvare — Our Three Pillars */}
       <section id="trinity" className="w-full relative py-20 lg:py-28 overflow-hidden bg-[#fafafa]">

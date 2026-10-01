@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Calendar, User } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { FadeIn, StaggerContainer, StaggerItem, TypingText } from '@/components/ui/motion';
 
 const BlogSection = () => {
@@ -31,12 +32,12 @@ const BlogSection = () => {
                             {/* Desktop Card */}
                             <Card className="hidden md:flex flex-col group border border-border/50 hover:border-primary/20 transition-all duration-500 overflow-hidden bg-[#fdfdfd] rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:-translate-y-2 animate-fade-in-up h-full" style={{ animationDelay: `${idx * 150}ms` }}>
                                 <div className="relative h-64 overflow-hidden">
-                                    <img
+                                    <Image
                                         src={post.image}
                                         alt={post.title}
-                                        loading="lazy"
-                                        decoding="async"
-                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                        fill
+                                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                                        className="object-cover group-hover:scale-110 transition-transform duration-700"
                                     />
                                     <div className="absolute top-6 left-6 flex gap-2">
                                         {post.tags.map(tag => (
@@ -84,7 +85,7 @@ const BlogSection = () => {
                                     </div>
                                 </div>
                                 <div className="w-24 h-24 shrink-0 overflow-hidden rounded-xl">
-                                    <img src={post.image} alt={post.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                                    <Image src={post.image} alt={post.title} fill sizes="96px" className="object-cover" />
                                 </div>
                             </Card>
                         </Link>

@@ -1,14 +1,22 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import { ArrowUp, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SITE_KNOWLEDGE } from '@/lib/site-knowledge';
 import { useScrollLock } from '@/hooks/use-scroll-lock';
+
+// react-markdown + remark-gfm and their micromark parser chain are only needed
+// once a reply is on screen, so they load as a separate async chunk rather than
+// with the widget itself (which is mounted in the root layout).
+const MarkdownContent = dynamic(() => import('@/components/chat-markdown'), {
+    ssr: false,
+    loading: () => <div className="h-4 w-24 animate-pulse rounded bg-white/20" />,
+});
 
 const TEASER_DISMISSED_KEY = 'delvare-ai-teaser-dismissed';
 const TEASER_DELAY_MS = 3500;
@@ -189,48 +197,6 @@ const consumeStream = async (
     return { ok: !streamError, error: streamError };
 };
 
-const MarkdownContent = ({ content }: { content: string }) => (
-    <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        components={{
-            p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
-            strong: ({ children }) => <strong className="font-black">{children}</strong>,
-            em: ({ children }) => <em className="italic">{children}</em>,
-            ul: ({ children }) => <ul className="list-disc pl-4 my-2 space-y-1">{children}</ul>,
-            ol: ({ children }) => <ol className="list-decimal pl-4 my-2 space-y-1">{children}</ol>,
-            li: ({ children }) => <li className="leading-relaxed marker:text-white/70">{children}</li>,
-            a: ({ href, children }) => (
-                <a href={href} target="_blank" rel="noopener noreferrer" className="underline font-bold hover:text-black/70 transition-colors">
-                    {children}
-                </a>
-            ),
-            table: ({ children }) => (
-                <div className="overflow-x-auto my-3 rounded-xl border border-white/30">
-                    <table className="w-full text-[11px] border-collapse text-left">{children}</table>
-                </div>
-            ),
-            th: ({ children }) => (
-                <th className="bg-black/10 px-2.5 py-1.5 font-black uppercase tracking-wide border-b border-white/30 first:pl-3 last:pr-3">
-                    {children}
-                </th>
-            ),
-            td: ({ children }) => (
-                <td className="px-2.5 py-1.5 align-top border-t border-white/20 first:pl-3 last:pr-3">
-                    {children}
-                </td>
-            ),
-            code: ({ children }) => (
-                <code className="bg-black/15 rounded px-1 py-0.5 text-[11px] font-bold">{children}</code>
-            ),
-            blockquote: ({ children }) => (
-                <blockquote className="border-l-2 border-white/40 pl-3 my-2 italic opacity-90">{children}</blockquote>
-            ),
-        }}
-    >
-        {content}
-    </ReactMarkdown>
-);
-
 const pickHook = () =>
     HOOK_MESSAGES[Math.floor(Math.random() * HOOK_MESSAGES.length)];
 
@@ -252,10 +218,22 @@ const AIChatWidget = () => {
 
     useEffect(() => {
         setMounted(true);
-        const handleScroll = () => setScrolled(window.scrollY > 300);
+        // Coalesce to one frame: smooth scrolling fires scroll every frame, and
+        // this listener is registered for the lifetime of every page.
+        let raf = 0;
+        const handleScroll = () => {
+            if (raf) return;
+            raf = requestAnimationFrame(() => {
+                raf = 0;
+                setScrolled(window.scrollY > 300);
+            });
+        };
         handleScroll();
         window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => window.removeEventListener('scroll', handleScroll);
+        return () => {
+            if (raf) cancelAnimationFrame(raf);
+            window.removeEventListener('scroll', handleScroll);
+        };
     }, []);
 
     const lastRole = messages[messages.length - 1]?.role;
@@ -483,7 +461,7 @@ const AIChatWidget = () => {
                         )}
                     >
                         <span className="absolute inset-0 rounded-full bg-primary/20 animate-ping" />
-                        <img src="/assets/arrow.png" alt="" width={610} height={520} decoding="async" className="relative w-9 h-9 object-contain" />
+                        <Image src="/assets/arrow.png" alt="" fill sizes="36px" className="object-contain" />
                         <span className="absolute right-20 bg-white text-brand-dark text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-lg shadow-xl border border-border opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap">
                             Ask AI
                         </span>
@@ -534,7 +512,7 @@ const AIChatWidget = () => {
                                         >
                                             {msg.role === 'assistant' && (
                                                 <span className="w-8 h-8 rounded-full bg-white border border-black/10 shadow-md flex items-center justify-center shrink-0 mr-3 mt-1 self-start overflow-hidden">
-                                                    <img src="/assets/arrow.png" alt="" width={610} height={520} decoding="async" className="w-[18px] h-[18px] object-contain" />
+                                                    <Image src="/assets/arrow.png" alt="" width={610} height={520} sizes="18px" className="h-[18px] w-auto object-contain" />
                                                 </span>
                                             )}
                                             <div

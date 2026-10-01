@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, Github, Linkedin } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -43,12 +44,12 @@ const FounderHighlight = () => {
                             <div className="relative w-full h-full rounded-full p-2 bg-gradient-to-br from-primary/40 via-primary/10 to-transparent shadow-[0_0_100px_-20px_rgba(16,185,129,0.3)] group-hover/max-w:shadow-[0_0_120px_-15px_rgba(16,185,129,0.5)] transition-shadow duration-500">
                                 {/* Strictly clipped circular photo */}
                                 <div className="absolute inset-2 rounded-full overflow-hidden bg-zinc-900 border border-white/10 [transform:translateZ(0)]">
-                                    <img
+                                    <Image
                                         src={FOUNDER_DATA.avatar}
                                         alt={`${FOUNDER_DATA.name} — ${FOUNDER_DATA.role}, ${FOUNDER_DATA.company}`}
-                                        loading="lazy"
-                                        decoding="async"
-                                        className="w-full h-full object-cover object-center rounded-full transition-transform duration-700 group-hover/max-w:scale-105"
+                                        fill
+                                        sizes="(min-width: 768px) 288px, (min-width: 640px) 256px, 224px"
+                                        className="object-cover object-center rounded-full transition-transform duration-700 group-hover/max-w:scale-105"
                                     />
                                 </div>
                                 {/* Orbiting rings */}

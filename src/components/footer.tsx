@@ -3,15 +3,14 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 import { Mail, MapPin, CalendarCheck, ArrowUpRight, Package, ArrowRight } from 'lucide-react';
 import Logo from '@/components/logo';
 import { cn } from '@/lib/utils';
 import { LegalModals, type PolicyType } from '@/components/legal-modals';
 import { siteConfig } from '@/lib/site-config';
-import { specialties } from '@/lib/specialties-data';
+import { footerServices } from '@/lib/footer-services';
 import { useTrackClick } from '@/hooks/use-track-click';
-
-const PRODUCT_SLUGS = ['ecbills', 'blendly'];
 
 const Footer = () => {
   const pathname = usePathname();
@@ -26,7 +25,7 @@ const Footer = () => {
     setIsModalOpen(true);
   };
 
-  const services = specialties.filter(s => !PRODUCT_SLUGS.includes(s.slug)).slice(0, 6);
+  const services = footerServices;
 
   // Shared tone helpers
   const heading = cn('text-[10px] font-black uppercase tracking-[0.35em] mb-5', isDark ? 'text-white' : 'text-foreground');
@@ -153,12 +152,12 @@ const Footer = () => {
           <div className={cn('flex flex-wrap justify-center items-center gap-x-8 gap-y-3 text-[10px] font-black uppercase tracking-[0.25em]', isDark ? 'text-white/50' : 'text-muted-foreground')}>
             {pathname !== '/' && (
               <Link href="/" className="group flex items-center gap-2 hover:text-primary transition-colors">
-                <img
+                <Image
                   src="/assets/arrow-transparent.png"
                   alt="Delvare"
                   width={610}
                   height={520}
-                  decoding="async"
+                  sizes="20px"
                   className={cn("h-5 w-auto object-contain brightness-0", isDark ? "invert opacity-80 group-hover:opacity-100" : "opacity-70 group-hover:opacity-100")}
                 />
                 Visit Delvare

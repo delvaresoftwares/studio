@@ -30,6 +30,10 @@ const Logo = ({ className, simple, light, variant = 'arrow', glow, compact }: {
           fill={!compact}
           width={compact ? 20 : undefined}
           height={compact ? 20 : undefined}
+          // Without this, `fill` falls back to sizes="100vw" and the optimiser
+          // hands back the 3840px variant for what renders at ~128px. The logo is
+          // priority-loaded in the header on every route, so the waste is eager.
+          sizes={compact ? undefined : simple ? "96px" : "128px"}
           className={cn("object-contain", compact && "w-5 h-5")}
           priority
         />

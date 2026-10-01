@@ -3,6 +3,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Calendar, User, ArrowLeft, Printer, FileText } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 
@@ -64,9 +65,16 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
                         </div>
                     </div>
 
-                    {/* Featured Image */}
+                    {/* Featured Image — LCP candidate, so it is preloaded and explicitly sized. */}
                     <div className="relative h-[500px] w-full rounded-[3rem] overflow-hidden mb-16 shadow-2xl print:h-[300px] print:rounded-2xl">
-                        <img src={post.image} alt={post.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                        <Image
+                            src={post.image}
+                            alt={post.title}
+                            fill
+                            priority
+                            sizes="(min-width: 1024px) 900px, 100vw"
+                            className="object-cover"
+                        />
                     </div>
 
                     {/* Content */}

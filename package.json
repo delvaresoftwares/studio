@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "gen:footer-services": "node scripts/gen-footer-services.mjs",
+    "check:footer-services": "node scripts/gen-footer-services.mjs --check"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.3",

@@ -4,6 +4,14 @@ import { Metadata } from 'next';
 import BlogPostContent from '@/components/blog-post-content';
 import { siteConfig } from '@/lib/site-config';
 
+// `blogs` is a static in-memory array with no dynamic data, so every post can be
+// prerendered at build time instead of server-rendered on each request.
+// dynamicParams stays at its default of true, so unknown slugs are still
+// server-rendered and hit notFound() as before.
+export function generateStaticParams() {
+    return blogs.map((post) => ({ slug: post.slug }));
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params;
     const post = blogs.find(b => b.slug === slug);

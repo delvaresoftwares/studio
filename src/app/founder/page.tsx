@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, Code2, Globe, Cpu, Award, TrendingUp, Github, Linkedin, ArrowRight, Activity, Terminal, Layout, ExternalLink, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -258,14 +259,13 @@ export default function FounderPortfolioPage() {
                                             </Button>
                                         </a>
                                         <a href="/" className="group" aria-label="Visit Delvare">
-                                            <Button variant="outline" size="icon" className="h-16 w-16 rounded-2xl border-white/10 bg-white/5 hover:bg-primary hover:border-primary text-white transition-all p-3.5">
-                                                <img
+                                            <Button variant="outline" size="icon" className="relative h-16 w-16 rounded-2xl border-white/10 bg-white/5 hover:bg-primary hover:border-primary text-white transition-all p-3.5">
+                                                <Image
                                                     src="/assets/arrow-transparent.png"
                                                     alt="Delvare"
-                                                    width={610}
-                                                    height={520}
-                                                    decoding="async"
-                                                    className="w-full h-full object-contain brightness-0 invert opacity-90 group-hover:opacity-100 transition-all"
+                                                    fill
+                                                    sizes="36px"
+                                                    className="object-contain brightness-0 invert opacity-90 group-hover:opacity-100 transition-all"
                                                 />
                                             </Button>
                                         </a>
@@ -297,12 +297,12 @@ export default function FounderPortfolioPage() {
                                     
                                     <div className="absolute inset-2 rounded-full overflow-hidden bg-zinc-900 border border-white/10 z-10 [transform:translateZ(0)]">
                                         <div className="absolute inset-0 bg-primary/20 mix-blend-overlay z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                                        <img
+                                        <Image
                                             src="/assets/avatar.webp"
                                             alt={FOUNDER_DATA.name}
-                                            loading="lazy"
-                                            decoding="async"
-                                            className="w-full h-full object-cover object-center rounded-full transition-all duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
+                                            fill
+                                            sizes="(min-width: 768px) 320px, 256px"
+                                            className="object-cover object-center rounded-full transition-all duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
                                         />
                                     </div>
                                     

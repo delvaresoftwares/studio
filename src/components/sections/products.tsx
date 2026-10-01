@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import {
     ArrowRight,
@@ -70,13 +71,13 @@ const ProductCard = ({ product }: { product: Product }) => (
                 )}
             >
                 {/* Beautiful background */}
-                <img
+                <Image
                     src={product.bgImage}
                     alt=""
                     aria-hidden
-                    loading="lazy"
-                    decoding="async"
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                 />
                 {/* Readability gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-black/25" />

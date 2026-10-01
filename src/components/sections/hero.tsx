@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRef } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles, Terminal, Cloud, ShieldCheck, Cpu } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -48,6 +49,18 @@ const HeroSection = () => {
     let raf = 0;
     let mouseX = -1;
     let mouseY = -1;
+    // Lenis repaints on every animation frame, so the raw scroll event fires far
+    // more often than the display can paint. Coalesce measurements into a single
+    // frame to keep forced layout reads at most one per frame instead of one per
+    // scroll event.
+    let measureRaf = 0;
+    const scheduleMeasure = () => {
+      if (measureRaf) return;
+      measureRaf = requestAnimationFrame(() => {
+        measureRaf = 0;
+        measure();
+      });
+    };
 
     const applyRotation = () => {
       raf = 0;
@@ -70,16 +83,17 @@ const HeroSection = () => {
 
     measure();
     window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('scroll', measure, { passive: true });
-    window.addEventListener('resize', measure, { passive: true });
+    window.addEventListener('scroll', scheduleMeasure, { passive: true });
+    window.addEventListener('resize', scheduleMeasure, { passive: true });
 
     return () => {
       clearInterval(interval);
       clearTimeout(sequence);
       if (raf) cancelAnimationFrame(raf);
+      if (measureRaf) cancelAnimationFrame(measureRaf);
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('scroll', measure);
-      window.removeEventListener('resize', measure);
+      window.removeEventListener('scroll', scheduleMeasure);
+      window.removeEventListener('resize', scheduleMeasure);
     };
   }, []);
 
@@ -121,9 +135,21 @@ const HeroSection = () => {
           <div className="relative flex items-center justify-center min-h-[300px] lg:min-h-[600px] w-full order-1 lg:order-2">
             <div className="relative w-full h-full flex items-center justify-center transition-transform duration-700 ease-out">
               <div ref={arrowRef} className="absolute z-20 w-48 h-48 lg:w-64 lg:h-64 bg-white rounded-[2rem] lg:rounded-[3rem] flex flex-col items-center justify-center transition-transform duration-200 ease-out shadow-sm lg:shadow-none">
-                {/* Mobile static arrow (landing highlight) */}
-                <img src="/assets/arrow.png" alt="Our Expertise" width={610} height={520} decoding="async" className="w-40 h-40 object-contain lg:hidden" style={{ transform: 'rotate(0deg)' }} />
-                {/* Desktop rotating arrow */}
+                {/* Mobile static arrow (landing highlight). This is the LCP candidate, so it is
+                    preloaded and sized to its rendered box — the source is 610x520
+                    but it paints at 160x160. */}
+                <Image
+                    src="/assets/arrow.png"
+                    alt="Our Expertise"
+                    fill
+                    priority
+                    sizes="160px"
+                    className="w-40 h-40 object-contain lg:hidden"
+                    style={{ transform: 'rotate(0deg)' }}
+                />
+                {/* Desktop rotating arrow. Deliberately a raw <img>: a ref drives
+                    its transform every animation frame, which conflicts with the
+                    inline styles next/image manages. */}
                 <img ref={arrowImgRef} src="/assets/arrow.png" alt="Our Expertise" width={610} height={520} decoding="async" className="hidden lg:block w-32 h-32 object-contain will-change-transform" style={{ transform: 'rotate(90deg)' }} />
               </div>
               <div className="hidden lg:flex absolute top-20 left-10 w-48 h-56 bg-white rounded-3xl p-6 flex-col justify-between transition-all cursor-default group/card shadow-lg">

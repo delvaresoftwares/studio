@@ -48,19 +48,31 @@ const Header = () => {
   const trackFormSubmit = useTrackClick('header-form-submit');
 
   useEffect(() => {
+    // Smooth scrolling drives the scroll event every frame, so coalesce the
+    // reads and state updates into one frame. The header is a large component
+    // (nav + contact form), and calling setState twice per scroll event forced a
+    // full re-render for every frame of the scroll gesture.
+    let raf = 0;
     const handleScroll = () => {
-      const y = window.scrollY;
-      setScrolled(y > 20);
-      if (y > lastScrollY.current && y > 140) {
-        setHidden(true);
-      } else if (y < lastScrollY.current) {
-        setHidden(false);
-      }
-      lastScrollY.current = y;
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const y = window.scrollY;
+        setScrolled(y > 20);
+        if (y > lastScrollY.current && y > 140) {
+          setHidden(true);
+        } else if (y < lastScrollY.current) {
+          setHidden(false);
+        }
+        lastScrollY.current = y;
+      });
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   useEffect(() => {

@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { Button } from '@/components/ui/button';
@@ -64,15 +65,16 @@ const ProductDetailContent = ({ data }: ProductDetailContentProps) => {
             <Header />
 
             <main className="flex-grow">
-                {/* Cinematic hero — same language as the showcase cards */}
+                {/* Cinematic hero — same language as the showcase cards. LCP candidate. */}
                 <section className="relative min-h-screen flex items-end overflow-hidden">
-                    <img
+                    <Image
                         src={product.bgImage}
                         alt=""
                         aria-hidden
-                        loading="lazy"
-                        decoding="async"
-                        className="absolute inset-0 w-full h-full object-cover"
+                        fill
+                        priority
+                        sizes="100vw"
+                        className="object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30" />
                     <div className={cn('absolute inset-0 mix-blend-overlay opacity-70', product.tintClasses)} />
@@ -250,7 +252,7 @@ const ProductDetailContent = ({ data }: ProductDetailContentProps) => {
 
                 {/* Closing CTA band */}
                 <section className="relative py-24 overflow-hidden">
-                    <img src={product.bgImage} alt="" aria-hidden loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover" />
+                    <Image src={product.bgImage} alt="" aria-hidden fill sizes="100vw" className="object-cover" />
                     <div className="absolute inset-0 bg-black/75" />
                     <div className={cn('absolute inset-0 mix-blend-overlay opacity-60', product.tintClasses)} />
                     <FadeIn className="container mx-auto px-4 relative z-10 text-center">
