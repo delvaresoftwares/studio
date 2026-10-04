@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import Logo from '@/components/logo';
 import { Button } from '@/components/ui/button';
@@ -107,11 +107,24 @@ const Header = () => {
     return () => window.removeEventListener('delvare:autofill', handleAutofill);
   }, []);
 
+  const closeForm = useCallback(() => {
+    setFormOpen(false);
+    setIsSubmitted(false);
+    setFormData({ name: '', email: '', phone: '', message: '' });
+  }, []);
+
+  useEffect(() => {
+    if (!formOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeForm();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [formOpen, closeForm]);
+
   const toggleForm = (type: 'contact' | 'career') => {
     if (formOpen && formType === type) {
-      setFormOpen(false);
-      setIsSubmitted(false);
-      setFormData({ name: '', email: '', phone: '', message: '' });
+      closeForm();
     } else {
       setFormType(type);
       setFormOpen(true);
@@ -219,34 +232,52 @@ const Header = () => {
             </nav>
 
             <div className="flex items-center gap-4">
-              {!isDark && (
-                <Button
-                  onClick={() => { trackStartNow(); toggleForm('contact'); }}
-                  variant={formOpen ? "ghost" : "default"}
+              {formOpen ? (
+                <button
+                  type="button"
+                  onClick={closeForm}
+                  aria-label="Close form"
+                  title="Close (Esc)"
                   className={cn(
-                    "h-10 px-6 rounded-lg font-black text-[10px] uppercase tracking-[0.1em] transition-all duration-500",
-                    (!scrolled && !formOpen) 
-                      ? (isDark ? "bg-primary text-black hover:bg-primary/90" : "bg-white text-primary hover:bg-white/90") 
-                      : "bg-primary text-white hover:bg-primary/90",
-                    formOpen && (isDark ? "bg-transparent text-white hover:bg-white/10 shadow-none border border-white/20" : "bg-transparent text-foreground hover:bg-secondary/50 shadow-none")
+                    "group grid place-items-center rounded-full border h-14 w-14 sm:h-16 sm:w-16 transition-all duration-300 active:scale-95",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                    isDark
+                      ? "border-white/20 text-white hover:bg-white hover:text-black"
+                      : "border-border bg-white text-foreground shadow-lg hover:border-foreground hover:bg-foreground hover:text-background hover:shadow-xl"
                   )}
                 >
-                  {formOpen ? "Close" : "Start Now"}
-                </Button>
-              )}
+                  <X className="h-7 w-7 transition-transform duration-500 group-hover:rotate-90" />
+                </button>
+              ) : (
+                <>
+                  {!isDark && (
+                    <Button
+                      onClick={() => { trackStartNow(); toggleForm('contact'); }}
+                      className={cn(
+                        "h-10 px-6 rounded-lg font-black text-[10px] uppercase tracking-[0.1em] transition-all duration-500",
+                        !scrolled
+                          ? "bg-white text-primary hover:bg-white/90"
+                          : "bg-primary text-white hover:bg-primary/90"
+                      )}
+                    >
+                      Start Now
+                    </Button>
+                  )}
 
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setMenuOpen(true)}
-                className={cn(
-                  "lg:hidden transition-colors", 
-                  formOpen ? (isDark ? "text-white" : "text-foreground") : scrolled ? (isDark ? "text-white" : "text-primary") : "text-white"
-                )}
-                aria-label="Open menu"
-              >
-                <Menu className="w-6 h-6" />
-              </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setMenuOpen(true)}
+                    className={cn(
+                      "lg:hidden transition-colors",
+                      scrolled ? (isDark ? "text-white" : "text-primary") : "text-white"
+                    )}
+                    aria-label="Open menu"
+                  >
+                    <Menu className="w-6 h-6" />
+                  </Button>
+                </>
+              )}
             </div>
           </div>
 
@@ -255,12 +286,12 @@ const Header = () => {
           {/* Expanded Drawer Form */}
           <div className={cn(
             "transition-all duration-500 ease-out overflow-hidden",
-            formOpen ? "opacity-100 max-h-[2000px] mt-16" : "opacity-0 max-h-0 pointer-events-none mt-0"
+            formOpen ? "opacity-100 max-h-[2000px] mt-10 lg:mt-14" : "opacity-0 max-h-0 pointer-events-none mt-0"
           )}>
-            <div className={cn("max-w-4xl mx-auto py-12 px-4 rounded-[3rem] border", isDark ? "shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] border-white/10 bg-[#0a0a0a] text-white" : "shadow-[0_40px_100px_-20px_rgba(0,0,0,0.05)] border-border/40 bg-white")}>
+            <div className="max-w-5xl mx-auto pb-16 lg:pb-24">
               {!isSubmitted ? (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-                  <div className="lg:col-span-5 space-y-8">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-0">
+                  <div className="lg:col-span-5 space-y-8 lg:pr-16">
                     <div className="space-y-4">
                       <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">{formType === 'contact' ? 'Get in Touch' : 'Join Us'}</span>
                       <h2 className={cn("text-4xl md:text-5xl font-black tracking-tighter leading-none", isDark ? "text-white" : "text-foreground")}>
@@ -275,7 +306,7 @@ const Header = () => {
 
                   </div>
 
-                  <div className="lg:col-span-7">
+                  <div className={cn("lg:col-span-7 lg:pl-16 lg:border-l", isDark ? "lg:border-white/10" : "lg:border-border/50")}>
                     <form className="space-y-6" onSubmit={handleSubmit}>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
