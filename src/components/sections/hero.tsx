@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react';
 import { useRef } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Sparkles, Terminal, Cloud, ShieldCheck, Cpu } from 'lucide-react';
+import { ArrowRight, Sparkles, Terminal, Cloud, ShieldCheck, Cpu, Phone, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTrackClick } from '@/hooks/use-track-click';
+import { siteConfig } from '@/lib/site-config';
 
 const keywords = [
   "24/7 IT Support", "System Maintenance", "Cloud Management", "Security Audits", "Data Backup", "Technical Consulting", "Network Monitoring", "IT Infrastructure", "Software Updates", "Troubleshooting", "System Optimization"
@@ -16,6 +17,8 @@ const HeroSection = () => {
   const [keywordIndex, setKeywordIndex] = useState(0);
   const [fade, setFade] = useState(true);
   const trackHeroEnquire = useTrackClick('hero-enquire');
+  const trackHeroCall = useTrackClick('hero-call');
+  const trackHeroWhatsapp = useTrackClick('hero-whatsapp');
   const heroRef = useRef<HTMLElement>(null);
   const arrowRef = useRef<HTMLDivElement>(null);
   const arrowImgRef = useRef<HTMLImageElement>(null);
@@ -125,6 +128,28 @@ const HeroSection = () => {
                 Enquire
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
+              <a
+                href={siteConfig.contact.phoneHref}
+                onClick={trackHeroCall}
+                aria-label={`Call Delvare at ${siteConfig.contact.phone}`}
+                className="group inline-flex items-center justify-center gap-2 h-16 px-5 sm:px-7 rounded-xl bg-primary/5 border border-primary/15 text-primary shadow-sm hover:bg-primary hover:text-primary-foreground hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+              >
+                <Phone className="w-5 h-5 shrink-0 group-hover:scale-110 transition-transform" />
+                <span className="hidden sm:inline text-[11px] font-black uppercase tracking-[0.2em]">Call Us</span>
+                <span className="sr-only sm:hidden">Call Us</span>
+              </a>
+              <a
+                href={siteConfig.contact.whatsappHref}
+                onClick={trackHeroWhatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Enquire on WhatsApp"
+                className="group inline-flex items-center justify-center gap-2 h-16 px-5 sm:px-7 rounded-xl bg-[#25D366] text-white shadow-lg hover:bg-[#1eb955] hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+              >
+                <MessageCircle className="w-5 h-5 shrink-0 group-hover:scale-110 transition-transform" />
+                <span className="hidden sm:inline text-[11px] font-black uppercase tracking-[0.2em]">WhatsApp</span>
+                <span className="sr-only sm:hidden">WhatsApp</span>
+              </a>
             </div>
             <div className="pt-10 flex items-center justify-center lg:justify-start gap-8">
               <div className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">

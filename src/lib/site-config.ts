@@ -17,6 +17,13 @@ export const siteConfig = {
   contact: {
     email: 'admin@delvare.in',
     emailHref: 'mailto:admin@delvare.in',
+    // E.164 digits only (no +, spaces or dashes) — wa.me rejects anything else.
+    phoneDigits: '918606821125',
+    phone: '+91 8606821125',
+    phoneHref: 'tel:+918606821125',
+    whatsappHref:
+      "https://wa.me/918606821125?text=" +
+      encodeURIComponent("Hi Delvare, I'd like to enquire about your services."),
     address: 'CO-Space | VSV Building, 4th Floor, Spectra School of Designs | East of Iron Bridge, CCNB Road, Aleppuzha, Kerala, India - 688001'
   },
 } as const;

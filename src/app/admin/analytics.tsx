@@ -30,6 +30,8 @@ const RANGES: { key: RangeKey; label: string; caption: string }[] = [
 
 const BUTTON_LABELS: Record<string, string> = {
     'hero-enquire': 'Hero: Enquire',
+    'hero-call': 'Hero: Call Us',
+    'hero-whatsapp': 'Hero: WhatsApp',
     'header-start-now': 'Header: Start Now',
     'header-start-project': 'Mobile: Start Project',
     'header-form-submit': 'Header: Form Submit',
