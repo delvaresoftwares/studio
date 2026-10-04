@@ -8,6 +8,11 @@ export function registerLenis(instance: Lenis | null) {
     lenisInstance = instance;
 }
 
+/** Read-only access for callers that must sync Lenis's internal position. */
+export function getLenis(): Lenis | null {
+    return lenisInstance;
+}
+
 type ScrollOptions = {
     offset?: number;
     immediate?: boolean;

@@ -85,6 +85,7 @@ export const metadata: Metadata = {
 import SmoothScroll from '@/components/smooth-scroll';
 import LazyChatWidget from '@/components/lazy-chat-widget';
 import VisitorTracker from '@/components/visitor-tracker';
+import ScrollRestoration from '@/components/scroll-restoration';
 
 export default function RootLayout({
   children,
@@ -125,6 +126,7 @@ export default function RootLayout({
             <LazyChatWidget />
           </SmoothScroll>
           <VisitorTracker />
+          <ScrollRestoration />
           <Toaster />
         </ThemeProvider>
       </body>

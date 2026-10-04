@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
@@ -19,6 +18,7 @@ import { FadeIn, StaggerContainer, StaggerItem } from '@/components/ui/motion';
 import { products } from '@/components/sections/products';
 import ServiceFaq from '@/components/service-faq';
 import { useLenis } from 'lenis/react';
+import { useSmartBack } from '@/hooks/use-smart-back';
 
 const productIconMap: Record<string, any> = {
     ecbills: Receipt,
@@ -46,6 +46,7 @@ interface ProductDetailContentProps {
 
 const ProductDetailContent = ({ data }: ProductDetailContentProps) => {
     const lenis = useLenis();
+    const goBack = useSmartBack('/');
     const product = products.find(p => p.id === data?.slug);
     const Icon = productIconMap[data?.slug];
     const accent = accents[data?.slug] ?? accents.ecbills;
@@ -91,13 +92,14 @@ const ProductDetailContent = ({ data }: ProductDetailContentProps) => {
                         }}
                     />
 
-                    <Link
-                        href="/"
+                    <button
+                        type="button"
+                        onClick={goBack}
                         aria-label="Go back"
                         className="absolute top-28 left-4 sm:left-8 z-20 w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-primary hover:border-primary transition-all shadow-lg"
                     >
                         <ArrowLeft className="w-5 h-5" />
-                    </Link>
+                    </button>
 
                     <div className="container mx-auto px-4 relative z-10 pb-16 sm:pb-24 pt-44">
                         <div className="max-w-3xl">

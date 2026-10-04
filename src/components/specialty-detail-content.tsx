@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { useEffect } from 'react';
 import ServiceFaq from '@/components/service-faq';
 import { useLenis } from 'lenis/react';
+import { useSmartBack } from '@/hooks/use-smart-back';
 
 const iconMap: Record<string, any> = {
     Cloud, Brain, Code2, ShieldCheck, LifeBuoy, GitBranch, Zap, MessageSquare, Cpu, Layout, Database, Search, TrendingUp, Calendar, Receipt, BookOpen
@@ -21,6 +22,7 @@ interface SpecialtyDetailContentProps {
 
 export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentProps) {
     const lenis = useLenis();
+    const goBack = useSmartBack('/');
     const Icon = iconMap[data.icon] || Zap;
 
     useEffect(() => {
@@ -58,13 +60,14 @@ export default function SpecialtyDetailContent({ data }: SpecialtyDetailContentP
                         <div className="max-w-4xl mx-auto flex flex-col items-center text-center">
                             {/* Heading line with Back Button */}
                             <div className="flex items-center justify-center gap-4 sm:gap-6 w-full animate-fade-in-up">
-                                <Link
-                                    href="/"
+                                <button
+                                    type="button"
+                                    onClick={goBack}
                                     aria-label="Go back"
                                     className="w-12 h-12 sm:w-16 sm:h-16 shrink-0 rounded-2xl bg-primary text-white flex items-center justify-center hover:bg-primary/90 hover:-translate-x-1 transition-all shadow-lg"
                                 >
                                     <ArrowLeft className="w-6 h-6 sm:w-8 sm:h-8" />
-                                </Link>
+                                </button>
                                 <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] text-foreground text-left sm:text-center">
                                     {data.title.split(' ')[0]}{' '}
                                     <span className="text-primary italic font-light tracking-tight">{data.title.split(' ').slice(1).join(' ')}</span>

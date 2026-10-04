@@ -6,12 +6,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
+import { useSmartBack } from '@/hooks/use-smart-back';
 
 interface BlogPostContentProps {
     post: any;
 }
 
 export default function BlogPostContent({ post }: BlogPostContentProps) {
+    const goBack = useSmartBack('/');
+
     return (
         <div className="min-h-screen bg-white">
             <div className="no-print">
@@ -36,9 +39,13 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
 
                     {/* Back Button */}
                     <div className="no-print flex justify-between items-center mb-12">
-                        <Link href="/" className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">
-                            <ArrowLeft className="w-4 h-4" /> Back to Home
-                        </Link>
+                        <button
+                            type="button"
+                            onClick={goBack}
+                            className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
+                        >
+                            <ArrowLeft className="w-4 h-4" /> Back
+                        </button>
                         <button
                             onClick={() => window.print()}
                             className="inline-flex items-center gap-2 px-6 py-3 bg-secondary border border-border rounded-xl text-[10px] font-black uppercase tracking-widest text-primary hover:bg-primary hover:text-white transition-all shadow-sm"
