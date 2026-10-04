@@ -115,9 +115,6 @@ const services = [
   },
 ];
 
-const formatPrice = (value: number) =>
-  new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
-
 const ServicesSection = () => {
   const isMobile = useIsMobile();
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
@@ -392,9 +389,6 @@ const ServicesSection = () => {
                       <h3 className="flex-grow min-w-0 text-sm sm:text-base font-black tracking-tight text-foreground truncate">
                         {service.title}
                       </h3>
-                      <span className="hidden sm:block shrink-0 text-primary font-black text-xs whitespace-nowrap">
-                        {formatPrice(service.price)}+
-                      </span>
                       {isMobile && (
                         <ChevronDown className={cn('w-4 h-4 shrink-0 text-muted-foreground transition-transform duration-300', isOpen && 'rotate-180 text-primary')} />
                       )}
