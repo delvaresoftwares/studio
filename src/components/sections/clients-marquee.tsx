@@ -8,8 +8,7 @@ import { cn } from '@/lib/utils';
 const LogoPlate = ({ name, logo, plate }: Pick<Client, 'name' | 'logo' | 'plate'>) => (
     <span
         className={cn(
-            'flex h-12 w-auto shrink-0 items-center justify-center overflow-hidden rounded-xl',
-            'border border-border/60 bg-white p-1 shadow-sm',
+            'flex h-12 w-auto shrink-0 items-center justify-center overflow-hidden',
             plate
         )}
     >
@@ -39,9 +38,7 @@ const ClientCard = ({ name, url, logo, plate, label }: Client) => {
     );
 
     const shell = cn(
-        'flex w-max min-w-[13.5rem] shrink-0 items-center gap-3 rounded-2xl border border-border/70 bg-white',
-        'px-3 py-2.5 shadow-sm transition-all duration-300',
-        url && 'hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10'
+        'flex w-max min-w-[13.5rem] shrink-0 items-center gap-3'
     );
 
     if (!url) {
