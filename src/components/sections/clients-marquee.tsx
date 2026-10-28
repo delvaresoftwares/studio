@@ -129,7 +129,15 @@ const ClientsMarquee = () => {
                     </p>
                 </FadeIn>
 
-                <div className="flex flex-col gap-5 md:gap-7">
+                {/* Mobile: 2-column grid */}
+                <div className="grid grid-cols-2 gap-2 sm:gap-3 md:hidden">
+                    {clients.map((client) => (
+                        <ClientCard key={client.name} {...client} />
+                    ))}
+                </div>
+
+                {/* Desktop: marquee strips */}
+                <div className="hidden md:flex md:flex-col md:gap-7">
                     <Strip />
                     <Strip reverse />
                 </div>
