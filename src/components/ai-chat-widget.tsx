@@ -27,7 +27,7 @@ type ChatMessage = {
 };
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'anon';
 
 const SUGGESTIONS = [
     'What services do you offer?',
@@ -366,13 +366,19 @@ const AIChatWidget = () => {
             : '';
 
         try {
-            const res = await fetch(`${SUPABASE_URL}/functions/v1/ai-chat`, {
+            const endpoint = SUPABASE_URL 
+                ? `${SUPABASE_URL}/functions/v1/ai-chat` 
+                : '/api/ai-chat';
+            const headers: Record<string, string> = {
+                'Content-Type': 'application/json',
+            };
+            if (SUPABASE_URL && SUPABASE_KEY) {
+                headers.Authorization = `Bearer ${SUPABASE_KEY}`;
+                headers.apikey = SUPABASE_KEY as string;
+            }
+            const res = await fetch(endpoint, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${SUPABASE_KEY}`,
-                    apikey: SUPABASE_KEY as string,
-                },
+                headers,
                 signal: controller.signal,
                 body: JSON.stringify({
                     name: 'delvare-ai',
