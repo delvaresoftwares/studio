@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import HomeClient from './home-client';
 import { siteConfig } from '@/lib/site-config';
 import { clients } from '@/lib/clients';
+import { clientsSeoGraph, ORGANIZATION_ID } from '@/lib/clients-seo';
 
 export const metadata: Metadata = {
     title: 'Delvare — Software Development Company | Custom Software, SaaS & AI Solutions',
@@ -18,6 +19,9 @@ export const metadata: Metadata = {
         'spectra school', 'nature of the divine', 'alien hills', 'riza hijabs', 'rizahijabs',
         'software hardware evolution',
         'future AI systems',
+        ...clients.map((client) => `${client.name} technology partner`),
+        ...clients.map((client) => `who is the technology partner of ${client.name}`),
+        ...clients.map((client) => `${client.name} website developer`),
     ],
     openGraph: {
         title: 'Delvare — Software Development Company | Custom Software, SaaS & AI Solutions',
@@ -56,6 +60,7 @@ const jsonLd = {
         },
         {
             '@type': 'Organization',
+            '@id': ORGANIZATION_ID,
             name: 'Delvare',
             url: siteConfig.url,
             logo: siteConfig.icon,
@@ -69,6 +74,14 @@ const jsonLd = {
             },
             description:
                 'Delvare is a software development company delivering high-performance business solutions — custom software, SaaS & PaaS platforms, AI automation, cloud & infrastructure, and cybersecurity — for businesses worldwide.',
+            knowsAbout: [
+                'Custom software development',
+                'SaaS and PaaS platform development',
+                'AI automation',
+                'Cloud infrastructure',
+                'Cybersecurity',
+                'Technology partnerships',
+            ],
             address: {
                 '@type': 'PostalAddress',
                 streetAddress: 'CO-Space | VSV Building, 4th Floor, Spectra School of Designs | East of Iron Bridge, CCNB Road',
@@ -120,6 +133,7 @@ const jsonLd = {
                 url: client.url || undefined,
             })),
         },
+        ...clientsSeoGraph,
     ],
 };
 

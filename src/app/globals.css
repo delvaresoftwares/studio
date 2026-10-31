@@ -244,6 +244,17 @@
     animation: marquee-scroll 55s linear infinite reverse;
   }
 
+  /* Let visitors read a client card without it sliding away */
+  @media (hover: hover) {
+    .marquee-frame:hover .marquee-track {
+      animation-play-state: paused;
+    }
+  }
+
+  .marquee-frame:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+
   /* Preloader Animations */
   @keyframes loading-bar {
     0% {
