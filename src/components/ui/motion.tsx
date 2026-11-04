@@ -72,7 +72,10 @@ export const StaggerItem = ({
 
   return (
     <motion.div
-      initial={reduceMotion ? "visible" : "hidden"}
+      // No `initial` here on purpose: the parent StaggerContainer owns the
+      // hidden/visible variant state and propagates it to these children.
+      // Setting `initial` on the child breaks that propagation, leaving every
+      // card stuck at opacity:0.
       variants={{
         hidden: { opacity: 0, y },
         visible: {
