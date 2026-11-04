@@ -60,7 +60,7 @@ export default function BlogDetailContent({ post, relatedPosts }: BlogDetailCont
                         aria-hidden
                         fill
                         priority
-                        sizes="100vw"
+                        sizes="(min-width: 1600px) 1600px, 100vw"
                         className="object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/75 to-black/30" />
@@ -368,7 +368,7 @@ export default function BlogDetailContent({ post, relatedPosts }: BlogDetailCont
 
                 {/* Closing CTA — same band as the product detail page. */}
                 <section className="relative py-24 overflow-hidden">
-                    <Image src={post.image} alt="" aria-hidden fill sizes="100vw" className="object-cover" />
+                    <Image src={post.image} alt="" aria-hidden fill sizes="(min-width: 1600px) 1600px, 100vw" className="object-cover" />
                     <div className="absolute inset-0 bg-black/80" />
                     <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/30 to-cyan-500/20 mix-blend-overlay" />
                     <FadeIn className="container mx-auto px-4 relative z-10 text-center">

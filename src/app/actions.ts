@@ -165,7 +165,7 @@ const contactFormSchema = z.object({
 export async function saveContactInfoAction(formData: ContactFormData): Promise<{ success: boolean; error?: string }> {
   const parsed = contactFormSchema.safeParse(formData);
   if (!parsed.success) {
-    return { success: false, error: parsed.error.errors[0]?.message ?? 'Invalid form data.' };
+    return { success: false, error: parsed.error.issues[0]?.message ?? 'Invalid form data.' };
   }
 
   if (!app.options.projectId) {

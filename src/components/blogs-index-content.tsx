@@ -234,7 +234,7 @@ export default function BlogsIndexContent() {
                             alt=""
                             aria-hidden
                             fill
-                            sizes="100vw"
+                            sizes="(min-width: 1600px) 1600px, 100vw"
                             className="object-cover"
                         />
                     </div>
