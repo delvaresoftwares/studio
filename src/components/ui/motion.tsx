@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, HTMLMotionProps } from 'framer-motion';
+import { motion, useReducedMotion, HTMLMotionProps } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import React from 'react';
 
@@ -13,12 +13,14 @@ export const FadeIn = ({
   y = 20,
   ...props
 }: HTMLMotionProps<"div"> & { delay?: number; duration?: number; y?: number }) => {
+  const reduceMotion = useReducedMotion();
+
   return (
     <motion.div
-      initial={{ opacity: 0, y }}
+      initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration, delay, ease: "easeOut" }}
+      transition={reduceMotion ? { duration: 0 } : { duration, delay, ease: "easeOut" }}
       className={className}
       {...props}
     >
@@ -35,17 +37,19 @@ export const StaggerContainer = ({
   delayChildren = 0,
   ...props
 }: HTMLMotionProps<"div"> & { staggerDelay?: number; delayChildren?: number }) => {
+  const reduceMotion = useReducedMotion();
+
   return (
     <motion.div
-      initial="hidden"
+      initial={reduceMotion ? "visible" : "hidden"}
       whileInView="visible"
       viewport={{ once: true, margin: "-50px" }}
       variants={{
         hidden: {},
         visible: {
           transition: {
-            staggerChildren: staggerDelay,
-            delayChildren: delayChildren,
+            staggerChildren: reduceMotion ? 0 : staggerDelay,
+            delayChildren: reduceMotion ? 0 : delayChildren,
           },
         },
       }}
@@ -64,14 +68,17 @@ export const StaggerItem = ({
   y = 20,
   ...props
 }: HTMLMotionProps<"div"> & { y?: number }) => {
+  const reduceMotion = useReducedMotion();
+
   return (
     <motion.div
+      initial={reduceMotion ? "visible" : "hidden"}
       variants={{
         hidden: { opacity: 0, y },
         visible: {
           opacity: 1,
           y: 0,
-          transition: { duration: 0.5, ease: "easeOut" },
+          transition: { duration: reduceMotion ? 0 : 0.5, ease: "easeOut" },
         },
       }}
       className={className}
@@ -94,7 +101,12 @@ export const TypingText = ({
   as?: any;
   delay?: number;
 }) => {
+  const reduceMotion = useReducedMotion();
   const letters = Array.from(text);
+
+  if (reduceMotion) {
+    return <Component className={className}>{text}</Component>;
+  }
 
   const container = {
     hidden: { opacity: 0 },

@@ -1,102 +1,45 @@
 'use client';
 
-import { blogs } from '@/lib/blogs';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { ArrowRight, Calendar, User } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { ArrowRight } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import BlogCard from '@/components/blog-card';
 import { FadeIn, StaggerContainer, StaggerItem, TypingText } from '@/components/ui/motion';
+import { blogSummaries } from '@/lib/blog-summaries';
 
 const BlogSection = () => {
+    const latestPosts = blogSummaries.slice(0, 3);
+
     return (
         <section id="blog" className="py-32 bg-white relative overflow-hidden">
             <div className="container mx-auto px-4">
-                <FadeIn delay={0.2} className="text-center mb-20">
-                    <Badge variant="outline" className="mb-6 border-primary text-primary px-6 py-1.5 text-[10px] font-black tracking-[0.3em] uppercase">
-                        Our Blog
+                <FadeIn delay={0.2} className="text-center mb-16 sm:mb-20">
+                    <Badge variant="outline" className="mb-6 border-primary text-primary-ink px-6 py-1.5 text-[10px] font-black tracking-[0.3em] uppercase">
+                        The Journal
                     </Badge>
                     <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-8 text-foreground leading-none">
-                        <TypingText text="Industry" delay={0.4} /> <span className="text-primary italic font-light">Insights.</span>
+                        <TypingText text="Industry" delay={0.4} /> <span className="text-primary-ink italic font-light">Insights.</span>
                     </h2>
                     <p className="max-w-xl mx-auto text-lg text-muted-foreground font-medium italic">
                         "Fresh perspectives on tech, growth, and the future of business."
                     </p>
                 </FadeIn>
 
-                <StaggerContainer staggerDelay={0.15} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                    {blogs.map((post, idx) => (
-                        <StaggerItem key={post.slug}>
-                            <Link href={`/blog/${post.slug}`}>
-                            {/* Desktop Card */}
-                            <Card className="hidden md:flex flex-col group border border-border/50 hover:border-primary/20 transition-all duration-500 overflow-hidden bg-[#fdfdfd] rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:-translate-y-2 animate-fade-in-up h-full" style={{ animationDelay: `${idx * 150}ms` }}>
-                                <div className="relative h-64 overflow-hidden">
-                                    <Image
-                                        src={post.image}
-                                        alt={post.title}
-                                        fill
-                                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                                        className="object-cover group-hover:scale-110 transition-transform duration-700"
-                                    />
-                                    <div className="absolute top-6 left-6 flex gap-2">
-                                        {post.tags.map(tag => (
-                                            <Badge key={tag} className="bg-primary text-white backdrop-blur-md rounded-lg border-none font-black text-[9px] uppercase tracking-widest">
-                                                {tag}
-                                            </Badge>
-                                        ))}
-                                    </div>
-                                </div>
-                                <CardContent className="p-10 space-y-5">
-                                    <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
-                                        <span className="flex items-center gap-2"><Calendar className="w-3" /> {post.date}</span>
-                                        <span className="flex items-center gap-2"><User className="w-3" /> {post.author}</span>
-                                    </div>
-                                    <h3 className="text-2xl font-black tracking-tight text-foreground group-hover:text-primary transition-colors leading-tight">
-                                        {post.title}
-                                    </h3>
-                                    <p className="text-foreground/70 font-medium line-clamp-2 italic">
-                                        {post.excerpt}
-                                    </p>
-                                    <div className="pt-4 flex items-center text-primary font-black text-xs uppercase tracking-widest gap-2">
-                                        Read More <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
-                                    </div>
-                                </CardContent>
-                            </Card>
-
-                            {/* Mobile Card - rectangular */}
-                            <Card className="flex md:hidden group border border-border/50 p-4 gap-4 items-center bg-[#fdfdfd] rounded-2xl shadow-sm mb-4">
-                                <div className="flex-grow space-y-2">
-                                    <div className="flex items-center gap-2">
-                                        {post.tags.slice(0, 1).map(tag => (
-                                            <Badge key={tag} className="bg-primary/10 text-primary border-none text-[8px] font-black uppercase tracking-widest px-2 py-0.5">
-                                                {tag}
-                                            </Badge>
-                                        ))}
-                                    </div>
-                                    <h3 className="text-lg font-black tracking-tight text-foreground leading-tight">
-                                        {post.title}
-                                    </h3>
-                                    <div className="flex items-center gap-3 text-[8px] font-black uppercase tracking-widest text-muted-foreground/60">
-                                        <span>{post.date}</span>
-                                    </div>
-                                    <div className="pt-1 flex items-center text-primary font-black text-[9px] uppercase tracking-widest gap-1">
-                                        Read <ArrowRight className="w-3 h-3" />
-                                    </div>
-                                </div>
-                                <div className="w-24 h-24 shrink-0 overflow-hidden rounded-xl">
-                                    <Image src={post.image} alt={post.title} fill sizes="96px" className="object-cover" />
-                                </div>
-                            </Card>
-                        </Link>
+                <StaggerContainer staggerDelay={0.12} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {latestPosts.map((post) => (
+                        <StaggerItem key={post.slug} className="h-full">
+                            <BlogCard post={post} />
                         </StaggerItem>
                     ))}
                 </StaggerContainer>
 
-                <div className="mt-20 text-center">
-                    <Button size="xl" variant="outline" className="h-16 px-10 rounded-2xl border-primary text-primary hover:bg-primary hover:text-white transition-all font-black text-[10px] uppercase tracking-widest">
-                        View All Articles
-                    </Button>
+                <div className="mt-16 text-center">
+                    <Link
+                        href="/blogs"
+                        className="inline-flex h-16 items-center justify-center gap-2 rounded-2xl border border-primary px-10 text-[11px] font-black uppercase tracking-widest text-primary-ink transition-all hover:bg-primary-ink hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                    >
+                        View All Articles <ArrowRight className="h-4 w-4" />
+                    </Link>
                 </div>
             </div>
         </section>

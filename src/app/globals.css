@@ -12,6 +12,8 @@
     --popover-foreground: 222 47% 11%;
     --primary: 161 72% 45%;
     /* Brand Green (Emerald 500 equivalent) */
+    --primary-ink: 161 84% 24%;
+    /* Darker brand green that meets AA contrast for text on white */
     --primary-foreground: 230 80% 98%;
     --secondary: 161 62% 88%;
     /* Green tint (darker) */
@@ -288,8 +290,26 @@
   }
 }
 
+/* Consistent keyboard focus. Individual components may add their own ring,
+   but links and native controls must never lose the indicator entirely. */
+@layer base {
+  :where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+}
+
 /* Respect reduced-motion preferences: kill looping/transform-heavy animations */
 @media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 
   .animate-marquee-scroll,
   .animate-marquee-scroll-reverse,

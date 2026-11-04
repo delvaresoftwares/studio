@@ -163,6 +163,7 @@ const Footer = () => {
                 Visit Delvare
               </Link>
             )}
+            <Link href="/blogs" className="hover:text-primary transition-colors">Journal</Link>
             <button onClick={() => openPolicy('privacy')} className="hover:text-primary transition-colors">Privacy</button>
             <button onClick={() => openPolicy('terms')} className="hover:text-primary transition-colors">Terms</button>
             <button onClick={() => openPolicy('security')} className="hover:text-primary transition-colors">Security</button>

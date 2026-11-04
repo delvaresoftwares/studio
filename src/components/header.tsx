@@ -18,7 +18,7 @@ const navLinks = [
   { name: 'Products', href: '#products' },
   { name: 'Founder', href: '/founder' },
   { name: 'Clients', href: '#clients' },
-  { name: 'Speciality', href: '#blog' },
+  { name: 'Blogs', href: '/blogs' },
   { name: 'Careers', href: '#careers' },
 ];
 
@@ -30,6 +30,12 @@ const Header = () => {
   const [hidden, setHidden] = useState(false);
   const lastScrollY = useRef(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const menuCloseRef = useRef<HTMLButtonElement>(null);
+  const menuWasOpen = useRef(false);
+  const formPanelRef = useRef<HTMLDivElement>(null);
+  const formTriggerRef = useRef<HTMLElement | null>(null);
+  const formWasOpen = useRef(false);
   const [formOpen, setFormOpen] = useState(false);
   const [formType, setFormType] = useState<'contact' | 'career'>('contact');
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -42,6 +48,7 @@ const Header = () => {
   });
 
   useScrollLock(formOpen);
+  useScrollLock(menuOpen);
 
   const trackStartNow = useTrackClick('header-start-now');
   const trackStartProject = useTrackClick('header-start-project');
@@ -78,6 +85,7 @@ const Header = () => {
   useEffect(() => {
     const handleOpenForm = (e: Event) => {
       const type = (e as CustomEvent<{ type?: 'contact' | 'career' }>).detail?.type ?? 'contact';
+      formTriggerRef.current = document.activeElement as HTMLElement | null;
       setFormType(type);
       setFormOpen(true);
       setMenuOpen(false);
@@ -94,6 +102,7 @@ const Header = () => {
     const handleAutofill = (e: Event) => {
       const message = (e as CustomEvent<{ message?: string }>).detail?.message;
       if (message) {
+        formTriggerRef.current = document.activeElement as HTMLElement | null;
         setFormType('contact');
         setFormOpen(true);
         setMenuOpen(false);
@@ -122,10 +131,50 @@ const Header = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [formOpen, closeForm]);
 
+  // Move keyboard focus into the panel when the contact form opens, and return
+  // it to the trigger when the panel closes, so the blog/service CTAs never
+  // leave focus behind on a now-hidden control.
+  useEffect(() => {
+    if (formOpen) {
+      formWasOpen.current = true;
+      const timer = window.setTimeout(() => {
+        formPanelRef.current?.querySelector<HTMLInputElement>('input')?.focus();
+      }, 120);
+      return () => window.clearTimeout(timer);
+    }
+    if (formWasOpen.current) {
+      formWasOpen.current = false;
+      const trigger = formTriggerRef.current;
+      if (trigger && document.contains(trigger)) {
+        trigger.focus({ preventScroll: true });
+      }
+      formTriggerRef.current = null;
+    }
+  }, [formOpen]);
+
+  // Move focus into the drawer when it opens and return it to the trigger when
+  // it closes. Escape closes the drawer as well.
+  useEffect(() => {
+    if (menuOpen) {
+      menuWasOpen.current = true;
+      menuCloseRef.current?.focus();
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') setMenuOpen(false);
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+    if (menuWasOpen.current) {
+      menuWasOpen.current = false;
+      menuButtonRef.current?.focus({ preventScroll: true });
+    }
+  }, [menuOpen]);
+
   const toggleForm = (type: 'contact' | 'career') => {
     if (formOpen && formType === type) {
       closeForm();
     } else {
+      formTriggerRef.current = document.activeElement as HTMLElement | null;
       setFormType(type);
       setFormOpen(true);
       setMenuOpen(false);
@@ -187,7 +236,7 @@ const Header = () => {
       )}>
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between transition-all duration-500">
-            <a href="#hero" className="flex items-center gap-3 group" onClick={() => { if (formOpen) setFormOpen(false); }}>
+            <a href={pathname === '/' ? '#hero' : '/'} aria-label="Delvare home" className="flex items-center gap-3 group" onClick={() => { if (formOpen) setFormOpen(false); }}>
               <Logo 
                 compact={scrolled}
                 glow={!isDark && !scrolled && !formOpen}
@@ -265,6 +314,7 @@ const Header = () => {
                   )}
 
                   <Button
+                    ref={menuButtonRef}
                     variant="ghost"
                     size="icon"
                     onClick={() => setMenuOpen(true)}
@@ -284,10 +334,17 @@ const Header = () => {
 
 
           {/* Expanded Drawer Form */}
-          <div className={cn(
-            "transition-all duration-500 ease-out overflow-hidden",
-            formOpen ? "opacity-100 max-h-[2000px] mt-10 lg:mt-14" : "opacity-0 max-h-0 pointer-events-none mt-0"
-          )}>
+          <div
+            ref={formPanelRef}
+            role={formOpen ? 'region' : undefined}
+            aria-label={formOpen ? (formType === 'contact' ? 'Contact form' : 'Careers form') : undefined}
+            aria-hidden={!formOpen}
+            inert={!formOpen}
+            className={cn(
+              "transition-all duration-500 ease-out overflow-hidden",
+              formOpen ? "opacity-100 max-h-[2000px] mt-10 lg:mt-14" : "opacity-0 max-h-0 pointer-events-none mt-0"
+            )}
+          >
             <div className="max-w-5xl mx-auto pb-16 lg:pb-24">
               {!isSubmitted ? (
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-0">
@@ -395,18 +452,33 @@ const Header = () => {
           "fixed inset-0 z-[90] bg-black/40 backdrop-blur-sm transition-opacity duration-500 lg:hidden",
           menuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
+        aria-hidden="true"
         onClick={() => setMenuOpen(false)}
       />
 
-      <div className={cn(
-        "fixed top-0 right-0 bottom-0 z-[100] w-[90vw] max-w-xs shadow-2xl transition-transform duration-700 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] lg:hidden overflow-y-auto",
-        isDark ? "bg-black border-l border-white/10 text-white" : "bg-white backdrop-blur-2xl border-l border-border",
-        menuOpen ? "translate-x-0" : "translate-x-full"
-      )}>
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site navigation"
+        aria-hidden={!menuOpen}
+        inert={!menuOpen}
+        className={cn(
+          "fixed top-0 right-0 bottom-0 z-[100] w-[90vw] max-w-xs shadow-2xl transition-transform duration-700 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] lg:hidden overflow-y-auto",
+          isDark ? "bg-black border-l border-white/10 text-white" : "bg-white backdrop-blur-2xl border-l border-border",
+          menuOpen ? "translate-x-0" : "translate-x-full"
+        )}
+      >
         <div className="flex flex-col h-full uppercase px-8 py-10">
           <div className="flex justify-center items-center mb-16 relative">
             <Logo simple variant="header" light={isDark} className="scale-125" />
-            <Button variant="ghost" size="icon" onClick={() => setMenuOpen(false)} className={cn("rounded-full absolute right-0", isDark ? "bg-white/10 text-white hover:bg-white/20" : "bg-black/5 text-foreground hover:bg-black/10")}>
+            <Button
+              ref={menuCloseRef}
+              variant="ghost"
+              size="icon"
+              onClick={() => setMenuOpen(false)}
+              aria-label="Close menu"
+              className={cn("rounded-full absolute right-0", isDark ? "bg-white/10 text-white hover:bg-white/20" : "bg-black/5 text-foreground hover:bg-black/10")}
+            >
               <X className="w-5 h-5" />
             </Button>
           </div>

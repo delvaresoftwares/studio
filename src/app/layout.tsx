@@ -95,6 +95,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Without JavaScript, scroll-triggered Framer Motion elements keep
+            their initial inline opacity:0 and the content is invisible. */}
+        <noscript>
+          <style>{`
+            [style*="opacity:0"], [style*="opacity: 0"] { opacity: 1 !important; }
+            [style*="translateY"], [style*="translate3d"] { transform: none !important; }
+          `}</style>
+        </noscript>
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GA4_MEASUREMENT_ID || 'G-BTCP5SPVD0'}`}
           strategy="afterInteractive"

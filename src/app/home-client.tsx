@@ -3,6 +3,7 @@ import HeroSection from '@/components/sections/hero';
 import KeywordMarquee from '@/components/sections/keywords';
 import ServicesSection from '@/components/sections/services';
 import ProductsSection from '@/components/sections/products';
+import BlogSection from '@/components/sections/blog';
 import Footer from '@/components/footer';
 
 export default function HomeClient() {
@@ -14,6 +15,7 @@ export default function HomeClient() {
         <KeywordMarquee />
         <ServicesSection />
         <ProductsSection />
+        <BlogSection />
         <Footer />
       </main>
     </div>

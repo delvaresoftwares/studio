@@ -5,9 +5,11 @@ import { siteConfig } from '@/lib/site-config';
 import SpecialtyDetailContent from '@/components/specialty-detail-content';
 
 // `specialties` is a static in-memory array with no dynamic data, so every
-// specialty can be prerendered at build time instead of server-rendered on each
-// request. dynamicParams stays at its default of true, so unknown slugs are
-// still server-rendered and hit notFound() as before.
+// specialty can be prerendered at build time. With dynamicParams = false,
+// unknown slugs return a real 404 instead of a prerendered 200 containing the
+// not-found UI.
+export const dynamicParams = false;
+
 export function generateStaticParams() {
     return specialties.map((specialty) => ({ slug: specialty.slug }));
 }
