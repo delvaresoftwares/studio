@@ -1,4 +1,17 @@
-export const roadmap = [
+import type { IconName } from './icons';
+
+export type RoadmapEntry = {
+  logo: IconName;
+  fromYear: string;
+  fromMonth: string;
+  toYear: string;
+  toMonth: string;
+  heading: string;
+  description: string;
+  hashtags: string[];
+};
+
+export const roadmap: RoadmapEntry[] = [
   {
     logo: "Globe",
     fromYear: "2025",

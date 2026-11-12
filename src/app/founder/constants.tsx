@@ -18,13 +18,5 @@ export const FOUNDER_DATA = {
     socials: {
         github: "https://github.com/living-tuna",
         linkedin: "https://in.linkedin.com/in/alfas-b-717054222"
-    },
-    skills: [
-        "Software Engineering",
-        "System Architecture",
-        "Cyber Security",
-        "Business Strategy",
-        "UI/UX Design",
-        "Cloud Computing"
-    ]
+    }
 };
