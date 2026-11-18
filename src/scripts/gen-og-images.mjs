@@ -6,9 +6,9 @@ import { loadBlogs } from './load-blogs.mjs';
 /**
  * Generates 1200×630 Open Graph images for every article plus the journal hub.
  *
- * The hero images used inside the site are square (640×640 or 1024×1024), so
- * declaring them as 1200×630 in metadata made every social card crop badly.
- * These cards are designed at the exact size the metadata promises.
+ * Each card uses the article's real hero photograph, cropped to the exact size
+ * the metadata promises and darkened so the headline stays legible. A flat
+ * gradient is used only when an article has no photograph.
  *
  * Run after adding or renaming a post:
  *   npm run gen:og-images
@@ -22,12 +22,40 @@ const { blogs } = loadBlogs();
 
 mkdirSync(OUT_DIR, { recursive: true });
 
-function renderCard({ slug, title, category, author = 'Alfas B' }) {
+function renderCard({ slug, title, category, author = 'Alfas B', image }) {
     const out = resolve(OUT_DIR, `${slug}.jpg`);
 
+    // Start with the real photograph where available, darkened and tinted to
+    // match the journal's visual language. Fall back to the brand gradient.
+    const background = image
+        ? [
+              '(',
+              resolve(process.cwd(), 'public', `.${image}`),
+              '-auto-orient',
+              '-resize', '1200x630^',
+              '-gravity', 'center',
+              '-extent', '1200x630',
+              '-modulate', '100,55,100',
+              '-fill', '#06110e',
+              '-colorize', '58',
+              ')',
+          ]
+        : ['-size', '1200x630', 'gradient:#07130f-#020403'];
+
     execFileSync('convert', [
+        ...background,
+
+        // A translucent scrim keeps white text readable over any photograph.
+        '(',
         '-size', '1200x630',
         'gradient:#07130f-#020403',
+        '-alpha', 'set',
+        '-channel', 'A',
+        '-evaluate', 'multiply', '0.55',
+        '+channel',
+        ')',
+        '-compose', 'over',
+        '-composite',
 
         // Ambient brand shapes.
         '-fill', '#0d3d2e',
@@ -88,6 +116,7 @@ const generated = [
         title: 'Engineering insights for people who ship.',
         category: 'Software · AI · Cloud · Growth',
         author: 'Delvare',
+        image: '/assets/blog/ai-small-business-team.webp',
     }),
 ];
 

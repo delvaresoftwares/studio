@@ -86,6 +86,11 @@ for (const post of blogs) {
     add(Array.isArray(post.faqs) && post.faqs.length >= 1, `${where} should have at least 1 FAQ`);
     add(Boolean(post.serviceSlug) && serviceSlugs.has(post.serviceSlug), `${where} serviceSlug does not match a specialty: ${post.serviceSlug}`);
 
+    for (const source of post.sources ?? []) {
+        add(Boolean(source.label), `${where} a source is missing a label`);
+        add(/^https:\/\//.test(source.url ?? ''), `${where} source URL must be https: ${source.url}`);
+    }
+
     for (const section of post.sections ?? []) {
         add(Boolean(section.heading), `${where} a section is missing a heading`);
         add(Array.isArray(section.paragraphs) && section.paragraphs.length > 0, `${where} section "${section.heading}" has no paragraphs`);

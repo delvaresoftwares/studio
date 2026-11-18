@@ -11,12 +11,16 @@ const featured = getFeaturedPost();
 export const metadata: Metadata = {
     title: { absolute: 'Blog — Software, AI, Cloud & Growth Insights | Delvare' },
     description:
-        'Practical articles from Delvare on custom software, AI automation, cloud performance and SEO — written by the team that builds and runs the systems.',
+        'Practical articles from Delvare on custom software, AI automation, AGI, the AI-driven economy, cloud performance and SEO — written by the team that builds and runs the systems.',
     keywords: [
         'delvare blog',
         'software development blog',
         'software engineering insights',
         'AI automation articles',
+        'AGI explained',
+        'AI and the economy',
+        'on-device AI',
+        'AI hardware and software integration',
         'cloud infrastructure blog',
         'SaaS development insights',
         'SEO content strategy',
@@ -24,6 +28,9 @@ export const metadata: Metadata = {
     ],
     alternates: {
         canonical: '/blogs',
+        types: {
+            'application/rss+xml': '/feed.xml',
+        },
     },
     openGraph: {
         type: 'website',

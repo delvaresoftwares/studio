@@ -11,28 +11,46 @@ export default function sitemap(): MetadataRoute.Sitemap {
   );
 
   const routes = [
-    '',
-    '/founder',
-    '/blogs',
-  ].map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: route === '/blogs' ? new Date(latestBlogUpdate) : new Date(),
-  }));
+    {
+      url: `${baseUrl}/`,
+      lastModified: new Date(latestBlogUpdate),
+      changeFrequency: 'weekly' as const,
+      priority: 1,
+    },
+    {
+      url: `${baseUrl}/founder`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/blogs`,
+      lastModified: new Date(latestBlogUpdate),
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    },
+  ];
 
   const specialtyRoutes = specialties.flatMap((specialty) => [
     {
       url: `${baseUrl}/main/${specialty.slug}`,
       lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
     },
     {
       url: `${baseUrl}/specialty/${specialty.slug}`,
       lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
     },
   ]);
 
   const blogRoutes = blogs.map((blog) => ({
     url: `${baseUrl}/blogs/${blog.slug}`,
     lastModified: new Date(blog.updated),
+    changeFrequency: 'monthly' as const,
+    priority: blog.featured ? 0.9 : 0.7,
   }));
 
   return [...routes, ...specialtyRoutes, ...blogRoutes];

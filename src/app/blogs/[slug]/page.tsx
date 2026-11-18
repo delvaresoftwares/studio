@@ -33,8 +33,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
             ...post.tags.map((tag) => tag.toLowerCase()),
         ],
         authors: [{ name: post.author.name, url: `${siteConfig.url}${post.author.profileUrl}` }],
+        category: post.category,
         alternates: {
             canonical: `/blogs/${post.slug}`,
+            types: {
+                'application/rss+xml': '/feed.xml',
+            },
         },
         openGraph: {
             type: 'article',
@@ -61,7 +65,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
             card: 'summary_large_image',
             title: post.title,
             description: post.metaDescription,
-            images: [`${siteConfig.url}${post.ogImage}`],
+            images: [
+                {
+                    url: `${siteConfig.url}${post.ogImage}`,
+                    width: 1200,
+                    height: 630,
+                    alt: post.imageAlt,
+                },
+            ],
         },
     };
 }
@@ -88,8 +99,20 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 alternativeHeadline: post.subtitle,
                 description: post.metaDescription,
                 image: [
-                    `${siteConfig.url}${post.ogImage}`,
-                    `${siteConfig.url}${post.image}`,
+                    {
+                        '@type': 'ImageObject',
+                        url: `${siteConfig.url}${post.ogImage}`,
+                        width: 1200,
+                        height: 630,
+                        caption: post.title,
+                    },
+                    {
+                        '@type': 'ImageObject',
+                        url: `${siteConfig.url}${post.image}`,
+                        width: 1600,
+                        height: 1000,
+                        caption: post.imageAlt,
+                    },
                 ],
                 datePublished: post.date,
                 dateModified: post.updated,
@@ -101,14 +124,20 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 articleSection: post.category,
                 keywords: post.tags.join(', '),
                 wordCount,
+                timeRequired: `PT${post.readingTime}M`,
                 inLanguage: 'en',
+                isAccessibleForFree: true,
+                copyrightYear: new Date(`${post.date}T00:00:00Z`).getUTCFullYear(),
+                about: post.tags.map((tag) => ({ '@type': 'Thing', name: tag })),
                 isPartOf: {
                     '@type': 'Blog',
+                    '@id': `${siteConfig.url}/blogs#blog`,
                     name: 'Delvare Journal',
                     url: `${siteConfig.url}/blogs`,
                 },
                 author: {
                     '@type': 'Person',
+                    '@id': `${siteConfig.url}/founder#person`,
                     name: post.author.name,
                     jobTitle: post.author.role,
                     description: post.author.bio,
@@ -117,12 +146,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     sameAs: post.author.sameAs,
                     worksFor: {
                         '@type': 'Organization',
+                        '@id': `${siteConfig.url}#organization`,
                         name: 'Delvare',
                         url: siteConfig.url,
                     },
                 },
                 publisher: {
                     '@type': 'Organization',
+                    '@id': `${siteConfig.url}#organization`,
                     name: 'Delvare',
                     url: siteConfig.url,
                     logo: {
@@ -130,6 +161,15 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                         url: siteConfig.icon,
                     },
                 },
+                ...(post.sources?.length
+                    ? {
+                          citation: post.sources.map((source) => ({
+                              '@type': 'CreativeWork',
+                              name: source.label,
+                              url: source.url,
+                          })),
+                      }
+                    : {}),
             },
             {
                 '@type': 'FAQPage',

@@ -38,6 +38,12 @@ export const metadata: Metadata = {
   creator: "Delvare.in",
   applicationName: "Delvare",
 
+  alternates: {
+    types: {
+      'application/rss+xml': '/feed.xml',
+    },
+  },
+
   icons: {
     icon: siteConfig.icon,
     shortcut: siteConfig.icon,

@@ -5,6 +5,107 @@ import type { BlogSummary } from './blog-types';
 
 export const blogSummaries: BlogSummary[] = [
     {
+        "slug": "agi-the-god-imitator",
+        "title": "AGI, the God Imitator: What It Can and Cannot Do",
+        "subtitle": "The label is getting louder. The useful question is much smaller.",
+        "excerpt": "I keep hearing AGI described as a mind that will think for us. I think \"imitator\" is the more honest word — and it still describes something worth taking seriously.",
+        "metaDescription": "AGI, the \"god imitator\": what it means, why it is still theoretical in 2026, and how to judge the claims without mistaking a model for a mind.",
+        "category": "AI Automation",
+        "date": "2026-11-18",
+        "updated": "2026-11-18",
+        "image": "/assets/blog/agi-humanoid-robot.webp",
+        "imageAlt": "Humanoid robot standing in a robotics laboratory",
+        "ogImage": "/og/agi-the-god-imitator.jpg",
+        "tags": [
+            "AGI",
+            "AI",
+            "AI Safety",
+            "Future of Work"
+        ],
+        "readingTime": 5,
+        "featured": true,
+        "serviceSlug": "ai-ecosystems",
+        "serviceTitle": "AI & Process Automation",
+        "author": {
+            "name": "Alfas B",
+            "role": "Founder & CEO, Delvare",
+            "avatar": "/assets/avatar.webp",
+            "profileUrl": "/founder",
+            "sameAs": [
+                "https://github.com/living-tuna",
+                "https://in.linkedin.com/in/alfas-b-717054222"
+            ]
+        }
+    },
+    {
+        "slug": "ai-economic-crisis-2026",
+        "title": "AI and the Economic Crisis: What the Data Says",
+        "subtitle": "One in eleven jobs, a tech rout, and a labour market that has not broken yet.",
+        "excerpt": "I get asked whether to stop hiring because of AI almost every week. My answer is longer than a yes or no, because the honest data does not fit either one.",
+        "metaDescription": "AI, jobs and the economy in 2026: what the one-in-eleven estimate really means, why the tech rout matters, and how businesses should respond.",
+        "category": "AI & Economy",
+        "date": "2026-11-16",
+        "updated": "2026-11-16",
+        "image": "/assets/blog/ai-economy-financial-district.webp",
+        "imageAlt": "Financial district skyscrapers photographed from street level",
+        "ogImage": "/og/ai-economic-crisis-2026.jpg",
+        "tags": [
+            "AI",
+            "Economy",
+            "Jobs",
+            "Business Strategy",
+            "Automation"
+        ],
+        "readingTime": 5,
+        "featured": false,
+        "serviceSlug": "business-analyst",
+        "serviceTitle": "Business Analysis & Strategy",
+        "author": {
+            "name": "Alfas B",
+            "role": "Founder & CEO, Delvare",
+            "avatar": "/assets/avatar.webp",
+            "profileUrl": "/founder",
+            "sameAs": [
+                "https://github.com/living-tuna",
+                "https://in.linkedin.com/in/alfas-b-717054222"
+            ]
+        }
+    },
+    {
+        "slug": "ai-hardware-software-evolution",
+        "title": "AI Hardware and Software Are Merging in 2026",
+        "subtitle": "On-device inference, smarter sensors and the quiet end of the cloud-only default.",
+        "excerpt": "I used to treat the model as the product and the hardware as a detail. After a year of edge projects, I think that is backwards. Here is where the real integration work sits.",
+        "metaDescription": "AI hardware and software are merging in 2026: what on-device inference, edge sensors and tighter integration mean for product architecture.",
+        "category": "AI Automation",
+        "date": "2026-11-14",
+        "updated": "2026-11-14",
+        "image": "/assets/blog/ai-hardware-circuit.webp",
+        "imageAlt": "Close-up photograph of a circuit board with electronic components",
+        "ogImage": "/og/ai-hardware-software-evolution.jpg",
+        "tags": [
+            "AI",
+            "Edge AI",
+            "Hardware",
+            "On-Device AI",
+            "Inference"
+        ],
+        "readingTime": 5,
+        "featured": false,
+        "serviceSlug": "ai-ecosystems",
+        "serviceTitle": "AI & Process Automation",
+        "author": {
+            "name": "Alfas B",
+            "role": "Founder & CEO, Delvare",
+            "avatar": "/assets/avatar.webp",
+            "profileUrl": "/founder",
+            "sameAs": [
+                "https://github.com/living-tuna",
+                "https://in.linkedin.com/in/alfas-b-717054222"
+            ]
+        }
+    },
+    {
         "slug": "ai-for-business-growth",
         "title": "How AI Is Changing Small Businesses in 2026",
         "subtitle": "Less hype, more margin: the four places AI pays for itself first.",
@@ -13,8 +114,8 @@ export const blogSummaries: BlogSummary[] = [
         "category": "AI Automation",
         "date": "2026-10-28",
         "updated": "2026-11-02",
-        "image": "/assets/blog_ai_business_1772616812117.webp",
-        "imageAlt": "Abstract visual representing AI automation in a small business",
+        "image": "/assets/blog/ai-small-business-team.webp",
+        "imageAlt": "Small team collaborating around laptops in a bright office",
         "ogImage": "/og/ai-for-business-growth.jpg",
         "tags": [
             "AI",
@@ -23,7 +124,7 @@ export const blogSummaries: BlogSummary[] = [
             "Small Business"
         ],
         "readingTime": 4,
-        "featured": true,
+        "featured": false,
         "serviceSlug": "ai-ecosystems",
         "serviceTitle": "AI & Process Automation",
         "author": {
@@ -46,8 +147,8 @@ export const blogSummaries: BlogSummary[] = [
         "category": "Cloud & Performance",
         "date": "2026-09-16",
         "updated": "2026-10-21",
-        "image": "/assets/nanotech_curved_2_1772615432367.webp",
-        "imageAlt": "Abstract curved technology visual representing fast cloud infrastructure",
+        "image": "/assets/blog/mobile-speed.webp",
+        "imageAlt": "Person holding a smartphone, checking a slow-loading page",
         "ogImage": "/og/website-speed-business-impact.jpg",
         "tags": [
             "Cloud",
@@ -79,8 +180,8 @@ export const blogSummaries: BlogSummary[] = [
         "category": "Software Engineering",
         "date": "2026-08-05",
         "updated": "2026-09-30",
-        "image": "/assets/services/software.webp",
-        "imageAlt": "Custom software engineering illustration",
+        "image": "/assets/blog/custom-software-code.webp",
+        "imageAlt": "Developer's screen showing source code for a custom application",
         "ogImage": "/og/custom-software-cost-2026.jpg",
         "tags": [
             "Software",
@@ -112,8 +213,8 @@ export const blogSummaries: BlogSummary[] = [
         "category": "SEO & Growth",
         "date": "2026-06-24",
         "updated": "2026-10-10",
-        "image": "/assets/services/seo.webp",
-        "imageAlt": "SEO and digital infrastructure illustration",
+        "image": "/assets/blog/seo-workspace.webp",
+        "imageAlt": "Laptop and notes on a desk during an SEO planning session",
         "ogImage": "/og/seo-content-that-ranks.jpg",
         "tags": [
             "SEO",

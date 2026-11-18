@@ -30,6 +30,12 @@ export type BlogFaq = {
     answer: string;
 };
 
+/** Reporting or research an article explicitly draws on. */
+export type BlogSource = {
+    label: string;
+    url: string;
+};
+
 /** Author fields needed to render a byline, without the long biography. */
 export type BlogSummaryAuthor = Pick<
     BlogAuthor,
@@ -66,4 +72,6 @@ export type BlogPost = BlogSummary & {
     takeaways: string[];
     sections: BlogSection[];
     faqs: BlogFaq[];
+    /** Optional further reading, rendered as citations for readers and search engines. */
+    sources?: BlogSource[];
 };

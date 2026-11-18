@@ -18,6 +18,7 @@ import {
     CalendarDays,
     CheckCircle2,
     Clock,
+    ExternalLink,
     Github,
     Linkedin,
     Quote,
@@ -253,6 +254,32 @@ export default function BlogDetailContent({ post, relatedPosts }: BlogDetailCont
                                 </FadeIn>
                             ))}
                         </div>
+
+                        {/* Reporting this article draws on — visible to readers and to crawlers. */}
+                        {post.sources && post.sources.length > 0 && (
+                            <FadeIn className="mt-14">
+                                <div className="rounded-3xl border border-border bg-[#fafafa] p-6 sm:p-8">
+                                    <p className="text-[10px] font-black uppercase tracking-[0.35em] text-muted-foreground">
+                                        Sources &amp; further reading
+                                    </p>
+                                    <ul className="mt-5 space-y-3">
+                                        {post.sources.map((source) => (
+                                            <li key={source.url} className="text-sm sm:text-base font-medium leading-relaxed">
+                                                <a
+                                                    href={source.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-start gap-2 text-primary-ink hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                                                >
+                                                    <ExternalLink className="mt-1 h-4 w-4 shrink-0 text-primary" />
+                                                    <span>{source.label}</span>
+                                                </a>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </FadeIn>
+                        )}
 
                         {/* Author */}
                         <FadeIn className="mt-16">

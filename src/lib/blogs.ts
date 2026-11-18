@@ -36,6 +36,358 @@ const ALFAS_B: BlogAuthor = {
 
 export const blogs: BlogPost[] = [
     {
+        slug: 'agi-the-god-imitator',
+        title: 'AGI, the God Imitator: What It Can and Cannot Do',
+        subtitle: 'The label is getting louder. The useful question is much smaller.',
+        excerpt:
+            'I keep hearing AGI described as a mind that will think for us. I think "imitator" is the more honest word — and it still describes something worth taking seriously.',
+        metaDescription:
+            'AGI, the "god imitator": what it means, why it is still theoretical in 2026, and how to judge the claims without mistaking a model for a mind.',
+        category: 'AI Automation',
+        date: '2026-11-18',
+        updated: '2026-11-18',
+        author: ALFAS_B,
+        image: '/assets/blog/agi-humanoid-robot.webp',
+        imageAlt: 'Humanoid robot standing in a robotics laboratory',
+        ogImage: '/og/agi-the-god-imitator.jpg',
+        tags: ['AGI', 'AI', 'AI Safety', 'Future of Work'],
+        readingTime: 5,
+        featured: true,
+        serviceSlug: 'ai-ecosystems',
+        serviceTitle: 'AI & Process Automation',
+        serviceBlurb:
+            'We build systems that use AI where it earns its place — with task-level evaluation, clear limits and a person accountable for the outcome.',
+        stats: [
+            { label: 'Status in 2026', value: 'Theoretical' },
+            { label: 'Claim To Watch', value: 'Self-improvement' },
+            { label: 'Buying Rule', value: 'Test the task' },
+        ],
+        takeaways: [
+            'AGI is a claim about general capability, not a product you can put in a procurement spreadsheet.',
+            'Imitating intelligent output is not the same as showing understanding, and the distinction matters in production.',
+            'Self-improving systems are the interesting hypothesis — and, for now, still a hypothesis.',
+            'Ignore the label when buying software. Test the exact task, with the exact data and a measurable error cost.',
+        ],
+        sections: [
+            {
+                heading: 'Why I keep the word "imitator"',
+                paragraphs: [
+                    'A client asked me last month whether we were "building toward AGI". I said no, and then I had to explain what I actually meant, because the phrase has become a container for everyone’s hopes and fears. The word I keep coming back to is imitator.',
+                    'Models learn to reproduce the shape of intelligent answers. That is an extraordinary engineering achievement. It is also a different claim from saying a system understands the world the way a person does. Calling it a god adds theatre to the conversation; calling it an imitator keeps the question precise: how convincing is the imitation, in which tasks, under what conditions?',
+                ],
+            },
+            {
+                heading: 'Where the label breaks down',
+                paragraphs: [
+                    'Britannica was still describing artificial general intelligence as theoretical in November 2026, while a respected academic discussion asked the opposite question: what if it is already here? Both can be reasonable positions, which tells you the term itself is doing too much work.',
+                    'In my own reviews, the gap shows up in transfer. A model can pass a benchmark and still fail on a slightly different invoice layout, a new customer tone or a policy that changed last week. General capability is not measured by the most impressive demo. It is measured by how quickly performance falls when the situation moves outside the example set.',
+                ],
+            },
+            {
+                heading: 'Self-improvement is the claim to watch',
+                paragraphs: [
+                    'The most interesting version of the AGI argument is not "a bigger model". It is a system that can improve its own performance, and the safety questions that come with it. The founder of Z.ai argued in November that self-improvement is the key step toward AGI while insisting that safety has to travel with it.',
+                    'I take that seriously, but I separate the direction from the timetable. A research direction is not a release date, and a lab’s roadmap is not your architecture. What would change my mind is evidence: repeatable gains on unseen tasks, done under controlled conditions, with failure modes that engineers can actually inspect.',
+                ],
+            },
+            {
+                heading: 'Scenarios are not forecasts',
+                paragraphs: [
+                    'RAND published two scenarios in November for how advanced AI could affect the economy and society. The useful part of that kind of work is not the headline. It is the reminder that outcomes branch: regulation, adoption speed, compute costs and public trust all change the result.',
+                    'I have seen teams make budgets from a single forecast about AGI. That is a mistake in either direction. If you stop investing because a god-like system is coming next year, you lose a year of compounding gains. If you bet the company on a date, you inherit a plan built on someone else’s guess.',
+                ],
+            },
+            {
+                heading: 'What I would do in your position',
+                paragraphs: [
+                    'Treat the name as background noise and the behaviour as the product. The questions below are the ones I ask in an evaluation, and they work whether or not AGI ever arrives.',
+                ],
+                bullets: [
+                    'Test the task with your own data, not a public leaderboard or a vendor demo.',
+                    'Write down what a wrong answer costs before you decide how much autonomy to give the system.',
+                    'Keep a person accountable for decisions that touch money, contracts, safety or customers.',
+                    'Limit access to the minimum the workflow needs, and log every automated action.',
+                    'Re-run the evaluation quarterly. Models, policies and failure modes all move.',
+                ],
+            },
+        ],
+        faqs: [
+            {
+                question: 'Has AGI arrived already?',
+                answer:
+                    'There is no agreed test that would let me say yes. Some researchers argue current systems already meet a practical definition; others, including Britannica, still describe AGI as theoretical. What matters for a business is narrower: does the system do your task reliably on your data?',
+            },
+            {
+                question: 'Why do you call AGI a god imitator?',
+                answer:
+                    'Because "god" describes the expectation people project onto it, while "imitator" describes what the system actually does: reproducing patterns of intelligent output. The second phrase keeps the engineering question honest without denying how capable these systems have become.',
+            },
+            {
+                question: 'Should we delay projects until AGI arrives?',
+                answer:
+                    'No. Waiting for a hypothetical breakthrough gives up the compounding value of fixing a real workflow now. Build for measurable tasks, keep the architecture replaceable, and upgrade the model when a better one clears your evaluation.',
+            },
+            {
+                question: 'What would make a system genuinely general?',
+                answer:
+                    'At minimum, reliable transfer to unfamiliar tasks, the ability to notice and correct its own errors, and behaviour you can verify under changing conditions. Passing one benchmark or producing fluent prose does not establish any of those.',
+            },
+        ],
+        sources: [
+            {
+                label: 'Britannica — Why is artificial general intelligence still considered theoretical? (6 Nov 2026)',
+                url: 'https://www.britannica.com/technology/Why-is-artificial-general-intelligence-still-considered-theoretical',
+            },
+            {
+                label: 'The Conversation — What is artificial general intelligence, and is it already here? (28 Oct 2026)',
+                url: 'https://theconversation.com/what-is-artificial-general-intelligence-and-is-it-already-here-293600',
+            },
+            {
+                label: 'South China Morning Post — Self-improving AI the key step towards AGI, says Z.ai founder (1 Nov 2026)',
+                url: 'https://www.scmp.com/tech/tech-trends/article/3372834/self-improving-ai-key-step-towards-agi-safety-key-zai-founder',
+            },
+            {
+                label: 'RAND — Infinite Potential: economic and societal impacts across two scenarios (16 Nov 2026)',
+                url: 'https://www.rand.org/pubs/research_reports/RRA4767-4.html',
+            },
+        ],
+    },
+    {
+        slug: 'ai-economic-crisis-2026',
+        title: 'AI and the Economic Crisis: What the Data Says',
+        subtitle: 'One in eleven jobs, a tech rout, and a labour market that has not broken yet.',
+        excerpt:
+            'I get asked whether to stop hiring because of AI almost every week. My answer is longer than a yes or no, because the honest data does not fit either one.',
+        metaDescription:
+            'AI, jobs and the economy in 2026: what the one-in-eleven estimate really means, why the tech rout matters, and how businesses should respond.',
+        category: 'AI & Economy',
+        date: '2026-11-16',
+        updated: '2026-11-16',
+        author: ALFAS_B,
+        image: '/assets/blog/ai-economy-financial-district.webp',
+        imageAlt: 'Financial district skyscrapers photographed from street level',
+        ogImage: '/og/ai-economic-crisis-2026.jpg',
+        tags: ['AI', 'Economy', 'Jobs', 'Business Strategy', 'Automation'],
+        readingTime: 5,
+        featured: false,
+        serviceSlug: 'business-analyst',
+        serviceTitle: 'Business Analysis & Strategy',
+        serviceBlurb:
+            'We separate forecast from fact: where automation saves money, where it creates risk, and which decisions still need a person in the room.',
+        stats: [
+            { label: 'Goldman Estimate', value: '1 in 11' },
+            { label: 'Evidence Today', value: 'Mixed' },
+            { label: 'My Advice', value: 'Measure first' },
+        ],
+        takeaways: [
+            'A projection about displacement is not the same as a layoff announcement.',
+            'Reported evidence on AI and jobs in 2026 is mixed, so confident timelines deserve scepticism.',
+            'The market is pricing AI spending and returns separately from the underlying technology.',
+            'Automate tasks, not job titles — and do not cut headcount on a forecast.',
+        ],
+        sections: [
+            {
+                heading: 'The number everyone quotes',
+                paragraphs: [
+                    'Goldman Sachs put forward an estimate that AI could displace roughly one in eleven workers, with the important caveat that the layoffs may wait for a recession. That is a serious forecast, and it is also exactly the kind of number that gets repeated without its conditions.',
+                    'Displacement is not the same as unemployment. A role can change tasks, a task can be automated without a role disappearing, and a company can absorb savings as margin rather than headcount cuts. I have seen all three happen in the same quarter across different clients. The headline number cannot tell you which one applies to you.',
+                ],
+            },
+            {
+                heading: 'The evidence is genuinely mixed',
+                paragraphs: [
+                    'The New York Times reported in November that the evidence for AI coming for jobs is, so far, mixed. That matches what I see on the ground. Some teams ship a workflow and redeploy the hours. Others run a pilot for six months and quietly go back to the spreadsheet because the exception rate was too high.',
+                    'This is where I try to be careful in client conversations. I do not know the month when a particular role becomes unnecessary, and neither does anyone selling certainty. What I can do is measure the task in front of us: minutes per item, error rate, turnaround time and who fixes the mistakes. Those numbers are local, defensible and useful whether a recession arrives or not.',
+                ],
+            },
+            {
+                heading: 'The market is pricing a different risk',
+                paragraphs: [
+                    'In late October, tech stocks fell sharply as AI spending approached a trillion dollars. In November, Baidu’s CEO said investment has to turn into profit or risk becoming a bubble. These are not claims that the technology is fake. They are claims about the gap between what companies spend and what they earn.',
+                    'That gap reaches ordinary businesses. Tool prices can change quickly when vendors compete for proof of value. Providers consolidate. A platform you built a workflow around may be repriced or retired. I now ask two questions in every AI architecture review: what does this cost at ten times the volume, and what is our exit if the vendor disappears?',
+                ],
+            },
+            {
+                heading: 'What I tell clients to do this quarter',
+                paragraphs: [
+                    'Nobody needs a dramatic restructure based on a headline. These are the moves I consider defensible with the information we have today.',
+                ],
+                bullets: [
+                    'Do not freeze hiring on a forecast. Freeze it when the workload or the margin says the role is not needed.',
+                    'Automate a measured task first, then decide what to do with the time you saved.',
+                    'Protect the entry-level ladder. If you stop hiring juniors, you also stop growing the people who will eventually run these systems.',
+                    'Keep cash and optionality. Vendor and pricing shifts are more likely than a single dramatic break.',
+                    'Write a one-page scenario for both a slowdown and a boom, with a trigger for each decision.',
+                ],
+            },
+            {
+                heading: 'The honest answer',
+                paragraphs: [
+                    'Is AI causing an economic crisis? Not on the evidence in front of me. Is it changing the cost structure of certain tasks fast enough that businesses which ignore it will look expensive? Yes. Those two statements can both be true, and they point to the same response: measure, adapt, and avoid irreversible decisions based on a story.',
+                    'The risk I worry about in my own company is not a model taking over. It is reorganising around a forecast, then discovering the workflow never worked — with people and institutional knowledge already gone. That is a mistake you can avoid, and the numbers to avoid it are sitting in your own operations.',
+                ],
+            },
+        ],
+        faqs: [
+            {
+                question: 'Is AI causing a recession right now?',
+                answer:
+                    'There is no clear evidence that it is. Market volatility around AI spending is real, but a stock selloff is not the same as a recession, and employment data so far is mixed rather than conclusive.',
+            },
+            {
+                question: 'Should we stop hiring because AI will replace the role?',
+                answer:
+                    'Not on a headline. Decide on workload, margin and measured automation. Removing a role before the workflow is proven usually costs more in rework and lost knowledge than it saves.',
+            },
+            {
+                question: 'What does "displace one in eleven workers" actually mean?',
+                answer:
+                    'It is a projection that a share of work could be automated, not a prediction that a specific one in eleven people will be dismissed next year. Fortune’s reporting on the estimate noted that actual layoffs may wait for a downturn.',
+            },
+            {
+                question: 'How should a small business protect its margins?',
+                answer:
+                    'Track time per task, exception rate and turnaround before and after automation. Redeploy saved hours into revenue work, keep a human check on high-cost errors, and avoid long commitments to a single vendor while pricing is unsettled.',
+            },
+        ],
+        sources: [
+            {
+                label: 'Fortune — AI could displace one in 11 workers, but layoffs may wait for a recession (22 Oct 2026)',
+                url: 'https://fortune.com/2026/10/22/goldman-sachs-forecast-how-many-jobs-lost-to-ai-9-percent/',
+            },
+            {
+                label: 'The New York Times — A.I. Was Supposed to Come for Our Jobs. So Far, Evidence Is Mixed. (6 Nov 2026)',
+                url: 'https://www.nytimes.com/2026/11/06/business/economy/ai-jobs-layoffs.html',
+            },
+            {
+                label: 'BBC — US tech stocks see sharp falls as AI spending nears $1tn (30 Oct 2026)',
+                url: 'https://www.bbc.co.uk/news/articles/cvwy72e0n72yo',
+            },
+            {
+                label: 'Reuters — Baidu CEO says AI investment must deliver profits to avoid bubble (17 Nov 2026)',
+                url: 'https://www.reuters.com/business/media-telecom/baidu-ceo-says-ai-investment-must-deliver-profits-avoid-bubble-2026-11-17/',
+            },
+        ],
+    },
+    {
+        slug: 'ai-hardware-software-evolution',
+        title: 'AI Hardware and Software Are Merging in 2026',
+        subtitle: 'On-device inference, smarter sensors and the quiet end of the cloud-only default.',
+        excerpt:
+            'I used to treat the model as the product and the hardware as a detail. After a year of edge projects, I think that is backwards. Here is where the real integration work sits.',
+        metaDescription:
+            'AI hardware and software are merging in 2026: what on-device inference, edge sensors and tighter integration mean for product architecture.',
+        category: 'AI Automation',
+        date: '2026-11-14',
+        updated: '2026-11-14',
+        author: ALFAS_B,
+        image: '/assets/blog/ai-hardware-circuit.webp',
+        imageAlt: 'Close-up photograph of a circuit board with electronic components',
+        ogImage: '/og/ai-hardware-software-evolution.jpg',
+        tags: ['AI', 'Edge AI', 'Hardware', 'On-Device AI', 'Inference'],
+        readingTime: 5,
+        featured: false,
+        serviceSlug: 'ai-ecosystems',
+        serviceTitle: 'AI & Process Automation',
+        serviceBlurb:
+            'We decide where inference should run, then build the workflow around it — with the latency, privacy and failure behaviour your users actually need.',
+        stats: [
+            { label: 'Inference Moving', value: 'On-device' },
+            { label: 'New Bottleneck', value: 'Embedded' },
+            { label: 'First Question', value: 'Latency' },
+        ],
+        takeaways: [
+            'The competitive edge in 2026 is less about model size and more about where inference runs.',
+            'Silicon, runtime, operating system and workflow have to be designed as one system.',
+            'Edge AI still needs a cloud path for updates, heavy jobs and review — hybrid is the default.',
+            'The scarce skill is embedded engineering, so budget for integration and device testing.',
+        ],
+        sections: [
+            {
+                heading: 'What changed on the projects I see',
+                paragraphs: [
+                    'A year ago, almost every AI request I received started with a model name. Now the first conversation is about a device: a phone, a camera, a handheld terminal, a machine on a factory floor. The client already knows a model can do the task. What they want to know is whether it will do it in 200 milliseconds, offline, on hardware they already own.',
+                    'That shift is visible across the industry. Analysts are describing Apple’s tight hardware-software integration as an underappreciated AI advantage, and chip vendors are shipping reference designs that connect sensors to inference pipelines instead of selling accelerators in isolation. The interesting engineering is no longer only inside the model. It is in the seams between layers.',
+                ],
+            },
+            {
+                heading: 'The four layers that now have to agree',
+                paragraphs: [
+                    'When inference runs on the device, a change in one layer moves the cost of every other layer. I draw the same four boxes on every architecture review.',
+                ],
+                bullets: [
+                    'Silicon — what the device can actually execute, and what that costs in power and heat.',
+                    'Model and runtime — quantisation, context size and startup time, not just benchmark accuracy.',
+                    'Operating system and sensors — which signals the app can read, with what permissions and latency.',
+                    'Workflow — what the user does with the result, and what happens when the answer is wrong or the network disappears.',
+                ],
+            },
+            {
+                heading: 'The bottleneck moved to embedded engineering',
+                paragraphs: [
+                    'Intel and Altera’s recent sensor-integration work is a good example of the direction: connecting perception hardware to edge compute as a system, not as separate purchases. Electronics Weekly reported in October that embedded engineering is becoming a bottleneck for industrial automation. I recognise it.',
+                    'A model that runs beautifully on a workstation can be useless on a device with a fixed power budget, a slow storage bus and no debugger attached. This is why AI projects now fail in integration rather than in training. The hard part is proving reliable behaviour across firmware revisions, drivers and a dozen device models — then keeping it reliable in the field.',
+                ],
+            },
+            {
+                heading: 'What I change in an architecture review',
+                paragraphs: [
+                    'I ask four questions before anyone opens a model catalogue. They sound simple and they expose most bad assumptions.',
+                ],
+                bullets: [
+                    'Where does the data originate? If it is created on the device, sending it to a data centre and back is a choice you should have to defend.',
+                    'What is the latency budget? A 900 ms answer can be excellent in a report and unusable at a checkout counter.',
+                    'What happens offline? If the workflow stops when the network drops, the edge in edge AI was never really designed.',
+                    'How do you update the model? A deployment path that needs a truck roll is not a deployment path.',
+                ],
+            },
+            {
+                heading: 'Hybrid is the default, not a compromise',
+                paragraphs: [
+                    'On-device inference does not abolish the cloud. It changes its job. The cloud becomes the place for heavy runs, fleet updates, aggregated review and audit logs, while the device keeps the fast, private, routine decisions close to the user.',
+                    'My rule is to put the smallest reliable model on the device and keep an escape hatch to a larger model in the cloud. That gives you speed and privacy for normal cases and a path to recover when the edge case arrives. It costs more to build than a single-layer design, but it is the shape that survives real usage.',
+                    'The probability that hardware and software keep converging is high; the timing of any particular feature is much less certain. What I would bet on is the skill: teams that can design across all four layers will ship the products everyone else spends the next two years trying to catch.',
+                ],
+            },
+        ],
+        faqs: [
+            {
+                question: 'Will on-device AI replace cloud AI?',
+                answer:
+                    'No. The useful pattern is hybrid: fast, private inference on the device, with the cloud reserved for heavy jobs, model updates, fleet-wide review and audit. Very few products can afford to give up either layer.',
+            },
+            {
+                question: 'Does this mean we should buy new AI hardware now?',
+                answer:
+                    'Not by itself. Start with the latency, privacy and connectivity the workflow needs. If existing devices meet those constraints, changing hardware is a cost with no customer value. If they do not, the gap tells you exactly what to buy.',
+            },
+            {
+                question: 'Why do edge AI projects cost more than expected?',
+                answer:
+                    'Because the model is rarely the expensive part. Integration, device testing, power and thermal constraints, sensor calibration and firmware maintenance take the time — and they need engineers comfortable across both hardware and software.',
+            },
+            {
+                question: 'Is data safer when inference runs on the device?',
+                answer:
+                    'Often, yes, because raw inputs can stay local. But check the full path: telemetry, crash reports, logs and model updates can still leave the device. Privacy is a property of the whole system, not of the inference location alone.',
+            },
+        ],
+        sources: [
+            {
+                label: 'Yahoo Finance — Deep hardware-software integration drives Apple’s AI advantage (19 Oct 2026)',
+                url: 'https://finance.yahoo.com/markets/stocks/articles/deep-hardware-software-integration-drives-163110026.html',
+            },
+            {
+                label: 'Intel — Intel and Altera simplify sensor integration for edge and physical AI (10 Nov 2026)',
+                url: 'https://www.intel.com/content/www/us/en/newsroom/news/artificial-intelligence/altera-sensor-integration-edge-physical-ai.html',
+            },
+            {
+                label: 'Electronics Weekly — Why embedded engineering is becoming a bottleneck for industrial automation (22 Oct 2026)',
+                url: 'https://www.electronicsweekly.com/?p=909260',
+            },
+        ],
+    },
+    {
         slug: 'ai-for-business-growth',
         title: 'How AI Is Changing Small Businesses in 2026',
         subtitle: 'Less hype, more margin: the four places AI pays for itself first.',
@@ -47,12 +399,12 @@ export const blogs: BlogPost[] = [
         date: '2026-10-28',
         updated: '2026-11-02',
         author: ALFAS_B,
-        image: '/assets/blog_ai_business_1772616812117.webp',
-        imageAlt: 'Abstract visual representing AI automation in a small business',
+        image: '/assets/blog/ai-small-business-team.webp',
+        imageAlt: 'Small team collaborating around laptops in a bright office',
         ogImage: '/og/ai-for-business-growth.jpg',
         tags: ['AI', 'Automation', 'Growth', 'Small Business'],
         readingTime: 4,
-        featured: true,
+        featured: false,
         serviceSlug: 'ai-ecosystems',
         serviceTitle: 'AI & Process Automation',
         serviceBlurb:
@@ -156,8 +508,8 @@ export const blogs: BlogPost[] = [
         date: '2026-09-16',
         updated: '2026-10-21',
         author: ALFAS_B,
-        image: '/assets/nanotech_curved_2_1772615432367.webp',
-        imageAlt: 'Abstract curved technology visual representing fast cloud infrastructure',
+        image: '/assets/blog/mobile-speed.webp',
+        imageAlt: 'Person holding a smartphone, checking a slow-loading page',
         ogImage: '/og/website-speed-business-impact.jpg',
         tags: ['Cloud', 'Performance', 'Core Web Vitals', 'Hosting'],
         readingTime: 4,
@@ -267,8 +619,8 @@ export const blogs: BlogPost[] = [
         date: '2026-08-05',
         updated: '2026-09-30',
         author: ALFAS_B,
-        image: '/assets/services/software.webp',
-        imageAlt: 'Custom software engineering illustration',
+        image: '/assets/blog/custom-software-code.webp',
+        imageAlt: "Developer's screen showing source code for a custom application",
         ogImage: '/og/custom-software-cost-2026.jpg',
         tags: ['Software', 'Pricing', 'SaaS', 'Product'],
         readingTime: 4,
@@ -372,8 +724,8 @@ export const blogs: BlogPost[] = [
         date: '2026-06-24',
         updated: '2026-10-10',
         author: ALFAS_B,
-        image: '/assets/services/seo.webp',
-        imageAlt: 'SEO and digital infrastructure illustration',
+        image: '/assets/blog/seo-workspace.webp',
+        imageAlt: 'Laptop and notes on a desk during an SEO planning session',
         ogImage: '/og/seo-content-that-ranks.jpg',
         tags: ['SEO', 'Content', 'Strategy', 'Search'],
         readingTime: 4,
