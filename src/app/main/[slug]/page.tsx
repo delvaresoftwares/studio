@@ -2,6 +2,7 @@ import { specialties } from '@/lib/specialties-data';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { siteConfig } from '@/lib/site-config';
+import { serializeJsonLd } from '@/lib/json-ld';
 import SpecialtyDetailContent from '@/components/specialty-detail-content';
 import ProductDetailContent from '@/components/product-detail-content';
 
@@ -32,6 +33,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         keywords: ['software development company', 'custom software development', 'delvare', 'delvare.in',
             data.title.toLowerCase(), `${data.title} by Delvare`, 'ecbills.in', 'blendly.sbs', 'SaaS development',
             'PaaS development', 'AI automation', 'cloud infrastructure', 'cybersecurity services', 'delvare clients'],
+        alternates: {
+            canonical: `/main/${data.slug}`,
+        },
         openGraph: {
             title: `${data.title} — Delvare`,
             description: `${data.detailedDescription || data.description} Built, run and grown by Delvare.`,
@@ -111,7 +115,7 @@ export default async function SpecialtyPortfolioPage({ params }: { params: Promi
         <>
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+                dangerouslySetInnerHTML={{ __html: serializeJsonLd(productJsonLd) }}
             />
             {isProduct ? (
                 <ProductDetailContent data={data} />

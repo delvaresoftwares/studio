@@ -3,6 +3,7 @@ import HomeClient from './home-client';
 import { siteConfig } from '@/lib/site-config';
 import { clients } from '@/lib/clients';
 import { clientsSeoGraph, ORGANIZATION_ID } from '@/lib/clients-seo';
+import { serializeJsonLd } from '@/lib/json-ld';
 
 export const metadata: Metadata = {
     title: 'Delvare — Software Development Company | Custom Software, SaaS & AI Solutions',
@@ -23,6 +24,9 @@ export const metadata: Metadata = {
         ...clients.map((client) => `who is the technology partner of ${client.name}`),
         ...clients.map((client) => `${client.name} website developer`),
     ],
+    alternates: {
+        canonical: '/',
+    },
     openGraph: {
         title: 'Delvare — Software Development Company | Custom Software, SaaS & AI Solutions',
         description:
@@ -142,7 +146,7 @@ export default function Home() {
         <>
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+                dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
             />
             <HomeClient />
         </>

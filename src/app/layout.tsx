@@ -39,6 +39,7 @@ export const metadata: Metadata = {
   applicationName: "Delvare",
 
   alternates: {
+    canonical: '/',
     types: {
       'application/rss+xml': '/feed.xml',
     },

@@ -11,6 +11,9 @@ export const metadata: Metadata = {
         'nature of the divine', 'blendly', 'blendly.sbs', 'ecbills', 'ecbills.in', 'dvenue',
         'software engineering', 'cybersecurity', 'AI automation', 'cloud computing',
     ],
+    alternates: {
+        canonical: '/founder',
+    },
     openGraph: {
         title: 'Alfas B — Founder & CEO, Delvare Software Development Company',
         description:
@@ -24,6 +27,16 @@ export const metadata: Metadata = {
                 alt: 'Alfas B — Founder & CEO of Delvare',
             },
         ],
+        locale: 'en_US',
+        type: 'profile',
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Alfas B — Founder & CEO, Delvare',
+        description:
+            'Founder & CEO of Delvare.in — custom software, SaaS & AI development. Author of "Nature of the Divine".',
+        images: ['/assets/avatar.webp'],
+        creator: '@delvare',
     },
 };
 

@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
       // existing links and any indexed posts do not 404.
       { source: '/blog', destination: '/blogs', permanent: true },
       { source: '/blog/:slug', destination: '/blogs/:slug', permanent: true },
+      // Consolidate legacy /specialty routes to canonical /main routes
+      { source: '/specialty', destination: '/#services', permanent: true },
+      { source: '/specialty/:slug', destination: '/main/:slug', permanent: true },
+      { source: '/main', destination: '/#services', permanent: true },
     ];
   },
   async headers() {

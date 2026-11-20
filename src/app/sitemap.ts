@@ -21,7 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/founder`,
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
-      priority: 0.6,
+      priority: 0.8,
     },
     {
       url: `${baseUrl}/blogs`,
@@ -31,20 +31,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  const specialtyRoutes = specialties.flatMap((specialty) => [
-    {
-      url: `${baseUrl}/main/${specialty.slug}`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/specialty/${specialty.slug}`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-    },
-  ]);
+  const specialtyRoutes = specialties.map((specialty) => ({
+    url: `${baseUrl}/main/${specialty.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }));
 
   const blogRoutes = blogs.map((blog) => ({
     url: `${baseUrl}/blogs/${blog.slug}`,
